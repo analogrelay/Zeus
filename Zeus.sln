@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus", "src\Zeus\Zeus.csproj", "{0787C07E-FCD1-4C6F-842B-0F35420F08E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cli", "src\Cli\Cli.csproj", "{11AAA9F0-1261-43DF-A191-A00940E49992}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cli.Facts", "facts\Cli.Facts\Cli.Facts.csproj", "{846FC654-8D26-43D5-8656-D575365DA8DB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,14 +13,6 @@ Global
 		{0787C07E-FCD1-4C6F-842B-0F35420F08E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0787C07E-FCD1-4C6F-842B-0F35420F08E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0787C07E-FCD1-4C6F-842B-0F35420F08E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11AAA9F0-1261-43DF-A191-A00940E49992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11AAA9F0-1261-43DF-A191-A00940E49992}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11AAA9F0-1261-43DF-A191-A00940E49992}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11AAA9F0-1261-43DF-A191-A00940E49992}.Release|Any CPU.Build.0 = Release|Any CPU
-		{846FC654-8D26-43D5-8656-D575365DA8DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{846FC654-8D26-43D5-8656-D575365DA8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{846FC654-8D26-43D5-8656-D575365DA8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{846FC654-8D26-43D5-8656-D575365DA8DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
