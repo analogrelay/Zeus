@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Cli.Arguments
+namespace Cli
 {
-    public class CommandLineToken
+    public interface ICommand
     {
     }
 }
