@@ -48,8 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CompositionManager.cs" />
+    <Compile Include="ICommandDispatcher.cs" />
+    <Compile Include="ILoggingService.cs" />
     <Compile Include="Infrastructure\SnazzyConsoleTarget.cs" />
+    <Compile Include="LoggingService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

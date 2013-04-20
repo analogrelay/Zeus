@@ -14,6 +14,17 @@ namespace Zeus
     [Export]
     public class Program
     {
+        public ICommandDispatcher Dispatcher { get; protected set; }
+        
+        private Logger Log { get; set; }
+
+        [ImportingConstructor]
+        public Program(ILoggingService logging, ICommandDispatcher dispatcher)
+        {
+            Dispatcher = dispatcher;
+            Log = logging.GetLogger(typeof(Program).Name);
+        }
+
         static void Main(string[] args)
         {
             var program = CompositionManager.Compose<Program>();
@@ -25,41 +36,17 @@ namespace Zeus
             // Set up Debugging
             TryLaunchDebugger(ref args);
 
-            // Set up Logging
-            InitializeLogging();
-            var mainLogger = LogManager.GetLogger("Program");
-
-            mainLogger.Trace("Started Zeus v{0}", typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+            Log.Trace("Started Zeus v{0}", typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
 
             // Use the first arg to dispatch the command
             if (args.Length == 0)
             {
-                mainLogger.Error("No arguments specified! TODO: Help!");
+                Log.Error("No arguments specified! TODO: Help!");
             }
             else
             {
-                mainLogger.Debug("Dispatching Command: {0}", args[0]);
+                Dispatcher.Dispatch(args[0], args.Skip(1));
             }
-        }
-
-        private void InitializeLogging()
-        {
-            var config = new LoggingConfiguration();
-
-            SnazzyConsoleTarget target = new SnazzyConsoleTarget()
-            {
-                Layout = "${message}"
-            };
-            config.AddTarget("console", target);
-
-            LogLevel level = LogLevel.Info;
-#if DEBUG
-            level = LogLevel.Debug;
-#endif
-            LoggingRule rule = new LoggingRule("*", level, target);
-            config.LoggingRules.Add(rule);
-
-            LogManager.Configuration = config;
         }
 
         [Conditional("DEBUG")]
