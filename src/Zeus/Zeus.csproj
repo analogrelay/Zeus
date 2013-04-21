@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="Commands\AddServiceCommand.cs" />
     <Compile Include="Commands\InitCommand.cs" />
     <Compile Include="CompositionManager.cs" />
     <Compile Include="ICommand.cs" />
