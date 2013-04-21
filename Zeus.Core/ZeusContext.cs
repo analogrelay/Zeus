@@ -14,5 +14,11 @@ namespace Zeus.Core
     /// </remarks>
     public class ZeusContext
     {
+        public string WorkingDirectory { get; private set; }
+
+        public ZeusContext(string workingDirectory)
+        {
+            WorkingDirectory = workingDirectory;
+        }
     }
 }

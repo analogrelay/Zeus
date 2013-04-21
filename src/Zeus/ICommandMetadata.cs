@@ -8,5 +8,6 @@ namespace Zeus
     public interface ICommandMetadata
     {
         string Name { get; }
+        string Group { get; }
     }
 }

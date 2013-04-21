@@ -45,7 +45,7 @@ namespace Zeus
             }
             else
             {
-                Dispatcher.Dispatch(args[0], args.Skip(1));
+                Dispatcher.Dispatch(args);
             }
         }
 

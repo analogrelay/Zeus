@@ -7,6 +7,6 @@ namespace Zeus
 {
     public interface ICommandDispatcher
     {
-        void Dispatch(string command, IEnumerable<string> args);
+        void Dispatch(IEnumerable<string> args);
     }
 }

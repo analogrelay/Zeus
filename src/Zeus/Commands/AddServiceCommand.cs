@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Fclp;
 using NLog;
+using Zeus.Core;
 
 namespace Zeus.Commands
 {
-    [Command("add-service")]
+    [Command(name: "add", group: "service")]
     public class AddServiceCommand : ICommand
     {
-        private const string UsageString = "Usage: add-service <name> <type>";
+        private const string UsageString = "Usage: service add <name> <type>";
 
         public Logger Log { get; set; }
 
@@ -29,6 +30,11 @@ namespace Zeus.Commands
         {
             if (!ParseArguments(args)) { return; }
             Log.Info("Adding {0} service named {1} to Zeusfile", Type, Name);
+
+            // Create a Zeus Context
+            var context = new ZeusContext(Environment.CurrentDirectory);
+
+            Log.Error("Finish this command.");
         }
 
         private bool ParseArguments(IEnumerable<string> args)
