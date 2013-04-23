@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="IO\IFileSystem.cs" />
     <Compile Include="IO\PhysicalFileSystem.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -51,9 +52,12 @@
     </Compile>
     <Compile Include="Serialization\IZeusfileSerializer.cs" />
     <Compile Include="Serialization\ZeusfileJsonSerializer.cs" />
+    <Compile Include="Serialization\ZeusfileSurrogate.cs" />
     <Compile Include="ZeusContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Zeusfile.cs" />
+    <Compile Include="ZeusService.cs" />
+    <Compile Include="ZeusServiceCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

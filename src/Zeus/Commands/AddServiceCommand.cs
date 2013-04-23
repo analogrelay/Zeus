@@ -33,7 +33,18 @@ namespace Zeus.Commands
             // Create a Zeus Context
             var context = new ZeusContext(Environment.CurrentDirectory);
 
-            Log.Error("Finish this command.");
+            // Add a service to the zeusfile
+            if (context.Zeusfile.Services.Contains(Name))
+            {
+                Log.Error("There is already a service named '{0}' in the Zeusfile", Name);
+            }
+            else
+            {
+                context.Zeusfile.Services.Add(new ZeusService(Name, Type));
+
+                // Save the file
+                context.SaveChanges();
+            }
         }
 
         private bool ParseArguments(IEnumerable<string> args)

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Zeus.Serialization.Surrogates;
 
 namespace Zeus.Serialization
 {
@@ -64,12 +65,12 @@ namespace Zeus.Serialization
 
         private Zeusfile Read(JsonReader reader)
         {
-            return _serializer.Deserialize<Zeusfile>(reader);
+            return _serializer.Deserialize<ZeusfileSurrogate>(reader).ToZeusfile();
         }
 
         private void Write(Zeusfile file, JsonWriter writer)
         {
-            _serializer.Serialize(writer, file);
+            _serializer.Serialize(writer, new ZeusfileSurrogate(file));
         }
     }
 }
