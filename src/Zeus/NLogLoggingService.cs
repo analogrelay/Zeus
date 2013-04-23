@@ -10,10 +10,10 @@ using NLog.Config;
 namespace Zeus
 {
     [Export(typeof(ILoggingService))]
-    public class LoggingService : ILoggingService
+    public class NLogLoggingService : ILoggingService
     {
         [ImportingConstructor]
-        public LoggingService()
+        public NLogLoggingService()
         {
             InitializeLogging();
         }

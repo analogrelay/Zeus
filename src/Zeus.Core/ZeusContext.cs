@@ -17,10 +17,12 @@ namespace Zeus
     /// </remarks>
     public class ZeusContext
     {
-        private readonly string _zeusfilePath;
+        private const string ZeusfileName = "Zeusfile";
+        private string _zeusfilePath;
 
         public string WorkingDirectory { get; private set; }
         public Zeusfile Zeusfile { get; private set; }
+        public string ZeusfileDirectory { get; private set; }
 
         private IFileSystem FileSystem { get; set; }
         private IZeusfileSerializer Serializer { get; set; }
@@ -31,8 +33,6 @@ namespace Zeus
             WorkingDirectory = workingDirectory;
             FileSystem = fileSystem;
             Serializer = serializer;
-
-            _zeusfilePath = Path.Combine(WorkingDirectory, "Zeusfile");
 
             LoadZeusfile();
         }
@@ -47,6 +47,13 @@ namespace Zeus
 
         private void LoadZeusfile()
         {
+            // Find the Zeusfile
+            do
+            {
+                ZeusfileDirectory = ZeusfileDirectory == null ? WorkingDirectory : Path.GetDirectoryName(ZeusfileDirectory);
+                _zeusfilePath = Path.Combine(ZeusfileDirectory, ZeusfileName);
+            } while (!FileSystem.Exists(_zeusfilePath) && !String.IsNullOrEmpty(ZeusfileDirectory));
+
             if (FileSystem.Exists(_zeusfilePath))
             {
                 // Load the Zeusfile

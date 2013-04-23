@@ -52,6 +52,7 @@
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="Commands\AddServiceCommand.cs" />
     <Compile Include="Commands\InitCommand.cs" />
+    <Compile Include="Commands\ListServicesCommand.cs" />
     <Compile Include="CompositionManager.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="ICommandDispatcher.cs" />
