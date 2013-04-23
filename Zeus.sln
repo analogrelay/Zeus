@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus", "src\Zeus\Zeus.csproj", "{0787C07E-FCD1-4C6F-842B-0F35420F08E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus.Core", "Zeus.Core\Zeus.Core.csproj", "{77779CE8-9841-4798-B49D-E0407310D0AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus.Core", "src\Zeus.Core\Zeus.Core.csproj", "{77779CE8-9841-4798-B49D-E0407310D0AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

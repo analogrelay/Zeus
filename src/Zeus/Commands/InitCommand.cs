@@ -7,8 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Fclp;
 using NLog;
-using Zeus.Core;
-using Zeus.Core.Serialization;
 
 namespace Zeus.Commands
 {
@@ -29,13 +27,8 @@ namespace Zeus.Commands
 
             // Create an empty Zeusfile
             Log.Info("Initializing an empty Zeusfile...");
-            Zeusfile file = new Zeusfile();
-
-            // Just save it to the working directory
-            string zeusfilePath = Path.Combine(Environment.CurrentDirectory, "Zeusfile");
-            Log.Info("Saving it to {0}...", zeusfilePath);
-            ZeusfileJsonSerializer serializer = new ZeusfileJsonSerializer();
-            serializer.Write(file, zeusfilePath);
+            ZeusContext context = new ZeusContext(Environment.CurrentDirectory);
+            context.SaveChanges();
         }
     }
 }

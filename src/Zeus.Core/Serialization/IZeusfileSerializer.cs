@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Zeus.Core.Serialization
+namespace Zeus.Serialization
 {
     public interface IZeusfileSerializer
     {

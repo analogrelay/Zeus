@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Fclp;
 using NLog;
-using Zeus.Core;
 
 namespace Zeus.Commands
 {

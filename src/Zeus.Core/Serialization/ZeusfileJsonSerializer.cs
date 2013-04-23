@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Zeus.Core.Serialization
+namespace Zeus.Serialization
 {
     public class ZeusfileJsonSerializer : IZeusfileSerializer
     {

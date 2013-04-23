@@ -67,8 +67,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Zeus.Core\Zeus.Core.csproj">
-      <Project>{77779CE8-9841-4798-B49D-E0407310D0AE}</Project>
+    <ProjectReference Include="..\Zeus.Core\Zeus.Core.csproj">
+      <Project>{77779ce8-9841-4798-b49d-e0407310d0ae}</Project>
       <Name>Zeus.Core</Name>
     </ProjectReference>
   </ItemGroup>
