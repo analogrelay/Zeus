@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="ILoggingService.cs" />
     <Compile Include="IO\IFileSystem.cs" />
     <Compile Include="IO\PhysicalFileSystem.cs" />
     <Compile Include="Resources.Designer.cs">
