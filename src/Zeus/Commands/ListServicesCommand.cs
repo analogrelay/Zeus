@@ -20,7 +20,7 @@ namespace Zeus.Commands
         [ImportingConstructor]
         public ListServicesCommand(ILoggingService logging)
         {
-            Log = logging.GetLogger("AddService");
+            Log = logging.GetLogger("ListServices");
         }
 
         public void Execute(IEnumerable<string> args)

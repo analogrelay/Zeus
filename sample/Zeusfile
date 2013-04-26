@@ -1,7 +1,0 @@
-{
-  "services": {
-    "test": {
-      "type": "Azure.CloudService"
-    }
-  }
-}

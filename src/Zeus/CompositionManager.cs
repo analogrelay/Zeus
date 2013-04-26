@@ -12,7 +12,9 @@ namespace Zeus
         public static TRoot Compose<TRoot>()
         {
             var container = new CompositionContainer(
-                new AssemblyCatalog(typeof(CompositionManager).Assembly));
+                new AggregateCatalog(
+                    new AssemblyCatalog(typeof(CompositionManager).Assembly),
+                    new AssemblyCatalog(typeof(ZeusContext).Assembly)));
             return container.GetExportedValue<TRoot>();
         }
     }
