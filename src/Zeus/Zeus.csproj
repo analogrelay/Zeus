@@ -58,7 +58,6 @@
     <Compile Include="ICommandDispatcher.cs" />
     <Compile Include="ICommandMetadata.cs" />
     <Compile Include="Infrastructure\SnazzyConsoleTarget.cs" />
-    <Compile Include="NLogLoggingService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
