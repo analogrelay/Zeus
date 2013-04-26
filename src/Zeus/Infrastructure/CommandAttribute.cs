@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Zeus
+namespace Zeus.Infrastructure
 {
     [MetadataAttribute]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
@@ -13,16 +13,19 @@ namespace Zeus
     {
         public string Name { get; private set; }
         public string Group { get; private set; }
+        public string Description { get; private set; }
+        public string ArgumentNames { get; set; }
 
-        public CommandAttribute(string name)
+        public CommandAttribute(string name, string description)
             : base(typeof(ICommand))
         {
             Name = name;
+            Description = description;
             Group = String.Empty;
         }
 
-        public CommandAttribute(string name, string group)
-            : this(name)
+        public CommandAttribute(string group, string name, string description)
+            : this(name, description)
         {
             if (group == null)
             {

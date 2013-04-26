@@ -18,11 +18,10 @@ namespace Zeus
     public class ZeusContext
     {
         private const string ZeusfileName = "Zeusfile";
-        private string _zeusfilePath;
 
         public string WorkingDirectory { get; private set; }
         public Zeusfile Zeusfile { get; private set; }
-        public string ZeusfileDirectory { get; private set; }
+        public string ZeusRoot { get; private set; }
 
         private IFileSystem FileSystem { get; set; }
         private IZeusfileSerializer Serializer { get; set; }
@@ -39,7 +38,7 @@ namespace Zeus
 
         public void SaveChanges()
         {
-            using (var stream = FileSystem.OpenWrite(_zeusfilePath))
+            using (var stream = FileSystem.OpenWrite(Path.Combine(ZeusRoot, ZeusfileName)))
             {
                 Serializer.Write(Zeusfile, stream);
             }
@@ -48,22 +47,27 @@ namespace Zeus
         private void LoadZeusfile()
         {
             // Find the Zeusfile
-            do
-            {
-                ZeusfileDirectory = ZeusfileDirectory == null ? WorkingDirectory : Path.GetDirectoryName(ZeusfileDirectory);
-                _zeusfilePath = Path.Combine(ZeusfileDirectory, ZeusfileName);
-            } while (!FileSystem.Exists(_zeusfilePath) && !String.IsNullOrEmpty(ZeusfileDirectory));
+            ZeusRoot = WorkingDirectory;
+            string zeusfilePath = null;
+            while (
+                !String.IsNullOrEmpty(ZeusRoot) && 
+                !FileSystem.Exists(zeusfilePath = Path.Combine(ZeusRoot, ZeusfileName))) {
+                ZeusRoot = Path.GetDirectoryName(ZeusRoot);
+            }
 
-            if (FileSystem.Exists(_zeusfilePath))
+            if (FileSystem.Exists(zeusfilePath))
             {
                 // Load the Zeusfile
-                using (var stream = FileSystem.OpenRead(_zeusfilePath))
+                using (var stream = FileSystem.OpenRead(zeusfilePath))
                 {
                     Zeusfile = Serializer.Read(stream);
                 }
             }
             else
             {
+                // Set the original working directory as our Zeus root
+                ZeusRoot = WorkingDirectory;
+                
                 // Initialize an empty Zeusfile
                 Zeusfile = new Zeusfile();
             }

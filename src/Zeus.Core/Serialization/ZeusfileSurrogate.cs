@@ -9,6 +9,7 @@ namespace Zeus.Serialization.Surrogates
 {
     internal class ZeusfileSurrogate
     {
+        public string AppName { get; set; }
         public IDictionary<string, ZeusServiceSurrogate> Services { get; set; }
 
         [JsonConstructor]
@@ -19,12 +20,14 @@ namespace Zeus.Serialization.Surrogates
 
         public ZeusfileSurrogate(Zeusfile file)
         {
+            AppName = file.AppName;
             Services = file.Services.ToDictionary(s => s.Name, s => new ZeusServiceSurrogate(s));
         }
 
         public Zeusfile ToZeusfile()
         {
             var file = new Zeusfile();
+            file.AppName = AppName;
             file.Services.AddRange(Services.Select(pair => new ZeusService(pair.Key, pair.Value.Type)));
             return file;
         }

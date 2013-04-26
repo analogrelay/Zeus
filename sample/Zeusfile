@@ -1,0 +1,8 @@
+{
+  "appName": "zeus-sample",
+  "services": {
+    "azure.CloudService": {
+      "type": "sample"
+    }
+  }
+}

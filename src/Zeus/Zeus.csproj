@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentCommandLineParser">
-      <HintPath>..\..\packages\FluentCommandLineParser.1.1.0.0\lib\net35\FluentCommandLineParser.dll</HintPath>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\packages\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
@@ -48,15 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandAttribute.cs" />
+    <Compile Include="CommandDescription.cs" />
+    <Compile Include="Infrastructure\ArgumentAttribute.cs" />
+    <Compile Include="Infrastructure\CommandAttribute.cs" />
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="Commands\AddServiceCommand.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\InitCommand.cs" />
     <Compile Include="Commands\ListServicesCommand.cs" />
     <Compile Include="CompositionManager.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="ICommandDispatcher.cs" />
     <Compile Include="ICommandMetadata.cs" />
+    <Compile Include="Infrastructure\OptionAttribute.cs" />
     <Compile Include="Infrastructure\SnazzyConsoleTarget.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

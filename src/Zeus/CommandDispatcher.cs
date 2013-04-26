@@ -59,7 +59,10 @@ namespace Zeus
             string name = args.FirstOrDefault();
             if (String.IsNullOrEmpty(name))
             {
-                Log.Error("Usage: service <{0}> ... options ...", String.Join("|", group.Values.Select(l => l.Metadata.Name)));
+                Log.Error(
+                    "Usage: {0}<{1}> ... options ...",
+                    String.IsNullOrEmpty(groupName) ? String.Empty : (" " + groupName),
+                    String.Join("|", group.Values.Select(l => l.Metadata.Name)));
                 return;
             }
             Lazy<ICommand, ICommandMetadata> cmd;
@@ -83,11 +86,11 @@ namespace Zeus
         private string DumpCommands()
         {
             return String.Join(Environment.NewLine, Commands.SelectMany(
-                p => p.Value.Values.Select(l => 
+                p => p.Value.Values.Select(l =>
                     String.Format(
-                        "Loaded '{0}' command from {1}, {2}", 
-                        (String.IsNullOrEmpty(p.Key) ? "" : (p.Key + " ")) + l.Metadata.Name, 
-                        l.Value.GetType().FullName, 
+                        "Loaded '{0}' command from {1}, {2}",
+                        (String.IsNullOrEmpty(p.Key) ? "" : (p.Key + " ")) + l.Metadata.Name,
+                        l.Value.GetType().FullName,
                         l.Value.GetType().Assembly.GetName().Name))));
         }
     }

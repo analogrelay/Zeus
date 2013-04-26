@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Microsoft.WindowsAzure
+@{
     ViewBag.Title = "Home Page";
 }
 @section featured {
@@ -6,7 +7,7 @@
         <div class="content-wrapper">
             <hgroup class="title">
                 <h1>It's a secret!</h1>
-                <h2>@System.Web.Configuration.WebConfigurationManager.AppSettings["ItsASecret"]</h2>
+                <h2>@CloudConfigurationManager.GetSetting("ItsASecret")</h2>
             </hgroup>
             <p>
                 To learn more about ASP.NET MVC visit

@@ -4,26 +4,21 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Fclp;
 using NLog;
+using Zeus.Infrastructure;
 
 namespace Zeus.Commands
 {
-    [Command(name: "list", group: "service")]
-    public class ListServicesCommand : ICommand
+    [Command("service", "list")]
+    public class ListServicesCommand : CommandBase
     {
-        public Logger Log { get; set; }
-
         public string Name { get; set; }
         public string Type { get; set; }
 
         [ImportingConstructor]
-        public ListServicesCommand(ILoggingService logging)
-        {
-            Log = logging.GetLogger("ListServices");
-        }
+        public ListServicesCommand(ILoggingService log) : base(log) { }
 
-        public void Execute(IEnumerable<string> args)
+        protected override void Execute()
         {
             // Create a Zeus Context
             var context = new ZeusContext(Environment.CurrentDirectory);

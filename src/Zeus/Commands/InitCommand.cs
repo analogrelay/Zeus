@@ -5,29 +5,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Fclp;
 using NLog;
+using Zeus.Infrastructure;
 
 namespace Zeus.Commands
 {
-    [Command("init")]
-    public class InitCommand : ICommand
+    [Command("init", "Initializes a new Zeusfile in the current directory", ArgumentNames = "name")]
+    public class InitCommand : CommandBase
     {
-        public Logger Log { get; set; }
+        [Argument("The name of the application that this Zeusfile will be for", order: 0, required: true)]
+        public string AppName { get; set; }
 
         [ImportingConstructor]
-        public InitCommand(ILoggingService logging)
-        {
-            Log = logging.GetLogger("InitCommand");
-        }
+        public InitCommand(ILoggingService log) : base(log) { }
 
-        public void Execute(IEnumerable<string> args)
+        protected override void Execute()
         {
-            Log.Debug("Running 'init' command.");
+            Log.Info("Creating Zeusfile for '{0}'", AppName);
 
             // Create an empty Zeusfile
-            Log.Info("Initializing an empty Zeusfile...");
             ZeusContext context = new ZeusContext(Environment.CurrentDirectory);
+            context.Zeusfile.AppName = AppName;
             context.SaveChanges();
         }
     }

@@ -4,30 +4,25 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Fclp;
 using NLog;
+using Zeus.Infrastructure;
 
 namespace Zeus.Commands
 {
-    [Command(name: "add", group: "service")]
-    public class AddServiceCommand : ICommand
+    [Command("service", "add", "Adds a service to an existing Zeusfile")]
+    public class AddServiceCommand : CommandBase
     {
-        private const string UsageString = "Usage: service add <name> <type>";
-
-        public Logger Log { get; set; }
-
+        [Argument("The name of the service to add", order: 0, required: true)]
         public string Name { get; set; }
+
+        [Argument("The type of the service to add", order: 1, required: true)]
         public string Type { get; set; }
 
         [ImportingConstructor]
-        public AddServiceCommand(ILoggingService logging)
-        {
-            Log = logging.GetLogger("AddService");
-        }
+        public AddServiceCommand(ILoggingService log) : base(log) { }
 
-        public void Execute(IEnumerable<string> args)
+        protected override void Execute()
         {
-            if (!ParseArguments(args)) { return; }
             Log.Info("Adding {0} service named {1} to Zeusfile", Type, Name);
 
             // Create a Zeus Context
@@ -45,26 +40,6 @@ namespace Zeus.Commands
                 // Save the file
                 context.SaveChanges();
             }
-        }
-
-        private bool ParseArguments(IEnumerable<string> args)
-        {
-            Name = args.FirstOrDefault();
-            if (String.IsNullOrEmpty(Name))
-            {
-                Log.Error("Missing 'name' argument");
-                Log.Error(UsageString);
-                return false;
-            }
-
-            Type = args.Skip(1).FirstOrDefault();
-            if (String.IsNullOrEmpty(Type))
-            {
-                Log.Error("Missing 'type' argument");
-                Log.Error(UsageString);
-                return false;
-            }
-            return true;
         }
     }
 }
