@@ -1,0 +1,22 @@
+{
+  "name": "Zeus",
+  "version": "0.1.0",
+  "description": "GOD OF THE CLOUDS!",
+  "main": "lib\\index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://vibrantcode.visualstudio.com/DefaultCollection/_git/Zeus"
+  },
+  "keywords": [
+    "Zeus",
+    "Azure",
+    "Cloud",
+    "Deployment"
+  ],
+  "author": "Andrew Nurse <andrew@andrewnurse.net>",
+  "license": "Apache 2",
+  "gitHead": "a7dd0f0c83fcc5f84e9c80e2c6ae964f3cfa4f57"
+}
