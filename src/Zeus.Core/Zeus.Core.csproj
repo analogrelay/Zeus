@@ -46,10 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationSetting.cs" />
+    <Compile Include="ConfigurationSettingCollection.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="ILoggingService.cs" />
     <Compile Include="IO\IFileSystem.cs" />
     <Compile Include="IO\PhysicalFileSystem.cs" />
+    <Compile Include="KeyedCollection.cs" />
     <Compile Include="NLogLoggingService.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

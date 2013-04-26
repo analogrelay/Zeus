@@ -1,8 +1,17 @@
 {
-  "appName": "zeus-sample",
+  "appName": "sample",
   "services": {
-    "azure.CloudService": {
-      "type": "sample"
+    "frontend": {
+      "type": "Azure.CloudService",
+      "settings": [
+        {
+          "name": "ItsASecret",
+          "required": true
+        },
+        {
+          "name": "AnotherSecret"
+        }
+      ]
     }
   }
 }

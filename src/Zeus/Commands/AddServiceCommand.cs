@@ -18,9 +18,6 @@ namespace Zeus.Commands
         [Argument("The type of the service to add", order: 1, required: true)]
         public string Type { get; set; }
 
-        [ImportingConstructor]
-        public AddServiceCommand(ILoggingService log) : base(log) { }
-
         protected override void Execute()
         {
             Log.Info("Adding {0} service named {1} to Zeusfile", Type, Name);

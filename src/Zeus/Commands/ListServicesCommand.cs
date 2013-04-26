@@ -9,14 +9,11 @@ using Zeus.Infrastructure;
 
 namespace Zeus.Commands
 {
-    [Command("service", "list")]
+    [Command("service", "list", "Lists services defined in the Zeusfile")]
     public class ListServicesCommand : CommandBase
     {
         public string Name { get; set; }
         public string Type { get; set; }
-
-        [ImportingConstructor]
-        public ListServicesCommand(ILoggingService log) : base(log) { }
 
         protected override void Execute()
         {

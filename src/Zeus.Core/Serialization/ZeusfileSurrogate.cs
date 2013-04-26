@@ -28,22 +28,32 @@ namespace Zeus.Serialization.Surrogates
         {
             var file = new Zeusfile();
             file.AppName = AppName;
-            file.Services.AddRange(Services.Select(pair => new ZeusService(pair.Key, pair.Value.Type)));
+            file.Services.AddRange(Services.Select(pair => CreateService(pair.Key, pair.Value)));
             return file;
+        }
+
+        private ZeusService CreateService(string name, ZeusServiceSurrogate serviceSurrogate)
+        {
+            var service = new ZeusService(name, serviceSurrogate.Type);
+            service.Settings.AddRange(serviceSurrogate.Settings.Select(p => new ConfigurationSetting(p.Name, p.Required)));
+            return service;
         }
     }
 
     internal class ZeusServiceSurrogate
     {
         public string Type { get; set; }
+        public IList<ConfigurationSetting> Settings { get; set; }
 
         public ZeusServiceSurrogate()
         {
+            Settings = new List<ConfigurationSetting>();
         }
 
         public ZeusServiceSurrogate(ZeusService service)
         {
             Type = service.Type;
+            Settings = service.Settings;
         }
     }
 }

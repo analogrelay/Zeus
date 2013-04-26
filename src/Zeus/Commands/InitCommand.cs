@@ -10,14 +10,11 @@ using Zeus.Infrastructure;
 
 namespace Zeus.Commands
 {
-    [Command("init", "Initializes a new Zeusfile in the current directory", ArgumentNames = "name")]
+    [Command("init", "Initializes a new Zeusfile in the current directory")]
     public class InitCommand : CommandBase
     {
         [Argument("The name of the application that this Zeusfile will be for", order: 0, required: true)]
         public string AppName { get; set; }
-
-        [ImportingConstructor]
-        public InitCommand(ILoggingService log) : base(log) { }
 
         protected override void Execute()
         {

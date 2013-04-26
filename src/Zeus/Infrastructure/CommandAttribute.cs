@@ -14,8 +14,7 @@ namespace Zeus.Infrastructure
         public string Name { get; private set; }
         public string Group { get; private set; }
         public string Description { get; private set; }
-        public string ArgumentNames { get; set; }
-
+        
         public CommandAttribute(string name, string description)
             : base(typeof(ICommand))
         {
