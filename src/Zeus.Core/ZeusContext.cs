@@ -72,5 +72,10 @@ namespace Zeus
                 Zeusfile = new Zeusfile();
             }
         }
+
+        public ZeusEnvironment CreateEnvironment(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
