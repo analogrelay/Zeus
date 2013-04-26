@@ -1,1 +1,0 @@
-dir -rec -fil packages.config | foreach { nuget install $_.FullName -o packages }
