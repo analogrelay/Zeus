@@ -1,7 +1,7 @@
 {
-  "name": "Zeus",
+  "name": "zeus-cli",
   "version": "0.1.0",
-  "description": "GOD OF THE CLOUDS!",
+  "description": "Command line interface to Zeus, cloud deployment made easy",
   "main": "./lib/cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

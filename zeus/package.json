@@ -1,0 +1,21 @@
+{
+  "name": "zeus",
+  "version": "0.1.0",
+  "description": "Zeus, cloud deployment made easy",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://vibrantcode.visualstudio.com/DefaultCollection/_git/Zeus"
+  },
+  "keywords": [
+    "zeus",
+    "azure",
+    "cloud",
+    "deployment"
+  ],
+  "author": "Andrew Nurse <andrew@andrewnurse.net>",
+  "license": "Apache 2"
+}
