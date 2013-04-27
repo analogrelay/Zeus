@@ -1,1 +1,1 @@
-@node %~dp0zeus.js
+@node %~dp0zeus.js %*
