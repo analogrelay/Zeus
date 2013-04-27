@@ -1,0 +1,1 @@
+@%~dp0zeus-cli\bin\zeus.cmd %*

@@ -2,9 +2,11 @@
   "name": "zeus",
   "version": "0.1.0",
   "description": "Zeus, cloud deployment made easy",
-  "main": "lib/index.js",
+  "main": "lib/zeus.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm -s run-script jshint && npm -s run-script unit",
+    "unit": "mocha --recursive spec",
+    "jshint": "jshint lib"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,14 @@
     "deployment"
   ],
   "author": "Andrew Nurse <andrew@andrewnurse.net>",
-  "license": "Apache 2"
+  "license": "Apache 2",
+  "dependencies": {
+    "winston": "0.6.x"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "sinon": "~1.6.0",
+    "sandboxed-module": "~0.2.0",
+    "jshint": "~1.1.0"
+  }
 }
