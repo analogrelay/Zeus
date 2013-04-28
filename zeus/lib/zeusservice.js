@@ -1,12 +1,13 @@
-function ZeusService(name, type) {
-	this.name = name || '';
+var _ = require('underscore');
+
+function ZeusService(type) {
 	this.type = type || '';
 	this.config = {};
 }
 
 /** Loads a true ZeusService object out of a plain JS object with matching properties */
-ZeusService.revive = function(name, obj) {
-	return new ZeusService(name, obj.type);
+ZeusService.revive = function(obj) {
+	return new ZeusService(obj.type);
 };
 ZeusService.prototype.cryo = function() {
 	var frozen = {
