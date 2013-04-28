@@ -1,25 +1,30 @@
+Global Options:
+	--verbose,-v
+	--json
+	--zeusfile,-z Specific Zeusfile to use
+
 zeus app init sample
 >> Zeusfile
 	{
 		"name": "sample"
 	}
 
-zeus service add frontend
+zeus service add frontend Azure.CloudService
 >> Zeusfile
 	{
 		"name": "sample"
 		"services": {
-			"frontend": {}
+			"frontend": {"type": "Azure.CloudService"}
 		}
 	}
 
-zeus service add database
+zeus service add database Azure.SqlServer
 >> Zeusfile
 	{
 		"name": "sample"
 		"services": {
-			"frontend": {}
-			"database": {}
+			"frontend": {"type": "Azure.CloudService"}
+			"database": {"type": "Azure.SqlServer"}
 		}
 	}
 
@@ -29,26 +34,28 @@ zeus config add frontend SqlServer '{{database.connectionString}}'
 		"name": "sample"
 		"services": {
 			"frontend": {
+				"type": "Azure.CloudService",
 				"config": {
 					"SqlServer": "{{database.connectionString}}"
 				}
 			}
-			"database": {}
+			"database": {"type": "Azure.SqlServer"}
 		}
 	}
 
-zeus service add storage
+zeus service add storage Azure.StorageAccount
 >> Zeusfile
 	{
 		"name": "sample"
 		"services": {
 			"frontend": {
+				"type": "Azure.CloudService",
 				"config": {
 					"SqlServer": "{{database.connectionString}}"
 				}
 			}
-			"database": {},
-			"storage": {}
+			"database": {"type": "Azure.SqlServer"},
+			"storage": {"type": "Azure.StorageAccount"}
 		}
 	}
 
@@ -58,13 +65,14 @@ zeus config add frontend BlobStorage '{{storage.connectionString}}'
 		"name": "sample"
 		"services": {
 			"frontend": {
+				"type": "Azure.CloudService",
 				"config": {
 					"SqlServer": "{{database.connectionString}}",
 					"BlobStorage": "{{storage.connectionString}}"
 				}
 			}
-			"database": {},
-			"storage": {}
+			"database": {"type": "Azure.SqlServer"},
+			"storage": {"type": "Azure.StorageAccount"}
 		}
 	}
 
@@ -74,14 +82,15 @@ zeus config add frontend EnvironmentName '{{env.name}}'
 		"name": "sample"
 		"services": {
 			"frontend": {
+				"type": "Azure.CloudService",
 				"config": {
 					"SqlServer": "{{database.connectionString}}",
 					"BlobStorage": "{{storage.connectionString}}",
 					"EnvironmentName": "{{env.name}}"
 				}
 			}
-			"database": {},
-			"storage": {}
+			"database": {"type": "Azure.SqlServer"},
+			"storage": {"type": "Azure.StorageAccount"}
 		}
 	}
 
@@ -91,15 +100,16 @@ zeus config add frontend SomeExternalService
 		"name": "sample"
 		"services": {
 			"frontend": {
+				"type": "Azure.CloudService",
 				"config": {
 					"SqlServer": "{{database.connectionString}}",
 					"BlobStorage": "{{storage.connectionString}}",
 					"EnvironmentName": "{{env.name}}",
-					"SomeExternalService": { required: true; }
+					"SomeExternalService": null
 				}
 			}
-			"database": {},
-			"storage": {}
+			"database": {"type": "Azure.SqlServer"},
+			"storage": {"type": "Azure.StorageAccount"}
 		}
 	}
 
@@ -109,19 +119,20 @@ zeus config add frontend --optional SomeExternalService
 		"name": "sample"
 		"services": {
 			"frontend": {
+				"type": "Azure.CloudService",
 				"config": {
 					"SqlServer": "{{database.connectionString}}",
 					"BlobStorage": "{{storage.connectionString}}",
 					"EnvironmentName": "{{env.name}}",
-					"SomeExternalService": null
+					"SomeExternalService": { required: false }
 				}
 			}
-			"database": {},
-			"storage": {}
+			"database": {"type": "Azure.SqlServer"},
+			"storage": {"type": "Azure.StorageAccount"}
 		}
 	}
 
-zeus config add frontend --optional CacheService "{ url: {{cacheService.endpoint}}, key: {{cacheService.key}} }"
+zeus config add frontend CacheService "{ url: {{cacheService.endpoint}}, key: {{cacheService.key}} }"
 >> Zeusfile
 	{
 		"name": "sample"
@@ -133,11 +144,11 @@ zeus config add frontend --optional CacheService "{ url: {{cacheService.endpoint
 					"BlobStorage": "{{storage.connectionString}}",
 					"EnvironmentName": "{{env.name}}",
 					"SomeExternalService": null,
-					"CacheService?": { url: {{cacheService.endpoint}}, key: {{cacheService.key}} }
+					"CacheService": "{ url: {{cacheService.endpoint}}, key: {{cacheService.key}} }"
 				}
 			}
-			"database": {},
-			"storage": {}
+			"database": {"type": "Azure.SqlServer"},
+			"storage": {"type": "Azure.StorageAccount"}
 		}
 	}
 
@@ -172,3 +183,7 @@ zeus repo list Sample
 
 zeus env deploy qa.zeusspec frontend Sample@1.2.3
 >> Deploys Sample.Frontend v1.2.3 package from the main repo to the frontend
+
+zeus env deploy qa.zeusspec Sample@1.2.3
+>> Deploys Sample.[ServiceName] v1.2.3 packages from the main repo to the various services.
+>> Unless a "Sample" package is available, in which case, it should have dependencies on the other packages and scripts to deploy them.
