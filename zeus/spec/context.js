@@ -26,7 +26,7 @@ describe('zeus', function() {
 				var context = new Context({boo:'urns'}, 'this/aint/real');
 				var expected = new Error('Ruh roh!');
 				var writeFile = Context._.fs.writeFile;
-				writeFile.callsArgWith(2, expected);
+				writeFile.yields(expected);
 
 				// Act
 				context.save(function(actual) {
@@ -42,11 +42,11 @@ describe('zeus', function() {
 				var Context = underTest();
 				var context = new Context({boo:'urns'}, 'this/aint/real');
 				var writeFile = Context._.fs.writeFile;
-				writeFile.callsArgWith(2, false);
+				writeFile.yields(false);
 
 				// Act
 				context.save(function(err) {
-					assert.ok(!err);
+					assert.ifError(err);
 					assert.ok(writeFile.called);
 					assert.equal(writeFile.getCall(0).args[0], 'this/aint/real');
 					assert.equal(writeFile.getCall(0).args[1], "{\n  \"boo\": \"urns\"\n}");

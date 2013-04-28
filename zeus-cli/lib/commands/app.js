@@ -1,4 +1,4 @@
-var zeus = require('../ref/zeus');
+var zeus = require('zeus');
 
 exports.init = function(cli) {
 	var log = cli.output;

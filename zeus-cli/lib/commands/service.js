@@ -1,5 +1,8 @@
+var zeus = require('zeus');
+
 function add(name, type, options, cb) {
-	console.log("Adding " + type + " service called " + name);
+	// Get the zeus context
+	var context = zeus.context(process.cwd())
 	cb();
 }
 
