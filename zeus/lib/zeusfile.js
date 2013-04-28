@@ -11,7 +11,6 @@ Zeusfile.revive = function(obj) {
 	var zf = new Zeusfile(obj.name);
 	if(obj.services) {
 		_.each(obj.services, function(value, key, list) {
-			console.log("reviving " + key);
 			zf.services[key] = ZeusService.revive(value);
 		});
 	}
