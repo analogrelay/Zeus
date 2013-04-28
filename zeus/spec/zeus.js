@@ -20,7 +20,7 @@ describe('#context(dir, appname)', function() {
 	afterEach(function() {
 		// Clean up the sandbox
 		sandbox.restore();
-	})
+	});
 
 	it('should throw if zeus context already exists', function(done) {
 		// Arrange
@@ -31,7 +31,7 @@ describe('#context(dir, appname)', function() {
 		
 		// Act/Assert
 		zeus.context('mydir', 'newapp', function(err, context) {
-			assert.equal("Can't create a new Zeusfile. There is already one in this directory", err.message);
+			assert.equal(err.message, "Can't create a new Zeusfile. There is already one in this directory");
 			done();
 		});
 	});
