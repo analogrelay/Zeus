@@ -58,7 +58,7 @@ exports.service = function(workingDirectory, serviceName, log, callback) {
 		if(err) {
 			callback(err);
 		} else if(name in context.zf.services) {
-			callback(null, context.zf.services[name]);
+			callback(null, context, context.zf.services[name]);
 		} else {
 			callback(new Error("Service not defined: " + name));
 		}

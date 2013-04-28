@@ -125,8 +125,10 @@ log.format = function (options) {
         transport.level = options.level;
       }
 
-      if (options.logo) {
+      if (options.logo == 'off') {
         log.format.logo = options.logo;
+      } else {
+        log.format.logo = 'on';
       }
     }
   }
@@ -646,19 +648,23 @@ function rootHelpInformation() {
   setupCommand(args, raw, true);
 
   if (log.format().logo === 'on') {
-    log.info('         _    _____   _ ___ ___'.cyan);
-    log.info('        /_\\  |_  / | | | _ \\ __|'.cyan);
-    log.info('  _ ___'.grey + '/ _ \\'.cyan + '__'.grey + '/ /| |_| |   / _|'.cyan + '___ _ _'.grey);
-    log.info('(___  '.grey + '/_/ \\_\\/___|\\___/|_|_\\___|'.cyan + ' _____)'.grey);
-    log.info('   (_______ _ _)         _ ______ _)_ _ '.grey);
-    log.info('          (______________ _ )   (___ _ _)'.grey);
+    log.info('            _____             '.red.bold);
+    log.info(' __________'.grey + '|__   |___ _ _ ___ '.red.bold + '________  '.grey);
+    log.info('(___       '.grey + '|   __| -_| | |_ -|'.red.bold + '     ___) '.grey);
+    log.info('   (_______'.grey + '|_____|___|___|___|'.red.bold + '_____)___ '.grey);
+    log.info('          (________________)   (_______)'.grey);
+    log.info('            .\'____    ,\''.yellow.bold);
+    log.info('                 /  ,\''.yellow.bold);
+    log.info('                / ,\''.yellow.bold);
+    log.info('               /,\''.yellow.bold);
+    log.info('              /\''.yellow.bold);
     log.info('');
   }
 
   var packagePath = path.join(__dirname, '../package.json');
   var packageInfo = JSON.parse(fs.readFileSync(packagePath));
 
-  log.info('Zeus! God of the Clouds! Cloud Deployment Made Easy');
+  log.info('Cloud Deployment Made Easy');
   log.info('');
   log.info('Tool version', packageInfo.version);
 
