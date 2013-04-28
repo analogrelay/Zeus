@@ -1,26 +1,34 @@
-function ConfigSetting(name, template, required) {
+function ConfigSetting(template, required) {
 	if(typeof template === 'boolean') {
 		required = template;
 		template = '';
+	} else if(typeof required === 'undefined') {
+		required = true;
 	}
 
-	this.name = name || '';
 	this.template = template || '';
-	this.required = required || true;
+	this.required = required;
 }
 
 /** Loads a true ConfigSetting object out of a plain JS object with matching properties */
-ConfigSetting.revive = function(name, obj) {
-	return new ConfigSetting(name, obj.template, obj.required);
+ConfigSetting.revive = function(obj) {
+	if(!obj) {
+		return new ConfigSetting('', true);
+	} else if(typeof obj === 'string') {
+		return new ConfigSetting(obj, true);
+	} else {
+		return new ConfigSetting(obj.template, obj.required);
+	}
 };
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
 ConfigSetting.prototype.cryo = function() {
-	var frozen = {};
-	var isNull = true;
 	if(!this.template && this.required) {
 		return null;
+	} else if(this.template && this.required) {
+		return this.template;
 	} else {
+		var frozen = {};
 		if(this.template) {
 			frozen.template = this.template;
 		}

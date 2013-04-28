@@ -1,8 +1,6 @@
 var assert = require('assert'),
 	path = require('path'),
-	sandbox = require('sandboxed-module'),
-	sinon = require('sinon'),
-	mockery = require('mockery');
+	sinon = require('sinon');
 
 describe('Context', function() {
 	describe('#save', function() {
