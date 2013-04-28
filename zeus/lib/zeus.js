@@ -15,7 +15,7 @@ function findZeusfile(log, dir, callback) {
 	log.verbose("searching for Zeusfile in " + dir);
 	fs.exists(zfpath, function(exists) {
 		if(exists) return callback(null, zfpath);
-		
+
 		var newdir = path.dirname(dir);
 		if(newdir == dir) {
 			callback(new Error("No Zeusfile found!")); // No luck and we're at the top of the directory tree
