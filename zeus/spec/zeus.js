@@ -104,6 +104,7 @@ describe('zeus', function() {
 				.yields(true);
 			zeus._.fs
 				.exists
+				.withArgs(path.join(subsub, 'Zeusfile'), sinon.match.func)
 				.yields(false);
 			zeus._.fs
 				.readFile
@@ -131,6 +132,11 @@ describe('zeus', function() {
 				.yields(true);
 			zeus._.fs
 				.exists
+				.withArgs(path.join(subsub, 'Zeusfile'), sinon.match.func)
+				.yields(false);
+			zeus._.fs
+				.exists
+				.withArgs(path.join(sub, 'Zeusfile'), sinon.match.func)
 				.yields(false);
 			zeus._.fs
 				.readFile

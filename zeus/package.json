@@ -5,7 +5,7 @@
   "main": "lib/zeus.js",
   "scripts": {
     "test": "npm -s run-script jshint && npm -s run-script unit",
-    "unit": "mocha --recursive spec",
+    "unit": "mocha --reporter spec --recursive spec",
     "jshint": "jshint lib"
   },
   "repository": {
