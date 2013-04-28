@@ -3,7 +3,7 @@ var zeus = require('../ref/zeus');
 exports.init = function(cli) {
 	var log = cli.output;
 	var app = cli.category('app')
-		.description('Commands for managing the Zeusfile which defines an app')
+		.description('Commands for managing Zeusfiles')
 
 	function init(appname, options, cb) {
 		// Set up a zeus context
