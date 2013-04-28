@@ -12,10 +12,10 @@ exports.init = function(cli) {
 			if(err) throw err;
 			
 			// Check if the service already exists
-			if(name in context.zf.services) {
+			if(context.zf.hasService(name)) {
 				log.error("Service already defined: " + name);
 			} else {
-				context.zf.services[name] = new zeus.ZeusService(type);
+				context.zf.services.push(new zeus.ZeusService(name, type));
 				context.save(cb);
 			}
 		})
@@ -26,8 +26,8 @@ exports.init = function(cli) {
 		zeus.context(process.cwd(), log, function(err, context) {
 			if(err) throw err;
 
-			_.each(context.zf.services, function(value, key, list) {
-				log.info(" * " + key + ": " + value.type);
+			_.each(context.zf.services, function(value, index, list) {
+				log.info(" * " + value.name + ": " + value.type);
 			});
 
 			cb();
@@ -40,10 +40,10 @@ exports.init = function(cli) {
 			if(err) throw err;
 			
 			// Check if the service exists
-			if(!(name in context.zf.services)) {
+			if(!context.zf.hasService(name)) {
 				log.error("Service not defined: " + name);
 			} else {
-				delete context.zf.services[name];
+				context.zf.removeService(name);
 				context.save(cb);
 			}
 		})

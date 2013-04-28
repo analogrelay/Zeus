@@ -8,7 +8,7 @@ function Context(zf, zfpath, log) {
 }
 Context.prototype.save = function(callback) {
 	// Pretty-print the JSON
-	var str = JSON.stringify(this.zf, null, 2);
+	var str = JSON.stringify(this.zf.cryo(), null, 2);
 	
 	// Write it out
 	this._log.verbose('writing Zeusfile: ' + this.path);

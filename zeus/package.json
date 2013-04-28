@@ -28,6 +28,7 @@
     "mocha": "*",
     "sinon": "~1.6.0",
     "sandboxed-module": "~0.2.0",
-    "jshint": "~1.1.0"
+    "jshint": "~1.1.0",
+    "mockery": "~1.4.0"
   }
 }

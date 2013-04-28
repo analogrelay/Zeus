@@ -17,4 +17,16 @@ Zeusfile.revive = function(obj) {
 	return zf;
 };
 
+/** Returns a copy of the object designed for cleaner JSON serialization */
+Zeusfile.prototype.cryo = function() {
+	var frozen = {
+		name: this.name,
+		services: {}
+	};
+	_.each(this.services, function(element, key, list) {
+		frozen.services[key] = element.cryo();
+	});
+	return frozen;
+};
+
 exports = module.exports = Zeusfile;

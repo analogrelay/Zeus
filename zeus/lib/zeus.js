@@ -31,13 +31,13 @@ function init(zfpath, appname, log, callback) {
 	zf.name = appname;
 
 	// Build a context around that Zeusfile and return it.
-	log.verbose('initializing Zeus context: ' + zfpath)
+	log.verbose('initializing Zeus context: ' + zfpath);
 	callback(null, new Context(zf, zfpath, log));
 }
 
 function load(zfpath, log, callback) {
 	// Read the Zeusfile
-	log.verbose('reading Zeusfile: ' + zfpath)
+	log.verbose('reading Zeusfile: ' + zfpath);
 	fs.readFile(zfpath, function(err, data) {
 		if(err) {
 			callback(err);
@@ -52,6 +52,20 @@ function load(zfpath, log, callback) {
 // Exports
 exports.version = package.version;
 
+/** Shortcut to go straight to a specific service in an existing Zeus context */
+exports.service = function(workingDirectory, serviceName, log, callback) {
+	zeus.context(workingDirectory, log, function(err, context) {
+		if(err) {
+			callback(err);
+		} else if(name in context.zf.services) {
+			callback(null, context.zf.services[name]);
+		} else {
+			callback(new Error("Service not defined: " + name));
+		}
+	});
+};
+
+/** Loads or creates the Zeus context for the specified directory */
 exports.context = function(workingDirectory, appname, log, callback) {
 	if(typeof appname !== 'string') {
 		// Appname is a log
