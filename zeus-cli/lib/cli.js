@@ -642,6 +642,33 @@ commander.Command.prototype.fullName = function () {
   return name;
 };
 
+// Patch usage()
+/**
+ * Set / get the command usage `str`.
+ *
+ * @param {String} str
+ * @return {String|Command}
+ * @api public
+ */
+
+commander.Command.prototype.usage = function(str){
+  var args = this.args.map(function(arg){
+    return arg.required
+      ? '<' + arg.name + '>'
+      : '[' + arg.name + ']';
+  });
+
+  var usage = '[options'
+    + (this.commands.length ? '] [command' : '')
+    + ']'
+    /* REMOVED + (this.args.length ? ' ' + args : ''); */
+    /* ADDED */ + (this.args.length ? ' ' + args.join(' ') : '');
+  if (0 == arguments.length) return this._usage || usage;
+  this._usage = str;
+
+  return this;
+};
+
 function rootHelpInformation() {
   var args = process.argv.slice(0, 2);
   var raw = cli.normalize(process.argv.slice(2));

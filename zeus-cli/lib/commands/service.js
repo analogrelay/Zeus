@@ -15,7 +15,7 @@ exports.init = function(cli) {
 			if(context.zf.hasService(name)) {
 				log.error("Service already defined: " + name);
 			} else {
-				context.zf.services.push(new zeus.ZeusService(name, type));
+				context.zf.services[name] = new zeus.ZeusService(type);
 				context.save(cb);
 			}
 		})
@@ -43,7 +43,7 @@ exports.init = function(cli) {
 			if(!context.zf.hasService(name)) {
 				log.error("Service not defined: " + name);
 			} else {
-				context.zf.removeService(name);
+				delete context.zf.services[name];
 				context.save(cb);
 			}
 		})

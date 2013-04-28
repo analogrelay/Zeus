@@ -8,27 +8,67 @@ exports.init = function(cli) {
 
 	function add(service, name, template, options, cb) {
 		// Get the zeus service
-		zeus.service(process.cwd(), name, log, function(err, context, service) {
+		zeus.service(process.cwd(), service, log, function(err, context, service) {
 			if(err) throw err;
 
 			// Check for a conflicting config name
 			if(name in service.config) {
 				log.error("Config setting already defined: " + name);
 			} else {
-				service.config.push(new zeus.ConfigSetting(template, true));
+				service.config[name] = new zeus.ConfigSetting(template, !options.optional);
 				context.save(cb);
 			}
 		});
 	}
 
-	function list(options, cb) {
+	function list(service, options, cb) {
+		// Get the zeus service
+		zeus.context(process.cwd(), log, function(err, context) {
+			if(err) throw err;
+
+			var services = context.zf.services;
+			if(service) {
+				if(!(service in context.zf.services)) {
+					log.error('No such servie: ' + name);
+				}
+				services = {};
+				services[service] = context.zf.services[service];
+			}
+
+			_.each(services, function(service, name, list) {
+				log.info('Config for ' + name + ':');
+				_.each(service.config, function(value, name, list) {
+					log.info(
+						(value.required ? " ! ".red.bold : " ? ".cyan.bold) +
+						name + " = " +
+						(value.template || '<no value>'));
+				});
+			});
+			log.info('');
+			log.info('!'.red.bold + ' = Required, ' + '?'.cyan.bold + ' = Optional');
+
+			cb();
+		});
 	}
 
-	function remove(options, cb) {
+	function remove(service, name, options, cb) {
+		// Get the zeus service
+		zeus.service(process.cwd(), service, log, function(err, context, service) {
+			if(err) throw err;
+
+			// Check for a conflicting config name
+			if(!(name in service.config)) {
+				log.error("Config setting not defined: " + name);
+			} else {
+				delete service.config[name];
+				context.save(cb);
+			}
+		});
 	}
 
 	config
 		.command('add <service> <name> [template]')
+		.option('-o, --optional', 'Mark this setting as optional')
 		.description('Adds a configuration setting to the specified service')
 		.execute(add);
 

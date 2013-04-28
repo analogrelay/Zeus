@@ -2,7 +2,10 @@
   "name": "sample",
   "services": {
     "frontend": {
-      "type": "Azure.CloudService"
+      "type": "Azure.CloudService",
+      "config": {
+        "SqlServer": "{{database.connectionString}}"
+      }
     }
   }
 }

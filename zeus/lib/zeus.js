@@ -7,7 +7,8 @@ var package = require('../package'),
 // Local File References
 var Zeusfile = exports.Zeusfile = require('./zeusfile'),
 	Context = exports.Context = require('./context'),
-	ZeusService = exports.ZeusService = require('./zeusservice');
+	ZeusService = exports.ZeusService = require('./zeusservice'),
+	ConfigSetting = exports.ConfigSetting = require('./configsetting');
 
 // Local Functions
 function findZeusfile(log, dir, callback) {
@@ -52,19 +53,6 @@ function load(zfpath, log, callback) {
 // Exports
 exports.version = package.version;
 
-/** Shortcut to go straight to a specific service in an existing Zeus context */
-exports.service = function(workingDirectory, serviceName, log, callback) {
-	zeus.context(workingDirectory, log, function(err, context) {
-		if(err) {
-			callback(err);
-		} else if(name in context.zf.services) {
-			callback(null, context, context.zf.services[name]);
-		} else {
-			callback(new Error("Service not defined: " + name));
-		}
-	});
-};
-
 /** Loads or creates the Zeus context for the specified directory */
 exports.context = function(workingDirectory, appname, log, callback) {
 	if(typeof appname !== 'string') {
@@ -103,6 +91,19 @@ exports.context = function(workingDirectory, appname, log, callback) {
 			}
 		});
 	}
+};
+
+/** Shortcut to go straight to a specific service in an existing Zeus context */
+exports.service = function(workingDirectory, serviceName, log, callback) {
+	exports.context(workingDirectory, log, function(err, context) {
+		if(err) {
+			callback(err);
+		} else if(serviceName in context.zf.services) {
+			callback(null, context, context.zf.services[serviceName]);
+		} else {
+			callback(new Error("Service not defined: " + serviceName));
+		}
+	});
 };
 
 module.exports = exports;
