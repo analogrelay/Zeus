@@ -1,0 +1,8 @@
+{
+  "name": "sample",
+  "services": {
+    "frontend": {
+      "type": "Azure.CloudService"
+    }
+  }
+}

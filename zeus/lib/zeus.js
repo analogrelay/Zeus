@@ -6,18 +6,21 @@ var package = require('../package'),
 
 // Local File References
 var Zeusfile = exports.Zeusfile = require('./zeusfile'),
-	Context = exports.Context = require('./context');
+	Context = exports.Context = require('./context'),
+	ZeusService = exports.ZeusService = require('./zeusservice');
 
 // Local Functions
-function findZeusfile(dir, callback) {
+function findZeusfile(log, dir, callback) {
 	var zfpath = path.join(dir, 'Zeusfile');
+	log.verbose("searching for Zeusfile in " + dir);
 	fs.exists(zfpath, function(exists) {
-		if(exists) callback(null, zfpath);
+		if(exists) return callback(null, zfpath);
+		
 		var newdir = path.dirname(dir);
 		if(newdir == dir) {
 			callback(new Error("No Zeusfile found!")); // No luck and we're at the top of the directory tree
 		} else {
-			findZeusfile(newdir, callback);
+			findZeusfile(log, newdir, callback);
 		}
 	});
 }
@@ -28,22 +31,19 @@ function init(zfpath, appname, log, callback) {
 	zf.name = appname;
 
 	// Build a context around that Zeusfile and return it.
+	log.verbose('initializing Zeus context: ' + zfpath)
 	callback(null, new Context(zf, zfpath, log));
 }
 
 function load(zfpath, log, callback) {
 	// Read the Zeusfile
-	var zf = new Zeusfile();
+	log.verbose('reading Zeusfile: ' + zfpath)
 	fs.readFile(zfpath, function(err, data) {
 		if(err) {
 			callback(err);
 		} else {
-			var loaded = JSON.parse(data);
-			var keys = Object.keys(zf);
-			for(var i in keys) {
-				var k = keys[i];
-				zf[k] = loaded[k];
-			}
+			log.verbose('reviving Zeusfile');
+			var zf = Zeusfile.revive(JSON.parse(data));
 			callback(null, new Context(zf, zfpath, log));
 		}
 	});
@@ -64,9 +64,10 @@ exports.context = function(workingDirectory, appname, log, callback) {
 		callback = log;
 		log = winston;
 	}
+	log.verbose('loading Zeus context for ' + workingDirectory);
 
 	var zfpath = path.join(workingDirectory, 'Zeusfile');
-	if(appname) {
+	if(!!appname) {
 		// Check for a zeusfile locally
 		fs.exists(zfpath, function(exists) {
 			if(exists) {
@@ -80,7 +81,7 @@ exports.context = function(workingDirectory, appname, log, callback) {
 		});
 	} else {
 		// Find the zeusfile
-		findZeusfile(workingDirectory, function(err, zfpath) {
+		findZeusfile(log, workingDirectory, function(err, zfpath) {
 			if(err) {
 				callback(err);
 			} else {

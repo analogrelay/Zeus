@@ -1,7 +1,7 @@
-var assert = require('assert'),
-	path = require('path'),
-	sandbox = require('sandboxed-module'),
-	sinon = require('sinon');
+assert = require('assert'),
+path = require('path'),
+sandbox = require('sandboxed-module'),
+sinon = require('sinon');
 
 function underTest() {
 	// Create mock modules

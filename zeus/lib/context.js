@@ -8,9 +8,11 @@ function Context(zf, zfpath, log) {
 }
 Context.prototype.save = function(callback) {
 	// Pretty-print the JSON
+	debugger;
 	var str = JSON.stringify(this.zf, null, 2);
 	
 	// Write it out
+	this._log.verbose('writing Zeusfile: ' + this.path);
 	fs.writeFile(this.path, str, callback);
 };
 

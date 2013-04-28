@@ -21,7 +21,8 @@
   "author": "Andrew Nurse <andrew@andrewnurse.net>",
   "license": "Apache 2",
   "dependencies": {
-    "winston": "0.6.x"
+    "winston": "0.6.x",
+    "underscore": "~1.4.4"
   },
   "devDependencies": {
     "mocha": "*",
