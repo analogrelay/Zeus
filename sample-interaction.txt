@@ -157,3 +157,18 @@ zeus env init qa
 			}
 		}
 	}
+
+zeus env provision qa.zeusspec
+>> Creates Azure resources
+
+zeus repo add https://sample.example.com/myfeed
+>> Registers https://sample.example.com/myfeed as a repo in the Zeusfile
+
+zeus repo list Sample
+>> Lists available Sample packages:
+* Sample.Frontend@1.2.3 - [Desc]
+* Sample.Frontend@1.1.0 - [Desc]
+* ...
+
+zeus env deploy qa.zeusspec frontend Sample@1.2.3
+>> Deploys Sample.Frontend v1.2.3 package from the main repo to the frontend
