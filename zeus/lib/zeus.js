@@ -33,7 +33,14 @@ function init(zfpath, appname, log, callback) {
 
 	// Build a context around that Zeusfile and return it.
 	log.verbose('initializing Zeus context: ' + zfpath);
-	callback(null, new Context(zf, zfpath, log));
+	var context = new Context(zf, zfpath, log);
+	context.loadPlugins(function(err) {
+		if(err) {
+			callback(err);
+		} else {
+			callback(context);
+		}
+	})
 }
 
 function load(zfpath, log, callback) {
@@ -45,7 +52,14 @@ function load(zfpath, log, callback) {
 		} else {
 			log.verbose('reviving Zeusfile');
 			var zf = Zeusfile.revive(JSON.parse(data));
-			callback(null, new Context(zf, zfpath, log));
+			var context = new Context(zf, zfpath, log);
+			context.loadPlugins(function(err) {
+				if(err) {
+					callback(err);
+				} else {
+					callback(null, context);
+				}
+			})
 		}
 	});
 }
