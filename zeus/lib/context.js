@@ -8,7 +8,7 @@ function Context(zf, zfpath, log) {
 	this.path = zfpath;
 	this._log = log || winston;
 
-	this.provisioners = {};
+	this.plugins = {};
 }
 
 /** Check this context for any issues relating to missing plugins */
@@ -21,6 +21,15 @@ Context.prototype.check = function() {
 		}
 	});
 	return issues;
+}
+
+Context.prototype.createInstance = function(environmentName, serviceName, service) {
+	// Find the plugin for the service
+	if(!(service.type in this.plugins)) {
+		throw new Error('no plugin for service type: ' + service.type);
+	} else {
+		return this.plugins[service.type].createInstance(environmentName, serviceName, service);
+	}
 }
 
 Context.prototype.loadPlugins = function(dir, callback) {

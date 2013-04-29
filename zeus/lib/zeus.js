@@ -8,7 +8,9 @@ var package = require('../package'),
 var Zeusfile = exports.Zeusfile = require('./zeusfile'),
 	Context = exports.Context = require('./context'),
 	ZeusService = exports.ZeusService = require('./zeusservice'),
-	ConfigSetting = exports.ConfigSetting = require('./configsetting');
+	ConfigSetting = exports.ConfigSetting = require('./configsetting'),
+	Environment = exports.Environment = require('./environment'),
+	ServiceInstance = exports.ServiceInstance = require('./serviceinstance');
 
 // Local Functions
 function findZeusfile(log, dir, callback) {
