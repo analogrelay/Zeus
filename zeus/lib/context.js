@@ -23,12 +23,12 @@ Context.prototype.check = function() {
 	return issues;
 }
 
-Context.prototype.createInstance = function(env, serviceName, service, callback) {
+Context.prototype.createServiceInstance = function(env, serviceName, service, callback) {
 	// Find the plugin for the service
 	if(!(service.type in this.plugins)) {
 		callback(new Error('no plugin for service type: ' + service.type));
 	} else {
-		this.plugins[service.type].createInstance(env, serviceName, service, callback);
+		this.plugins[service.type].createServiceInstance(env, serviceName, service, callback);
 	}
 }
 

@@ -6,11 +6,12 @@ var Plugin = require('../plugin'),
 function CloudServicePlugin(context, cli, log) {
 	Plugin.apply(this, [context, cli, log]);
 }
-CloudServicePlugin.prototype.createInstance = function(env, serviceName, service, callback) {
+
+CloudServicePlugin.prototype.createServiceInstance = function(env, serviceName, service, callback) {
 	var self = this;
 	var instanceName = self.context.zf.name + '-' + serviceName + '-' + env.name;
 
-	function continuation(err, subscriptionId) {
+	function afterGetLocation(err) {
 		if(err) {
 			callback(err);
 		}
@@ -19,13 +20,37 @@ CloudServicePlugin.prototype.createInstance = function(env, serviceName, service
 		}
 	}
 
+	function afterGetSubscription(err) {
+		if(err) {
+			callback(err);
+		}
+		else {
+			scripty.invoke('account affinity-group list', function(err, affinityGroups) {
+				if(err) {
+					continuation(new Error("you have no affinity groups, create some in the portal first"));
+				} else {
+					var names = _.map(affinityGroups, function(item) {
+						return item.Name + ' (' + item.Location + ')';
+					});
+
+					self.log.info("Choose an Affinity Group to use for this application: ")
+					self.cli.choose(names, function(i) {
+						self.log.info("Using '" + names[i] + "'.");
+						env.config.affinityGroup = affinityGroups[i].Name;
+						afterGetLocation(null);
+					});
+				}
+			});
+		}
+	}
+
 	if(env.config.subscriptionId) {
-		continuation(null, env.config.subscriptionId);
+		afterGetSubscription(null);
 	} else {
 		// Get a list of available subscriptions
 		scripty.invoke('account list', function(err, accounts) {
 			if(err) {
-				continuation(new Error("No Azure Accounts have been registered, run 'azure account list' for more info"));
+				callback(new Error("no Azure accounts have been registered, run 'azure account list' for more info"));
 			} else {
 				var names = _.pluck(accounts, "Name");
 
@@ -33,11 +58,15 @@ CloudServicePlugin.prototype.createInstance = function(env, serviceName, service
 				self.cli.choose(names, function(i) {
 					self.log.info("Using '" + names[i] + "'.");
 					env.config.subscriptionId = accounts[i].Id;
-					continuation(null, env.config.subscriptionId);
+					afterGetSubscription(null);
 				});
 			}
 		});
 	}
+};
+
+CloudServicePlugin.prototype.provision = function(env, context, serviceName, callback) {
+
 };
 
 exports.attach = function(context, cli, log) {

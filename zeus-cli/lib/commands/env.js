@@ -9,7 +9,7 @@ exports.init = function(cli) {
 		.description("Manage environments in which Zeus services can be deployed");
 
 	function createInstances(context, env, serviceName, rest, callback) {
-		context.createInstance(env, serviceName, context.zf.services[serviceName], function (err, instance) {
+		context.createServiceInstance(env, serviceName, context.zf.services[serviceName], function (err, instance) {
 			if(err) {
 				callback(err);
 			} else {
@@ -43,7 +43,7 @@ exports.init = function(cli) {
 						env.save(outputPath, function(err) {
 							if(err) throw err;
 
-							log.warn("Saved " + outputPath + ". This contains/will contain secret data! Make sure you store it " + "outside".yellow.bold + " your source code repository");
+							log.warn("Saved " + outputPath + ". " + "This contains secret data!".red.bold + " Make sure you store it " + "outside".yellow.bold + " your source code repository");
 							cb();
 						});
 					});
