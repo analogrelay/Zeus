@@ -22,7 +22,9 @@
   "license": "Apache 2",
   "dependencies": {
     "winston": "0.6.x",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "azure": "~0.7.2",
+    "xml2js": "~0.2.6"
   },
   "devDependencies": {
     "mocha": "*",

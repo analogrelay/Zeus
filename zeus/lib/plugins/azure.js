@@ -1,7 +1,84 @@
 var Plugin = require('../plugin'),
-	scripty = require('azure-scripty'),
+	azure = require('azure'),
+	xml2js = require('xml2js'),
 	_ = require('underscore'),
 	ServiceInstance = require('../serviceinstance.js');
+
+// From azure-cli - We want to share the same data.
+function homeFolder() {
+	if (process.env.HOME !== undefined) {
+		return process.env.HOME;
+	}
+
+	if (process.env.HOMEDRIVE && process.env.HOMEPATH) {
+		return process.env.HOMEDRIVE + process.env.HOMEPATH;
+	}
+
+	throw new Error('No HOME path available');
+}
+
+function azureDir() {
+	var dir = process.env.AZURE_CONFIG_DIR ||
+		path.join(homeFolder(), '.azure');
+
+	if (!exports.pathExistsSync(dir)) {
+		fs.mkdirSync(dir, 502); // 0766
+	}
+
+	return dir;
+};
+// End
+
+// Hacked up from azure-cli
+function readSubscriptions (callback) {
+	fs.exists(publishSettingsFilePath, function(exists) {
+		if(!exists) {
+			callback(new Error('No publish settings file found. Please use the "azure account import" command via the azure-cli first.'));
+		} else {
+			var parser = new xml2js.Parser();
+			fs.readFile(publishSettingsFilePath, function(err, readBuffer) {
+				if(err) {
+					callback(err);
+				} else {
+					var publishSettings = null;
+					parser.on('end', function (settings) { publishSettings = settings; });
+					try {
+				  		parser.parseString(readBuffer);
+					} catch (err) {
+					    // This looks like an xml parsing error, not PFX.
+					    callback(err);
+				  		publishSettings = null;
+					}
+
+					if (publishSettings) {
+				  		var subs = publishSettings.PublishProfile.Subscription;
+				  		if (typeof subs === 'undefined' || subs === undefined) {
+							subs = [];
+						} else if (typeof (subs[0]) === 'undefined') {
+							subs = [subs];
+						}
+
+						var subscriptions = [];
+						for (var s in subs) {
+					  		subscriptions[s] = subs[s]['@'];
+						}
+						callback(null, subscriptions);
+					} else {
+					 	callback(new Error('Invalid publish settings file.'));
+					}
+				}
+			});
+		}
+	});
+}
+
+function getSubscriptions() {
+	var azureDirectory = utils.azureDir();
+ 	var pemPath = path.join(azureDirectory, 'managementCertificate.pem');
+ 	var publishSettingsFilePath = path.join(azureDirectory, 'publishSettings.xml');
+ 	
+ 	// Read the subscriptions from the Publish Settings file
+}
 
 function CloudServicePlugin(context, cli, log) {
 	Plugin.apply(this, [context, cli, log]);
