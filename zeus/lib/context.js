@@ -23,16 +23,16 @@ Context.prototype.check = function() {
 	return issues;
 }
 
-Context.prototype.createInstance = function(environmentName, serviceName, service) {
+Context.prototype.createInstance = function(env, serviceName, service, callback) {
 	// Find the plugin for the service
 	if(!(service.type in this.plugins)) {
-		throw new Error('no plugin for service type: ' + service.type);
+		callback(new Error('no plugin for service type: ' + service.type));
 	} else {
-		return this.plugins[service.type].createInstance(environmentName, serviceName, service);
+		this.plugins[service.type].createInstance(env, serviceName, service, callback);
 	}
 }
 
-Context.prototype.loadPlugins = function(dir, callback) {
+Context.prototype.loadPlugins = function(cli, log, dir, callback) {
 	var self = this;
 
 	if(typeof dir === "function") {
@@ -46,7 +46,7 @@ Context.prototype.loadPlugins = function(dir, callback) {
 			callback(err);
 		} else {
 			files.forEach(function(file) {
-				require(path.join(dir, file)).attach(self, self._log);
+				require(path.join(dir, file)).attach(self, cli, log);
 			});
 			callback();
 		}

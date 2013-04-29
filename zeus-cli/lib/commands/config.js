@@ -8,7 +8,7 @@ exports.init = function(cli) {
 
 	function add(service, name, template, options, cb) {
 		// Get the zeus service
-		zeus.service(process.cwd(), service, log, function(err, context, service) {
+		zeus.service(cli, log, process.cwd(), service, function(err, context, service) {
 			if(err) throw err;
 
 			// Check for a conflicting config name
@@ -23,7 +23,7 @@ exports.init = function(cli) {
 
 	function list(service, options, cb) {
 		// Get the zeus service
-		zeus.context(process.cwd(), log, function(err, context) {
+		zeus.context(cli, log, process.cwd(), function(err, context) {
 			if(err) throw err;
 
 			var services = context.zf.services;
@@ -53,7 +53,7 @@ exports.init = function(cli) {
 
 	function remove(service, name, options, cb) {
 		// Get the zeus service
-		zeus.service(process.cwd(), service, log, function(err, context, service) {
+		zeus.service(cli, log, process.cwd(), service, function(err, context, service) {
 			if(err) throw err;
 
 			// Check for a conflicting config name

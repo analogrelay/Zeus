@@ -7,7 +7,7 @@ exports.init = function(cli) {
 
 	function init(appname, options, cb) {
 		// Set up a zeus context
-		zeus.context(process.cwd(), appname, log, function(err, context) {
+		zeus.context(cli, log, process.cwd(), appname, function(err, context) {
 			if(err) throw err;
 
 			log.info("Saving new Zeusfile to: " + context.path);

@@ -17,3 +17,4 @@ node_modules
 # Zeus-specific
 zeus_error
 azure_error
+*.zeusspec

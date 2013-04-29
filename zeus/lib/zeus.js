@@ -28,7 +28,7 @@ function findZeusfile(log, dir, callback) {
 	});
 }
 
-function init(zfpath, appname, log, callback) {
+function init(cli, log, zfpath, appname, callback) {
 	// Create a Zeusfile
 	var zf = new Zeusfile();
 	zf.name = appname;
@@ -36,7 +36,7 @@ function init(zfpath, appname, log, callback) {
 	// Build a context around that Zeusfile and return it.
 	log.verbose('initializing Zeus context: ' + zfpath);
 	var context = new Context(zf, zfpath, log);
-	context.loadPlugins(function(err) {
+	context.loadPlugins(cli, log, function(err) {
 		if(err) {
 			callback(err);
 		} else {
@@ -45,7 +45,7 @@ function init(zfpath, appname, log, callback) {
 	})
 }
 
-function load(zfpath, log, callback) {
+function load(cli, log, zfpath, callback) {
 	// Read the Zeusfile
 	log.verbose('reading Zeusfile: ' + zfpath);
 	fs.readFile(zfpath, function(err, data) {
@@ -55,7 +55,7 @@ function load(zfpath, log, callback) {
 			log.verbose('reviving Zeusfile');
 			var zf = Zeusfile.revive(JSON.parse(data));
 			var context = new Context(zf, zfpath, log);
-			context.loadPlugins(function(err) {
+			context.loadPlugins(cli, log, function(err) {
 				if(err) {
 					callback(err);
 				} else {
@@ -70,18 +70,12 @@ function load(zfpath, log, callback) {
 exports.version = package.version;
 
 /** Loads or creates the Zeus context for the specified directory */
-exports.context = function(workingDirectory, appname, log, callback) {
-	if(typeof appname !== 'string') {
-		// Appname is a log
-		callback = log;
-		log = appname;
+exports.context = function(cli, log, workingDirectory, appname, callback) {
+	if(typeof appname === 'function') {
+		callback = appname;
 		appname = null;
 	}
-	if(typeof log === 'function') {
-		// Log is a callback
-		callback = log;
-		log = winston;
-	}
+
 	log.verbose('loading Zeus context for ' + workingDirectory);
 
 	var zfpath = path.join(workingDirectory, 'Zeusfile');
@@ -94,7 +88,7 @@ exports.context = function(workingDirectory, appname, log, callback) {
 			}
 			else {
 				// Ok, just use this as the working directory and initialize a new ZF regardless of the parents
-				init(zfpath, appname, log, callback);
+				init(cli, log, zfpath, appname, callback);
 			}
 		});
 	} else {
@@ -103,15 +97,15 @@ exports.context = function(workingDirectory, appname, log, callback) {
 			if(err) {
 				callback(err);
 			} else {
-				load(zfpath, log, callback);
+				load(cli, log, zfpath, callback);
 			}
 		});
 	}
 };
 
 /** Shortcut to go straight to a specific service in an existing Zeus context */
-exports.service = function(workingDirectory, serviceName, log, callback) {
-	exports.context(workingDirectory, log, function(err, context) {
+exports.service = function(cli, log, workingDirectory, serviceName, callback) {
+	exports.context(cli, log, workingDirectory, function(err, context) {
 		if(err) {
 			callback(err);
 		} else if(serviceName in context.zf.services) {
