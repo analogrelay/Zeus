@@ -30,7 +30,7 @@ Environment.prototype.save = function(path, callback) {
 	// Write it out
 	log.verbose('writing Zeusspec: ' + path);
 	fs.writeFile(path, str, callback);
-}
+};
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
 Environment.prototype.cryo = function() {

@@ -22,7 +22,8 @@
   "license": "Apache 2",
   "dependencies": {
     "winston": "0.6.x",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "hypospray": "~0.1.0"
   },
   "devDependencies": {
     "mocha": "*",

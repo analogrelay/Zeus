@@ -14,7 +14,7 @@ ServiceInstance.revive = function(obj) {
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
 ServiceInstance.prototype.cryo = function() {
-	var frozen = {}
+	var frozen = {};
 	if(this.name) {
 		frozen.name = this.name;
 	}

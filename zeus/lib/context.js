@@ -21,7 +21,7 @@ Context.prototype.check = function() {
 		}
 	});
 	return issues;
-}
+};
 
 Context.prototype.createServiceInstance = function(env, serviceName, service, callback) {
 	// Find the plugin for the service
@@ -30,28 +30,29 @@ Context.prototype.createServiceInstance = function(env, serviceName, service, ca
 	} else {
 		this.plugins[service.type].createServiceInstance(env, serviceName, service, callback);
 	}
-}
+};
 
 Context.prototype.loadPlugins = function(cli, log, dir, callback) {
-	var self = this;
+	//var self = this;
 
-	if(typeof dir === "function") {
-		callback = dir;
-		dir = path.join(__dirname, "plugins");
-	}
+	//if(typeof dir === "function") {
+	//	callback = dir;
+	//	dir = path.join(__dirname, "plugins");
+	//}
 
-	self._log.verbose('scanning ' + dir + ' for plugins');
-	fs.readdir(dir, function(err, files) {
-		if(err) {
-			callback(err);
-		} else {
-			files.forEach(function(file) {
-				require(path.join(dir, file)).attach(self, cli, log);
-			});
-			callback();
-		}
-	})
+	//self._log.verbose('scanning ' + dir + ' for plugins');
+	//fs.readdir(dir, function(err, files) {
+	//	if(err) {
+	//		callback(err);
+	//	} else {
+	//		files.forEach(function(file) {
+	//			require(path.join(dir, file)).attach(self, cli, log);
+	//		});
+	//		callback();
+	//	}
+	//});
 };
+
 Context.prototype.save = function(callback) {
 	var self = this;
 

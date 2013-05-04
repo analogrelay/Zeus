@@ -42,7 +42,7 @@ function init(cli, log, zfpath, appname, callback) {
 		} else {
 			callback(context);
 		}
-	})
+	});
 }
 
 function load(cli, log, zfpath, callback) {
@@ -61,7 +61,7 @@ function load(cli, log, zfpath, callback) {
 				} else {
 					callback(null, context);
 				}
-			})
+			});
 		}
 	});
 }
@@ -70,12 +70,15 @@ function load(cli, log, zfpath, callback) {
 exports.version = package.version;
 
 /** Loads or creates the Zeus context for the specified directory */
-exports.context = function(cli, log, workingDirectory, appname, callback) {
+exports.context = function(workingDirectory, appname, callback) {
+	var cli = {};
+	var log = winston;
+
 	if(typeof appname === 'function') {
 		callback = appname;
 		appname = null;
 	}
-
+	
 	log.verbose('loading Zeus context for ' + workingDirectory);
 
 	var zfpath = path.join(workingDirectory, 'Zeusfile');
