@@ -11,31 +11,31 @@ function ConfigSetting(template, required) {
 }
 
 /** Loads a true ConfigSetting object out of a plain JS object with matching properties */
-ConfigSetting.revive = function(obj) {
-	if(!obj) {
+ConfigSetting.fromJSON = function(value) {
+	if(!value) {
 		return new ConfigSetting('', true);
-	} else if(typeof obj === 'string') {
-		return new ConfigSetting(obj, true);
+	} else if(typeof value === 'string') {
+		return new ConfigSetting(value, true);
 	} else {
-		return new ConfigSetting(obj.template, obj.required);
+		return new ConfigSetting(value.template, value.required);
 	}
 };
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
-ConfigSetting.prototype.cryo = function() {
-	if(!this.template && this.required) {
+ConfigSetting.toJSON = function(value) {
+	if(!value.template && value.required) {
 		return null;
-	} else if(this.template && this.required) {
-		return this.template;
+	} else if(value.template && value.required) {
+		return value.template;
 	} else {
-		var frozen = {};
-		if(this.template) {
-			frozen.template = this.template;
+		var json = {};
+		if(value.template) {
+			json.template = value.template;
 		}
-		if(!this.required) {
-			frozen.required = false;
+		if(!value.required) {
+			json.required = false;
 		}
-		return frozen;
+		return json;
 	}
 };
 exports = module.exports = ConfigSetting;

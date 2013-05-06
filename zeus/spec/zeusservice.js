@@ -13,24 +13,24 @@ describe('ZeusService', function() {
 			assert.equal(new ZeusService('foo').type, 'foo');
 		});
 	});
-	describe('#cryo', function () {
-		it('should cryo-freeze a simple ZeusService', function() {
+	describe('.toJSON', function () {
+		it('should return a simple ZeusService', function() {
 			var service = new ZeusService('thingy');
 			service.config.foo = new ConfigSetting('{{bar}}', false);
 			
-			assert.deepEqual(service.cryo(), { type: 'thingy', config: { 'foo': {template: '{{bar}}', required: false} }});
+			assert.deepEqual(ZeusService.toJSON(service), { type: 'thingy', config: { 'foo': {template: '{{bar}}', required: false} }});
 		});
 	});
-	describe('.revive', function () {
+	describe('.fromJSON', function () {
 		it('should load the type and empty config from type only', function() {
-			var service = ZeusService.revive({type: 'app'});
+			var service = ZeusService.fromJSON({type: 'app'});
 			
 			assert.instanceOf(service, ZeusService);
 			assert.equal(service.type, 'app');
 			assert.isNotNull(service.config);
 		});
 		it('should revive services', function() {
-			var service = ZeusService.revive({type: 'app', config: { 'foo': {template: '{{bar}}', required: false} }});
+			var service = ZeusService.fromJSON({type: 'app', config: { 'foo': {template: '{{bar}}', required: false} }});
 			
 			assert.instanceOf(service, ZeusService);
 			assert.equal(service.type, 'app');

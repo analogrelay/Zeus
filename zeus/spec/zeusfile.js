@@ -13,24 +13,24 @@ describe('Zeusfile', function() {
 			assert.equal(new Zeusfile('foo').name, 'foo');
 		});
 	});
-	describe('#cryo', function () {
-		it('should cryo-freeze a simple Zeusfile', function() {
+	describe('.toJSON', function () {
+		it('should return a simple Zeusfile', function() {
 			var zf = new Zeusfile('app');
 			zf.services.foo = new ZeusService('bar');
 			
-			assert.deepEqual({ name: 'app', services: { foo: {type: 'bar', config:{}}}}, zf.cryo());
+			assert.deepEqual(Zeusfile.toJSON(zf), { name: 'app', services: { foo: {type: 'bar', config:{}}}});
 		});
 	});
-	describe('.revive', function () {
+	describe('.fromJSON', function () {
 		it('should load the name and empty services from name only', function() {
-			var zf = Zeusfile.revive({name: 'app'});
+			var zf = Zeusfile.fromJSON({name: 'app'});
 			
 			assert.instanceOf(zf, Zeusfile);
 			assert.equal(zf.name, 'app');
 			assert.isNotNull(zf.services);
 		});
 		it('should revive services', function() {
-			var zf = Zeusfile.revive({name: 'app', services: {'foo': {type: 'bar'}}});
+			var zf = Zeusfile.fromJSON({name: 'app', services: {'foo': {type: 'bar'}}});
 			
 			assert.instanceOf(zf, Zeusfile);
 			assert.equal(zf.name, 'app');

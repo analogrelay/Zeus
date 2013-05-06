@@ -1,31 +1,24 @@
-var _ = require('underscore'),
-	ConfigSetting = require('./configsetting');
+var ConfigSetting = require('./configsetting'),
+	_ = require('./extensions/underscore');
 
-function ZeusService(type) {
+function ZeusService(type, config) {
 	this.type = type || '';
-	this.config = {};
+	this.config = config || {};
 }
 
 /** Loads a true ZeusService object out of a plain JS object with matching properties */
-ZeusService.revive = function(obj) {
-	var service = new ZeusService(obj.type);
-	if(obj.config) {
-		_.each(obj.config, function(value, key, list) {
-			service.config[key] = ConfigSetting.revive(value);
-		});
-	}
-	return service;
+ZeusService.fromJSON = function(value) {
+	return new ZeusService(
+		value.type,
+		_.mapObject(value.config || {}, ConfigSetting.fromJSON));
 };
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
-ZeusService.prototype.cryo = function() {
-	var frozen = {
-		type: this.type,
-		config: {}
+ZeusService.toJSON = function(value) {
+	return {
+		type: value.type,
+		config: _.mapObject(value.config || {}, ConfigSetting.toJSON)
 	};
-	_.each(this.config, function(element, key, list) {
-		frozen.config[key] = element.cryo();
-	});
-	return frozen;
 };
+
 exports = module.exports = ZeusService;

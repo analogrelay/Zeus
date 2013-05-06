@@ -1,7 +1,8 @@
 var fs = require('fs'),
 	path = require('path'),
 	_ = require('underscore'),
-	winston = require('winston');
+	winston = require('winston'),
+	Zeusfile = require('./zeusfile');
 
 function Context(zf, zfpath, log) {
 	this.zf = zf;
@@ -68,7 +69,7 @@ Context.prototype.save = function(callback) {
 	}
 
 	// Pretty-print the JSON
-	var str = JSON.stringify(self.zf.cryo(), null, 2);
+	var str = JSON.stringify(Zeusfile.toJSON(self.zf), null, 2);
 	
 	// Write it out
 	self._log.verbose('writing Zeusfile: ' + self.path);

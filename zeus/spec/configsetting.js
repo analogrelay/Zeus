@@ -24,81 +24,81 @@ describe('ConfigSetting', function() {
 			assert.ok(!setting.required);
 		});
 	});
-	describe('#cryo', function() {
-		it('should cryo-freeze to null for required non-template argument', function() {
+	describe('.toJSON', function() {
+		it('should return null for required non-template argument', function() {
 			var setting = new ConfigSetting('', true);
 
-			assert.isNull(setting.cryo());
+			assert.isNull(ConfigSetting.toJSON(setting));
 		});
-		it('should cryo-freeze to string for required template argument', function() {
+		it('should return string for required template argument', function() {
 			var setting = new ConfigSetting('{{template}}', true);
 
-			assert.equal(setting.cryo(), '{{template}}');
+			assert.equal(ConfigSetting.toJSON(setting), '{{template}}');
 		});
-		it('should cryo-freeze to object for optional non-template argument', function() {
+		it('should return object for optional non-template argument', function() {
 			var setting = new ConfigSetting('', false);
 
-			assert.deepEqual(setting.cryo(), {required:false});
+			assert.deepEqual(ConfigSetting.toJSON(setting), {required:false});
 		});
 
-		it('should cryo-freeze to object for optional template argument', function() {
+		it('should return object for optional template argument', function() {
 			var setting = new ConfigSetting('{{template}}', false);
 
-			assert.deepEqual(setting.cryo(), {template: '{{template}}', required:false});
+			assert.deepEqual(ConfigSetting.toJSON(setting), {template: '{{template}}', required:false});
 		});
 	});
-	describe('.revive', function() {
+	describe('.fromJSON', function() {
 		it('should load required template setting from string argument', function() {
-			var setting = ConfigSetting.revive('{{template}}');
+			var setting = ConfigSetting.fromJSON('{{template}}');
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '{{template}}');
 			assert.ok(setting.required);
 		});
 		it('should load required template setting from object argument', function() {
-			var setting = ConfigSetting.revive({template: '{{template}}'});
+			var setting = ConfigSetting.fromJSON({template: '{{template}}'});
 
-			assert.instanceOf(setting, ConfigSetting);
+			assert.instanceOf(setting, ConfigSetting);			
 			assert.equal(setting.template, '{{template}}');
 			assert.ok(setting.required);
 		});
 		it('should load required template setting from object argument with explicit required setting', function() {
-			var setting = ConfigSetting.revive({required: true, template: '{{template}}'});
+			var setting = ConfigSetting.fromJSON({required: true, template: '{{template}}'});
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '{{template}}');
 			assert.ok(setting.required);
 		});
 		it('should load optional template setting from object argument', function() {
-			var setting = ConfigSetting.revive({required: false, template: '{{template}}'});
+			var setting = ConfigSetting.fromJSON({required: false, template: '{{template}}'});
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '{{template}}');
 			assert.ok(!setting.required);
 		});
 		it('should load optional setting from object argument', function() {
-			var setting = ConfigSetting.revive({required: false});
+			var setting = ConfigSetting.fromJSON({required: false});
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '');
 			assert.ok(!setting.required);
 		});
 		it('should load required setting from object argument', function() {
-			var setting = ConfigSetting.revive({required: true});
+			var setting = ConfigSetting.fromJSON({required: true});
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '');
 			assert.ok(setting.required);
 		});
 		it('should load required setting from null argument', function() {
-			var setting = ConfigSetting.revive(null);
+			var setting = ConfigSetting.fromJSON(null);
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '');
 			assert.ok(setting.required);
 		});
 		it('should load required setting from undefined argument', function() {
-			var setting = ConfigSetting.revive();
+			var setting = ConfigSetting.fromJSON();
 
 			assert.instanceOf(setting, ConfigSetting);
 			assert.equal(setting.template, '');
