@@ -4,20 +4,15 @@ var assert = require('assert'),
 
 describe('Context', function() {
 	describe('#save', function() {
-		var fs = require('fs');
-		var zeus = require('../lib/zeus.js');
-		var zf = new zeus.Zeusfile('test')
 		var expectedString = JSON.stringify({name: "test", services: {}}, null, 2);
-		var sandbox;
+		var zf, fs, zeus;
 		beforeEach(function() {
-			sandbox = sinon.sandbox.create();
-
-			// Stub out functions
-			sandbox.stub(fs, 'writeFile');
+			fs = { writeFile: sinon.stub() };
+			zeus = require('../lib/zeus')({fs: fs});
+			zf = new zeus.Zeusfile('test');
 		});
 		afterEach(function() {
-			// Clean up the sandbox
-			sandbox.restore();
+			fs = zeus = null;
 		})
 
 		it('should produce error from FS module', function(done) {
