@@ -22,7 +22,7 @@ ConfigSetting.revive = function(obj) {
 };
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
-ConfigSetting.prototype.cryo = function() {
+ConfigSetting.prototype.cryofreeze = function() {
 	if(!this.template && this.required) {
 		return null;
 	} else if(this.template && this.required) {

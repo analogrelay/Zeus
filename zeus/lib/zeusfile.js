@@ -1,32 +1,26 @@
-var _ = require('underscore'),
+var utils = require('./utils'),
 	ZeusService = require('./zeusservice');
 
-function Zeusfile(name) {
+function Zeusfile(name, services) {
 	this.name = name || '';
-	this.services = {};
+	this.services = services || {};
 }
 
 /** Loads a true Zeusfile object out of a plain JS object with matching properties */
 Zeusfile.revive = function(obj) {
-	var zf = new Zeusfile(obj.name);
-	if(obj.services) {
-		_.each(obj.services, function(value, key, list) {
-			zf.services[key] = ZeusService.revive(value);
-		});
-	}
-	return zf;
+	return new Zeusfile(
+		obj.name, 
+		utils.mapObject(obj.services, ZeusService.revive));
 };
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
-Zeusfile.prototype.cryo = function() {
-	var frozen = {
+Zeusfile.prototype.cryofreeze = function() {
+	return {
 		name: this.name,
-		services: {}
+
+		// the value is the default context, so using the prototype method works!
+		services: utils.mapObject(this.services, ZeusService.prototype.cryofreeze)
 	};
-	_.each(this.services, function(element, key, list) {
-		frozen.services[key] = element.cryo();
-	});
-	return frozen;
 };
 
 exports = module.exports = Zeusfile;

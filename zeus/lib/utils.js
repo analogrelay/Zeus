@@ -2,10 +2,14 @@ exports.mapObject = function mapObject(object, callback, context) {
 	if(!callback) {
 		return object;
 	}
-
+	if(!object) {
+		return object;
+	}
+	
 	var result = {};
 	Object.keys(object).forEach(function(key) {
-		result[key] = callback.call(context, object[key], key, object);
+		var value = object[key];
+		result[key] = callback.call(context || value, value, key, object);
 	});
 	return result;
 };

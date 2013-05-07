@@ -24,27 +24,27 @@ describe('ConfigSetting', function() {
 			assert.ok(!setting.required);
 		});
 	});
-	describe('#cryo', function() {
+	describe('#cryofreeze', function() {
 		it('should cryo-freeze to null for required non-template argument', function() {
 			var setting = new ConfigSetting('', true);
 
-			assert.isNull(setting.cryo());
+			assert.isNull(setting.cryofreeze());
 		});
 		it('should cryo-freeze to string for required template argument', function() {
 			var setting = new ConfigSetting('{{template}}', true);
 
-			assert.equal(setting.cryo(), '{{template}}');
+			assert.equal(setting.cryofreeze(), '{{template}}');
 		});
 		it('should cryo-freeze to object for optional non-template argument', function() {
 			var setting = new ConfigSetting('', false);
 
-			assert.deepEqual(setting.cryo(), {required:false});
+			assert.deepEqual(setting.cryofreeze(), {required:false});
 		});
 
 		it('should cryo-freeze to object for optional template argument', function() {
 			var setting = new ConfigSetting('{{template}}', false);
 
-			assert.deepEqual(setting.cryo(), {template: '{{template}}', required:false});
+			assert.deepEqual(setting.cryofreeze(), {template: '{{template}}', required:false});
 		});
 	});
 	describe('.revive', function() {

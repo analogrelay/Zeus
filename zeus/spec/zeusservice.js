@@ -13,12 +13,12 @@ describe('ZeusService', function() {
 			assert.equal(new ZeusService('foo').type, 'foo');
 		});
 	});
-	describe('#cryo', function () {
+	describe('#cryofreeze', function () {
 		it('should cryo-freeze a simple ZeusService', function() {
 			var service = new ZeusService('thingy');
 			service.config.foo = new ConfigSetting('{{bar}}', false);
 			
-			assert.deepEqual(service.cryo(), { type: 'thingy', config: { 'foo': {template: '{{bar}}', required: false} }});
+			assert.deepEqual(service.cryofreeze(), { type: 'thingy', config: { 'foo': {template: '{{bar}}', required: false} }});
 		});
 	});
 	describe('.revive', function () {

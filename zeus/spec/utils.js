@@ -7,10 +7,13 @@ sinon.assert.expose(assert, {prefix: ''});
 describe('the utils module', function() {
 	describe('the mapObject method', function() {
 		var obj = {foo: 42, bar: 24};
+		it('should return undefined if no arguments passed', function() {
+			assert.isUndefined(utils.mapObject());
+		});
 		it('should return the same object if no filter method provided', function() {
 			assert.equal(utils.mapObject(obj), obj);
 		});
-		it('should execute the callback for each key', function() {
+		it('should execute the callback for each key, using the value as the context', function() {
 			// Arrange
 			var spy = sinon.spy();
 			
@@ -19,7 +22,10 @@ describe('the utils module', function() {
 
 			// Assert
 			assert.calledWith(spy, 42, 'foo', obj);
+			assert.calledOn(spy, 42);
+
 			assert.calledWith(spy, 24, 'bar', obj);
+			assert.calledOn(spy, 24);
 		});
 		it('should execute the callback, using the specified context, for each key', function() {
 			// Arrange

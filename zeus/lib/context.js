@@ -68,7 +68,7 @@ Context.prototype.save = function(callback) {
 	}
 
 	// Pretty-print the JSON
-	var str = JSON.stringify(self.zf.cryo(), null, 2);
+	var str = JSON.stringify(self.zf.cryofreeze(), null, 2);
 	
 	// Write it out
 	self._log.verbose('writing Zeusfile: ' + self.path);

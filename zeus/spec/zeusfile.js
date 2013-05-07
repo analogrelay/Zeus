@@ -13,12 +13,12 @@ describe('Zeusfile', function() {
 			assert.equal(new Zeusfile('foo').name, 'foo');
 		});
 	});
-	describe('#cryo', function () {
+	describe('#cryofreeze', function () {
 		it('should cryo-freeze a simple Zeusfile', function() {
 			var zf = new Zeusfile('app');
 			zf.services.foo = new ZeusService('bar');
 			
-			assert.deepEqual({ name: 'app', services: { foo: {type: 'bar', config:{}}}}, zf.cryo());
+			assert.deepEqual(zf.cryofreeze(), { name: 'app', services: { foo: {type: 'bar', config:{}}}});
 		});
 	});
 	describe('.revive', function () {
