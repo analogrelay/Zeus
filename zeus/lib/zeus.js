@@ -42,7 +42,7 @@ function init(cli, log, zfpath, appname, callback) {
 		} else {
 			callback(context);
 		}
-	})
+	});
 }
 
 function load(cli, log, zfpath, callback) {
@@ -61,7 +61,7 @@ function load(cli, log, zfpath, callback) {
 				} else {
 					callback(null, context);
 				}
-			})
+			});
 		}
 	});
 }

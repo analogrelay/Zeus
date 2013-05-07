@@ -21,7 +21,7 @@ Context.prototype.check = function() {
 		}
 	});
 	return issues;
-}
+};
 
 Context.prototype.createServiceInstance = function(env, serviceName, service, callback) {
 	// Find the plugin for the service
@@ -30,7 +30,7 @@ Context.prototype.createServiceInstance = function(env, serviceName, service, ca
 	} else {
 		this.plugins[service.type].createServiceInstance(env, serviceName, service, callback);
 	}
-}
+};
 
 Context.prototype.loadPlugins = function(cli, log, dir, callback) {
 	var self = this;
@@ -50,8 +50,9 @@ Context.prototype.loadPlugins = function(cli, log, dir, callback) {
 			});
 			callback();
 		}
-	})
+	});
 };
+
 Context.prototype.save = function(callback) {
 	var self = this;
 

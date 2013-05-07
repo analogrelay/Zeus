@@ -93,7 +93,7 @@ CloudServicePlugin.prototype.createServiceInstance = function(env, serviceName, 
 			callback(err);
 		}
 		else {
-			callback(null, new ServiceInstance(instanceName))
+			callback(null, new ServiceInstance(instanceName));
 		}
 	}
 
@@ -110,7 +110,7 @@ CloudServicePlugin.prototype.createServiceInstance = function(env, serviceName, 
 						return item.Name + ' (' + item.Location + ')';
 					});
 
-					self.log.info("Choose an Affinity Group to use for this application: ")
+					self.log.info("Choose an Affinity Group to use for this application: ");
 					self.cli.choose(names, function(i) {
 						self.log.info("Using '" + names[i] + "'.");
 						env.config.affinityGroup = affinityGroups[i].Name;
@@ -131,7 +131,7 @@ CloudServicePlugin.prototype.createServiceInstance = function(env, serviceName, 
 			} else {
 				var names = _.pluck(accounts, "Name");
 
-				self.log.info("Choose a Subscription to use for this application: ")
+				self.log.info("Choose a Subscription to use for this application: ");
 				self.cli.choose(names, function(i) {
 					self.log.info("Using '" + names[i] + "'.");
 					env.config.subscriptionId = accounts[i].Id;
