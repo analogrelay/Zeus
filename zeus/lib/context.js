@@ -26,7 +26,7 @@ function Context(zf, zfpath, ui) {
 
 	this.createServiceInstance = function(env, serviceName, service, callback) {
 		// Find the plugin for the service
-		if(!(service.type in this.plugins)) {
+		if(!this.plugins.hasOwnProperty(service.type)) {
 			callback(new Error('no plugin for service type: ' + service.type));
 		} else {
 			this.plugins[service.type].createServiceInstance(env, serviceName, service, callback);

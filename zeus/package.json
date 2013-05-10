@@ -4,7 +4,7 @@
   "description": "Zeus, cloud deployment made easy",
   "main": "lib/zeus.js",
   "scripts": {
-    "test": "npm -s run-script jshint && npm -s run-script unit",
+    "test": "jshint lib && mocha --reporter spec --recursive spec",
     "unit": "mocha --reporter spec --recursive spec",
     "jshint": "jshint lib"
   },
