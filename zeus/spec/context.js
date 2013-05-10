@@ -69,6 +69,26 @@ describe('Context', function() {
 				done();
 			});
 		});
+		it('should log warning if service has issues', function(done) {
+			// Arrange
+			var zeusfile = new zeus.Zeusfile('test', {
+				foo: new zeus.ZeusService('Not.A.Thing', {}),
+				bar: new zeus.ZeusService('Whats.This', {}),
+				baz: new zeus.ZeusService('Azure.Thing', {})
+			});
+			var context = new zeus.Context(zeusfile, 'path', ui);
+			context.plugins['Azure.Thing'] = {};
+			fs.writeFile.yields();
+
+			// Act
+			var results = context.save(function(err, callback) {
+				assert.ok(ui.log.warn.calledWith("plugin for 'Not.A.Thing' could not be found"));
+				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'foo' service"));
+				assert.ok(ui.log.warn.calledWith("plugin for 'Whats.This' could not be found"));
+				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'bar' service"));
+				done();
+			});
+		});
 	});
 
 	describe('#loadPlugins', function() {
@@ -151,26 +171,39 @@ describe('Context', function() {
 		});
 	});
 
-	describe('#save', function() {
-		it('should log warning if service has issues', function(done) {
+	describe('#createServiceInstance', function() {
+		it('should yield error if plugin not available', function(done) {
 			// Arrange
 			var zeusfile = new zeus.Zeusfile('test', {
-				foo: new zeus.ZeusService('Not.A.Thing', {}),
-				bar: new zeus.ZeusService('Whats.This', {}),
-				baz: new zeus.ZeusService('Azure.Thing', {})
+				foo: new zeus.ZeusService('Not.A.Thing', {})
 			});
-			var context = new zeus.Context(zeusfile, 'path', ui);
-			context.plugins['Azure.Thing'] = {};
-			fs.writeFile.yields();
+			var context = new zeus.Context(zeusfile, 'path');
 
 			// Act
-			var results = context.save(function(err, callback) {
-				assert.ok(ui.log.warn.calledWith("plugin for 'Not.A.Thing' could not be found"));
-				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'foo' service"));
-				assert.ok(ui.log.warn.calledWith("plugin for 'Whats.This' could not be found"));
-				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'bar' service"));
+			context.createServiceInstance({}, 'foo', zeusfile.services.foo, function(err) {
+				assert.deepEqual(err, new Error('no plugin for service type: Not.A.Thing'));
 				done();
 			});
-		})
+		});
+
+		it('should pass through to plugin if available', function(done) {
+			// Arrange
+			var zeusfile = new zeus.Zeusfile('test', {
+				foo: new zeus.ZeusService('Azure.Thing', {})
+			});
+			var context = new zeus.Context(zeusfile, 'path');
+			context.plugins['Azure.Thing'] = {
+				createServiceInstance: sinon.stub()
+			};
+			context.plugins['Azure.Thing'].createServiceInstance.yields();
+
+			// Act
+			var env = {};
+			context.createServiceInstance(env, 'foo', zeusfile.services.foo, function(err) {
+				assert.ifError(err);
+				assert.ok(context.plugins['Azure.Thing'].createServiceInstance.calledWith(env, 'foo', zeusfile.services.foo, sinon.match.any));
+				done();
+			});
+		});
 	});
 });

@@ -4,6 +4,7 @@
   "description": "Zeus, cloud deployment made easy",
   "main": "lib/zeus.js",
   "scripts": {
+    "coverage": "..\\scripts\\coverage.cmd",
     "test": "jshint lib && mocha --reporter spec --recursive spec",
     "unit": "mocha --reporter spec --recursive spec",
     "jshint": "jshint lib"
