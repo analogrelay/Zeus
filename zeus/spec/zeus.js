@@ -1,3 +1,4 @@
+// var libpath = process.env['ZEUS_COV'] ? '../lib-cov' : '../lib'
 // var assert = require('assert'),
 // 	path = require('path'),
 // 	sinon = require('sinon');
@@ -10,7 +11,7 @@
 // 	var cli = {};
 // 	var log = {};
 // 	var fs = require('fs');
-// 	var zeus = require('../lib/zeus.js');
+// 	var zeus = require(libpath + '/zeus.js');
 // 	var sandbox;
 // 	beforeEach(function() {
 // 		sandbox = sinon.sandbox.create();

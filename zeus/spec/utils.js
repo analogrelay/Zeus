@@ -1,4 +1,6 @@
-var utils = require('../lib/utils'),
+var libpath = process.env['ZEUS_COV'] ? '../lib-cov' : '../lib'
+
+var utils = require(libpath + '/utils'),
 	sinon = require('sinon'),
 	assert = require('chai').assert;
 

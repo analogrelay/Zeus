@@ -1,8 +1,10 @@
+var libpath = process.env['ZEUS_COV'] ? '../lib-cov' : '../lib'
+
 var assert = require('chai').assert,
 	path = require('path'),
 	sinon = require('sinon'),
-	Zeusfile = require('../lib/zeusfile.js'),
-	ZeusService = require('../lib/zeusservice.js');
+	Zeusfile = require(libpath + '/zeusfile.js'),
+	ZeusService = require(libpath + '/zeusservice.js');
 
 describe('Zeusfile', function() {
 	describe('#constructor', function() {

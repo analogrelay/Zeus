@@ -1,7 +1,9 @@
+var libpath = process.env['ZEUS_COV'] ? '../lib-cov' : '../lib'
+
 var assert = require('chai').assert,
 	path = require('path'),
 	sinon = require('sinon'),
-	ConfigSetting = require('../lib/configsetting.js');
+	ConfigSetting = require(libpath + '/configsetting.js');
 
 describe('ConfigSetting', function() {
 	describe('#constructor', function() {

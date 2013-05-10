@@ -18,3 +18,4 @@ node_modules
 zeus_error
 azure_error
 *.zeusspec
+build
