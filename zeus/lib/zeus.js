@@ -14,9 +14,9 @@ var Zeusfile = exports.Zeusfile = require('./zeusfile'),
 	UIService = exports.UIService = require('./ui');
 
 // Local Functions
-function findZeusfile(log, dir, callback) {
+function findZeusfile(ui, dir, callback) {
 	var zfpath = path.join(dir, 'Zeusfile');
-	log.verbose("searching for Zeusfile in " + dir);
+	ui.log.verbose("searching for Zeusfile in " + dir);
 	fs.exists(zfpath, function(exists) {
 		if(exists) return callback(null, zfpath);
 
@@ -24,7 +24,7 @@ function findZeusfile(log, dir, callback) {
 		if(newdir == dir) {
 			callback(new Error("No Zeusfile found!")); // No luck and we're at the top of the directory tree
 		} else {
-			findZeusfile(log, newdir, callback);
+			findZeusfile(ui, newdir, callback);
 		}
 	});
 }
@@ -35,7 +35,7 @@ function init(ui, zfpath, appname, callback) {
 	zf.name = appname;
 
 	// Build a context around that Zeusfile and return it.
-	log.verbose('initializing Zeus context: ' + zfpath);
+	ui.log.verbose('initializing Zeus context: ' + zfpath);
 	var context = new Context(zf, zfpath, ui);
 	context.loadPlugins(function(err) {
 		if(err) {
@@ -94,7 +94,7 @@ exports.context = function(ui, workingDirectory, appname, callback) {
 		});
 	} else {
 		// Find the zeusfile
-		findZeusfile(log, workingDirectory, function(err, zfpath) {
+		findZeusfile(ui, workingDirectory, function(err, zfpath) {
 			if(err) {
 				callback(err);
 			} else {

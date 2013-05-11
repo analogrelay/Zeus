@@ -146,9 +146,9 @@ CloudServicePlugin.prototype.provision = function(env, context, serviceName, cal
 
 };
 
-exports.attach = function(context, cli, log) {
-    log.verbose('loading azure plugin');
+exports.attach = function(context, ui) {
+    ui.log.verbose('loading azure plugin');
 
-    context.plugins['Azure.CloudService'] = new CloudServicePlugin(context, cli, log);
+    context.plugins['Azure.CloudService'] = new CloudServicePlugin(context, ui);
 };
 module.exports = exports;
