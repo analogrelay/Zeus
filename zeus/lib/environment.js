@@ -1,31 +1,29 @@
 var _ = require('underscore'),
+	utils = require('./utils'),
 	fs = require('fs'),
 	log = require('winston'),
 	ServiceInstance = require('./serviceinstance');
 
-function Environment(app, name) {
+function Environment(app, name, services, config) {
 	this.app = app || '';
 	this.name = name || '';
 
-	this.services = {};
-	this.config = {};
+	this.services = services || {};
+	this.config = config || {};
 }
 
 /** Loads a true Environment object out of a plain JS object with matching properties */
 Environment.revive = function(obj) {
-	var env = new Environment(obj.app, obj.name);
-	if(obj.services) {
-		_.each(obj.services, function(value, key, list) {
-			env.services[key] = ServiceInstance.revive(value);
-		});
-	}
-	env.config = obj.config;
-	return env;
+	return new Environment(
+		obj.app, 
+		obj.name,
+		utils.mapObject(obj.services, ServiceInstance.revive),
+		obj.config);
 };
 
 Environment.prototype.save = function(path, callback) {
 	// Pretty-print the JSON
-	var str = JSON.stringify(this.cryo(), null, 2);
+	var str = JSON.stringify(Environment.cryofreeze(this), null, 2);
 	
 	// Write it out
 	log.verbose('writing Zeusspec: ' + path);
@@ -33,17 +31,13 @@ Environment.prototype.save = function(path, callback) {
 };
 
 /** Returns a copy of the object designed for cleaner JSON serialization */
-Environment.prototype.cryo = function() {
-	var frozen = {
-		app: this.app,
-		name: this.name,
-		services: {},
-		config: this.config
+Environment.cryofreeze = function(self) {
+	return {
+		app: self.app,
+		name: self.name,
+		services: utils.mapObject(self.services, ServiceInstance.cryofreeze),
+		config: self.config
 	};
-	_.each(this.services, function(element, key, list) {
-		frozen.services[key] = element.cryo();
-	});
-	return frozen;
 };
 
 module.exports = exports = Environment;
