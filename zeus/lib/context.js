@@ -33,10 +33,6 @@ function Context(zf, zfpath, ui) {
 		}
 	};
 
-	this.loadPlugin = function(path) {
-		require(path).attach(this, ui);
-	};
-
 	this.loadPlugins = function(dir, callback) {
 		var self = this;
 
@@ -82,5 +78,9 @@ function Context(zf, zfpath, ui) {
 		fs.writeFile(self.path, str, callback);
 	};
 }
+
+Context.prototype.loadPlugin = function(path) {
+	require(path).attach(this, ui);
+};
 
 exports = module.exports = Context;

@@ -18,6 +18,7 @@ describe('#context(dir, appname)', function() {
 		// Stub out functions
 		sandbox.stub(fs, 'exists');
 		sandbox.stub(fs, 'readFile');
+		sandbox.stub(zeus.Context.prototype, 'loadPlugin');
 	});
 	afterEach(function() {
 		// Clean up the sandbox
