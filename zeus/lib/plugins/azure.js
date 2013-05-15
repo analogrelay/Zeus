@@ -62,7 +62,7 @@ function readSubscriptions (publishSettingsFilePath, callback) {
 
                         var subscriptions = [];
                         for (var s in subs) {
-                            subscriptions[s] = subs[s]['$'];
+                            subscriptions[s] = subs[s].$;
                         }
                         callback(null, subscriptions);
                     } else {

@@ -171,39 +171,39 @@ describe('Context', function() {
 		});
 	});
 
-	describe('#createServiceInstance', function() {
-		it('should yield error if plugin not available', function(done) {
-			// Arrange
-			var zeusfile = new zeus.Zeusfile('test', {
-				foo: new zeus.ZeusService('Not.A.Thing', {})
-			});
-			var context = new zeus.Context(zeusfile, 'path');
+	// describe('#createServiceInstance', function() {
+	// 	it('should yield error if plugin not available', function(done) {
+	// 		// Arrange
+	// 		var zeusfile = new zeus.Zeusfile('test', {
+	// 			foo: new zeus.ZeusService('Not.A.Thing', {})
+	// 		});
+	// 		var context = new zeus.Context(zeusfile, 'path');
 
-			// Act
-			context.createServiceInstance({}, 'foo', zeusfile.services.foo, function(err) {
-				assert.deepEqual(err, new Error('no plugin for service type: Not.A.Thing'));
-				done();
-			});
-		});
+	// 		// Act
+	// 		context.createServiceInstance({}, 'foo', zeusfile.services.foo, function(err) {
+	// 			assert.deepEqual(err, new Error('no plugin for service type: Not.A.Thing'));
+	// 			done();
+	// 		});
+	// 	});
 
-		it('should pass through to plugin if available', function(done) {
-			// Arrange
-			var zeusfile = new zeus.Zeusfile('test', {
-				foo: new zeus.ZeusService('Azure.Thing', {})
-			});
-			var context = new zeus.Context(zeusfile, 'path');
-			context.plugins['Azure.Thing'] = {
-				createServiceInstance: sinon.stub()
-			};
-			context.plugins['Azure.Thing'].createServiceInstance.yields();
+	// 	it('should pass through to plugin if available', function(done) {
+	// 		// Arrange
+	// 		var zeusfile = new zeus.Zeusfile('test', {
+	// 			foo: new zeus.ZeusService('Azure.Thing', {})
+	// 		});
+	// 		var context = new zeus.Context(zeusfile, 'path');
+	// 		context.plugins['Azure.Thing'] = {
+	// 			createServiceInstance: sinon.stub()
+	// 		};
+	// 		context.plugins['Azure.Thing'].createServiceInstance.yields();
 
-			// Act
-			var env = {};
-			context.createServiceInstance(env, 'foo', zeusfile.services.foo, function(err) {
-				assert.ifError(err);
-				assert.ok(context.plugins['Azure.Thing'].createServiceInstance.calledWith(env, 'foo', zeusfile.services.foo, sinon.match.any));
-				done();
-			});
-		});
-	});
+	// 		// Act
+	// 		var env = {};
+	// 		context.createServiceInstance(env, 'foo', zeusfile.services.foo, function(err) {
+	// 			assert.ifError(err);
+	// 			assert.ok(context.plugins['Azure.Thing'].createServiceInstance.calledWith(env, 'foo', zeusfile.services.foo, sinon.match.any));
+	// 			done();
+	// 		});
+	// 	});
+	// });
 });
