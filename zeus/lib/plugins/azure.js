@@ -91,11 +91,29 @@ function getSubscriptions(callback) {
     });
 }
 
+function WebsiteServiceType(plugin) {
+    this.plugin = plugin;
+    this.context = plugin.context;
+    this.ui = plugin.ui;
+}
+
+WebsiteServiceType.prototype.createInstance = function(zeusfile, environmentName, service, serviceName, callback) {
+    // Set the name
+    var name = zeusfile.name + '-' + environmentName + '-' + serviceName;
+
+    // All we need to do now is return a service instance object
+    callback(null, new ServiceInstance({
+        name: name
+    }));
+};
+
 function AzurePlugin(context, ui) {
-    this.context = context;
-    this.ui = ui;
+    Plugin.apply(this, [context, ui]);
+    this.serviceTypes.website = new WebsiteServiceType(this);
 }
 exports.AzurePlugin = AzurePlugin;
+
+AzurePlugin.prototype = new Plugin();
 
 AzurePlugin.prototype.collectGlobalConfiguration = function(callback) {
     var self = this;

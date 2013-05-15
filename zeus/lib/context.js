@@ -3,17 +3,27 @@ var fs = require('fs'),
     _ = require('underscore'),
     winston = require('winston'),
     async = require('async'),
-    UIService = require('./ui');
+    UIService = require('./ui'),
+    Environment = require('./Environment');
 
 var ServiceTypeRegex = /([^\.]*)\.(.*)/;
 
 function findPlugins(services) {
     return _.uniq(_.filter(_.map(services, function(value, key, list) {
-        var m = value.type.match(ServiceTypeRegex);
-        if(m) {
-            return m[1];
-        }
+        return parseServiceType(value.type).plugin;
     }), _.isString));
+}
+
+function parseServiceType(serviceType) {
+    var m = serviceType.match(ServiceTypeRegex);
+    if(m) {
+        return {
+            plugin: m[1],
+            name: m[2]
+        };
+    } else {
+        return {};
+    }
 }
 
 function Context(zf, zfpath, ui) {
@@ -35,13 +45,52 @@ function Context(zf, zfpath, ui) {
         return issues;
     };
 
+    this.createEnvironment = function(name, callback) {
+        var self = this;
+        self.collectGlobalConfiguration(function(err, config) {
+            async.mapSeries(Object.keys(self.zf.services), function(key, callback) {
+                var service = self.zf.services[key];
+                var type = parseServiceType(service.type);
+                if(self.plugins.hasOwnProperty(type.plugin)) {
+                    var plugin = self.plugins[type.plugin];
+                    plugin.createServiceInstance(self.zf, name, service, key, type.name, function(err, instance) {
+                        if(err) {
+                            callback(err);
+                        } else {
+                            callback(null, {
+                                serviceName: key,
+                                instance: instance
+                            });
+                        }
+                    });
+                } else {
+                    callback();
+                }
+            }, function(err, instances) {
+                if(err) {
+                    callback(err);
+                } else {
+                    var services = {};
+                    instances.forEach(function(instance) {
+                        if(instance) {
+                            services[instance.serviceName] = instance.instance;
+                        }
+                    });
+
+                    var env = new Environment(self.zf.name, name, services, config);
+                    callback(null, env);
+                }
+            });
+        });
+    };
+
     this.collectGlobalConfiguration = function(callback) {
         // Find the plugins for all services
         var self = this;
         var pluginNames = findPlugins(this.zf.services);
 
         var config = {};
-        async.each(pluginNames, function(pluginName, callback) {
+        async.eachSeries(pluginNames, function(pluginName, callback) {
             if(self.plugins.hasOwnProperty(pluginName)) {
                 var plugin = self.plugins[pluginName];
                 plugin.collectGlobalConfiguration(function(err, pluginConfig) {

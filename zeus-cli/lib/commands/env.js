@@ -8,21 +8,6 @@ exports.init = function(ui) {
 	var env = ui.cli.category('env')
 		.description("Manage environments in which Zeus services can be deployed");
 
-	function createInstances(context, env, serviceName, rest, callback) {
-		context.createServiceInstance(env, serviceName, context.zf.services[serviceName], function (err, instance) {
-			if(err) {
-				callback(err);
-			} else {
-				env.services[serviceName] = instance;
-				if(rest.length == 0) {
-					callback();
-				} else {
-					createInstances(context, env, _.first(rest), _.rest(rest), callback);
-				}
-			}
-		});
-	}
-
 	function init(name, outputPath, options, cb) {
 		outputPath = outputPath || (path.join(process.cwd(), name + '.zeusspec'));
 		fs.exists(outputPath, function(exists) {
@@ -31,18 +16,17 @@ exports.init = function(ui) {
 			}
 			else {
 				zeus.context(ui, process.cwd(), function(err, context) {
-					// Collect global configuration to apply to the environment
-					context.collectGlobalConfiguration(function(err, config) {
+					ui.log.info('Collecting global configuration information...');
+
+					// Create the environment object
+					context.createEnvironment(name, function(err, env) {
 						if(err) {
 							throw err;
 						} else {
-							// Build a Zeus Environment
-							var env = new zeus.Environment(context.zf.name, name, {}, config);
-
 							// Save it
 							env.save(outputPath, cb);
 						}
-					})
+					});
 				});
 			}
 		});
