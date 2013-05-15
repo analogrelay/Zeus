@@ -1,15 +1,10 @@
-function Plugin(context, cli, log) {
+function Plugin(context, ui) {
 	this.context = context;
-	this.cli = cli;
-	this.log = log;
+	this.ui = ui;
 }
 
-Plugin.prototype.createServiceInstance = function(env, serviceName, service, callback) {
-	throw new Error("plugin does not implement createInstance");
-};
-
-Plugin.prototype.provision = function(env, context, serviceName, callback) {
-	throw new Error("plugin does not implement provision");
+Plugin.prototype.collectGlobalConfiguration = function(callback) {
+	// Nothing to do by default
 };
 
 module.exports = exports = Plugin;

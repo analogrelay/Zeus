@@ -4,6 +4,17 @@ var fs = require('fs'),
 	winston = require('winston'),
 	UIService = require('./ui');
 
+var ServiceTypeRegex = /([^\.]*)\.(.*)/;
+
+function findPlugins(services) {
+	return _.uniq(_.filter(_.map(services, function(value, key, list) {
+		var m = value.type.match(ServiceTypeRegex);
+		if(m) {
+			return m[1];
+		}
+	}), _.isString));
+}
+
 function Context(zf, zfpath, ui) {
 	this.zf = zf;
 	this.path = zfpath;
@@ -24,14 +35,34 @@ function Context(zf, zfpath, ui) {
 		return issues;
 	};
 
-	this.createServiceInstance = function(env, serviceName, service, callback) {
-		// Find the plugin for the service
-		if(!this.plugins.hasOwnProperty(service.type)) {
-			callback(new Error('no plugin for service type: ' + service.type));
-		} else {
-			this.plugins[service.type].createServiceInstance(env, serviceName, service, callback);
-		}
-	};
+	this.collectGlobalConfiguration = function(callback) {
+		// Find the plugins for all services
+		var plugins = findPlugins(this.zf.services);
+
+		var config = {};
+		collectConfiguration(
+			_.first(plugins),
+			_.rest(plugins),
+			function() {
+
+			});
+		plugins.forEach(function(pluginName) {
+			if(this.plugins.hasOwnProperty(pluginName)) {
+				var plugin = this.plugins[pluginName];
+
+				_.each()
+			}
+		});
+	}
+
+	// this.createServiceInstance = function(env, serviceName, service, callback) {
+	// 	// Find the plugin for the service
+	// 	if(!this.plugins.hasOwnProperty(service.type)) {
+	// 		callback(new Error('no plugin for service type: ' + service.type));
+	// 	} else {
+	// 		this.plugins[service.type].createServiceInstance(env, serviceName, service, callback);
+	// 	}
+	// };
 
 	this.loadPlugins = function(dir, callback) {
 		var self = this;

@@ -30,7 +30,7 @@ function azureDir() {
 // End
 
 // Hacked up from azure-cli
-function readSubscriptions (callback) {
+function readSubscriptions (publishSettingsFilePath, callback) {
     fs.exists(publishSettingsFilePath, function(exists) {
         if(!exists) {
             callback(new Error('No publish settings file found. Please use the "azure account import" command via the azure-cli first.'));
@@ -72,83 +72,42 @@ function readSubscriptions (callback) {
     });
 }
 
-function getSubscriptions() {
+function getSubscriptions(callback) {
     var azureDirectory = utils.azureDir();
     var pemPath = path.join(azureDirectory, 'managementCertificate.pem');
     var publishSettingsFilePath = path.join(azureDirectory, 'publishSettings.xml');
     
     // Read the subscriptions from the Publish Settings file
-}
-
-function CloudServicePlugin(context, cli, log) {
-    Plugin.apply(this, [context, cli, log]);
-}
-
-CloudServicePlugin.prototype.createServiceInstance = function(env, serviceName, service, callback) {
-    var self = this;
-    var instanceName = self.context.zf.name + '-' + serviceName + '-' + env.name;
-
-    function afterGetLocation(err) {
-        if(err) {
-            callback(err);
-        }
-        else {
-            callback(null, new ServiceInstance(instanceName));
-        }
-    }
-
-    function afterGetSubscription(err) {
-        if(err) {
-            callback(err);
-        }
-        else {
-            scripty.invoke('account affinity-group list', function(err, affinityGroups) {
-                if(err) {
-                    continuation(new Error("you have no affinity groups, create some in the portal first"));
-                } else {
-                    var names = _.map(affinityGroups, function(item) {
-                        return item.Name + ' (' + item.Location + ')';
-                    });
-
-                    self.log.info("Choose an Affinity Group to use for this application: ");
-                    self.cli.choose(names, function(i) {
-                        self.log.info("Using '" + names[i] + "'.");
-                        env.config.affinityGroup = affinityGroups[i].Name;
-                        afterGetLocation(null);
-                    });
-                }
+    fs.exists(publishSettingsFilePath, function(exists) {
+        if(!exists) {
+            callback(new Error("Publish Settings file not found."));
+        } else {
+            readSubscriptions(publishSettingsFilePath, function(err, subscriptions) {
+                callback(null, subscriptions);
             });
         }
-    }
+    });
+}
 
-    if(env.config.subscriptionId) {
-        afterGetSubscription(null);
-    } else {
-        // Get a list of available subscriptions
-        scripty.invoke('account list', function(err, accounts) {
-            if(err) {
-                callback(new Error("no Azure accounts have been registered, run 'azure account list' for more info"));
-            } else {
-                var names = _.pluck(accounts, "Name");
+function AzurePlugin(context, ui) {
+    this.context = context;
+    this.ui = ui;
+}
+exports.AzurePlugin = AzurePlugin;
 
-                self.log.info("Choose a Subscription to use for this application: ");
-                self.cli.choose(names, function(i) {
-                    self.log.info("Using '" + names[i] + "'.");
-                    env.config.subscriptionId = accounts[i].Id;
-                    afterGetSubscription(null);
-                });
-            }
+AzurePlugin.prototype.collectGlobalConfiguration = function(callback) {
+    // Ask the user which subscription they want
+    getSubscriptions(function(err, subscriptions) {
+        if(err) throw err;
+        this.ui.choose(subscriptions, function(i) {
+            this.log.info('Selected: ' + subscriptions[i]);
         });
-    }
-};
-
-CloudServicePlugin.prototype.provision = function(env, context, serviceName, callback) {
-
+    });
 };
 
 exports.attach = function(context, ui) {
     ui.log.verbose('loading azure plugin');
 
-    context.plugins['Azure.CloudService'] = new CloudServicePlugin(context, ui);
+    context.plugins['Azure'] = new AzurePlugin(context, ui);
 };
 module.exports = exports;
