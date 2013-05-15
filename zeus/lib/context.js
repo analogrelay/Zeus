@@ -38,8 +38,9 @@ function Context(zf, zfpath, ui) {
         var self = this;
         var issues = [];
         _.each(self.zf.services, function(service, name, list) {
-            if(!(service.type in self.plugins)) {
-                issues.push({ type: 'missing_plugin', name: service.type, service: name });
+            var type = parseServiceType(service.type)
+            if(!(type.plugin in self.plugins)) {
+                issues.push({ type: 'missing_plugin', name: type.plugin, service: name });
             }
         });
         return issues;
