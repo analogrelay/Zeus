@@ -21,16 +21,6 @@ Environment.revive = function(obj) {
 		obj.config);
 };
 
-Environment.prototype.save = function(path, callback) {
-	// Pretty-print the JSON
-	var str = JSON.stringify(Environment.cryofreeze(this), null, 2);
-	
-	// Write it out
-	log.verbose('writing Zeusspec: ' + path);
-	fs.writeFile(path, str, callback);
-};
-
-/** Returns a copy of the object designed for cleaner JSON serialization */
 Environment.cryofreeze = function(self) {
 	return {
 		app: self.app,
@@ -38,6 +28,15 @@ Environment.cryofreeze = function(self) {
 		services: utils.mapObject(self.services, ServiceInstance.cryofreeze),
 		config: self.config
 	};
+};
+
+Environment.prototype.save = function(path, callback) {
+	// Pretty-print the JSON
+	var str = JSON.stringify(Environment.cryofreeze(this), null, 2);
+	
+	// Write it out
+	log.verbose('writing Zeusspec: ' + path);
+	fs.writeFile(path, str, callback);
 };
 
 module.exports = exports = Environment;

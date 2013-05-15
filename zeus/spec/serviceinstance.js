@@ -7,26 +7,41 @@ var assert = require('chai').assert,
 
 describe('ServiceInstance', function() {
 	describe('#constructor', function() {
-		it('should accept (string, object)', function() {
-			var name = 'thename';
+		it('should accept (object)', function() {
 			var config = {};
-			var instance = new ServiceInstance(name, config);
+			var instance = new ServiceInstance(config);
 
-			assert.strictEqual(name, instance.name);
 			assert.strictEqual(config, instance.config);
-		});
-		it('should accept (string)', function() {
-			var name = 'thename';
-			var instance = new ServiceInstance(name);
-
-			assert.strictEqual(name, instance.name);
-			assert.isNotNull(instance.config);
 		});
 		it('should accept ()', function() {
 			var instance = new ServiceInstance();
 
-			assert.strictEqual('', instance.name);
 			assert.isNotNull(instance.config);
+		});
+	});
+
+	describe('.revive', function() {
+		it('should return a true service instance', function() {
+			var frozen = {
+				config: {'foo': 42}
+			}
+			var expected = new ServiceInstance({foo: 42});
+			var revived = ServiceInstance.revive(frozen);
+
+			assert.deepEqual(revived, expected);
+			assert.instanceOf(revived, ServiceInstance);
+		});
+	});
+
+	describe('.cryofreeze', function() {
+		it('should return a frozen serviceinstance object', function() {
+			var expected = {
+				config: {'foo': 42}
+			};
+			var live = new ServiceInstance({foo: 42});
+			var frozen = ServiceInstance.cryofreeze(live);
+
+			assert.deepEqual(frozen, expected);
 		});
 	});
 });
