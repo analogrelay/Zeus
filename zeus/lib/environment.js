@@ -30,6 +30,17 @@ Environment.cryofreeze = function(self) {
 	};
 };
 
+Environment.load = function(path, callback) {
+	// Read the file
+	fs.readFile(path, function(err, data) {
+		if(err) {
+			callback(err);
+		} else {
+			callback(null, Environment.revive(JSON.parse(data)));
+		}
+	});
+}
+
 Environment.prototype.save = function(path, callback) {
 	// Pretty-print the JSON
 	var str = JSON.stringify(Environment.cryofreeze(this), null, 2);

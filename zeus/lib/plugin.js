@@ -17,4 +17,12 @@ Plugin.prototype.createServiceInstance = function(zeusfile, environmentName, ser
 	}
 };
 
+Plugin.prototype.provision = function(zeusfile, env, type, service, instance, callback) {
+	if(this.serviceTypes.hasOwnProperty(type)) {
+		this.serviceTypes[type].provision(zeusfile, env, service, instance, callback);
+	} else {
+		callback(new Error("No handler for service type '" + type + "' registered."));
+	}
+};
+
 module.exports = exports = Plugin;

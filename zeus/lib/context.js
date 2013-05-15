@@ -45,6 +45,20 @@ function Context(zf, zfpath, ui) {
         return issues;
     };
 
+    this.provision = function(env, serviceName, callback) {
+        var self = this;
+
+        // Find the plugin
+        var service = self.zf.services[serviceName];
+        var instance = env.services[serviceName];
+        var type = parseServiceType(service.type);
+        if(self.plugins.hasOwnProperty(type.plugin)) {
+            var plugin = self.plugins[type.plugin];
+            plugin.provision(self.zf, env, type.name, service, instance, callback);
+        }
+        callback(new Error("No plugin for '" + service.type + "'"));
+    }
+
     this.createEnvironment = function(name, callback) {
         var self = this;
         self.collectGlobalConfiguration(function(err, config) {

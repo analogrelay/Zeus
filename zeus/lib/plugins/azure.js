@@ -91,6 +91,10 @@ function getSubscriptions(callback) {
     });
 }
 
+function createServiceManagementService(subscriptionId) {
+    throw new Error("not implemented.");
+}
+
 function WebsiteServiceType(plugin) {
     this.plugin = plugin;
     this.context = plugin.context;
@@ -107,6 +111,11 @@ WebsiteServiceType.prototype.createInstance = function(zeusfile, environmentName
     }));
 };
 
+WebsiteServiceType.prototype.provision = function(zeusfile, env, service, instance, callback) {
+    this.ui.log.info("provisioning azure website: " + instance.config.name);
+    callback();
+};
+
 function AzurePlugin(context, ui) {
     Plugin.apply(this, [context, ui]);
     this.serviceTypes.website = new WebsiteServiceType(this);
@@ -114,7 +123,6 @@ function AzurePlugin(context, ui) {
 exports.AzurePlugin = AzurePlugin;
 
 AzurePlugin.prototype = new Plugin();
-
 AzurePlugin.prototype.collectGlobalConfiguration = function(callback) {
     var self = this;
 

@@ -39,16 +39,20 @@ exports.init = function(ui) {
 			}
 			else {
 				zeus.context(ui, process.cwd(), function(err, context) {
-					// Load the Zeus environment
-					var env = new zeus.Environment.load(spec);
+					if(err) throw err;
 
-					if(!(service in env.services)) {
-						ui.log.error("Service not defined in the zeusspec: " + service);
-					}
-					else {
-						// Provision the requested environment
-						context.provision(service);
-					}
+					// Load the Zeus environment
+					var env = zeus.Environment.load(spec, function(err, env) {
+						if(err) throw err;
+						
+						if(!(service in env.services)) {
+							ui.log.error("Service not defined in the zeusspec: " + service);
+						}
+						else {
+							// Provision the requested environment
+							context.provision(env, service, cb);
+						}
+					});
 				});
 			}
 		});
