@@ -2,6 +2,7 @@ var fs = require('fs'),
 	path = require('path'),
 	_ = require('underscore'),
 	winston = require('winston'),
+	async = require('async'),
 	UIService = require('./ui');
 
 var ServiceTypeRegex = /([^\.]*)\.(.*)/;
@@ -18,8 +19,7 @@ function findPlugins(services) {
 function Context(zf, zfpath, ui) {
 	this.zf = zf;
 	this.path = zfpath;
-
-	ui = ui || UIService.empty;
+	this.ui = ui || UIService.empty;
 	
 	this.plugins = {};
 
@@ -37,23 +37,28 @@ function Context(zf, zfpath, ui) {
 
 	this.collectGlobalConfiguration = function(callback) {
 		// Find the plugins for all services
-		var plugins = findPlugins(this.zf.services);
+		var self = this;
+		var pluginNames = findPlugins(this.zf.services);
 
 		var config = {};
-		collectConfiguration(
-			_.first(plugins),
-			_.rest(plugins),
-			function() {
-
-			});
-		plugins.forEach(function(pluginName) {
-			if(this.plugins.hasOwnProperty(pluginName)) {
-				var plugin = this.plugins[pluginName];
-
-				_.each()
+		async.each(pluginNames, function(pluginName, callback) {
+			if(self.plugins.hasOwnProperty(pluginName)) {
+				var plugin = self.plugins[pluginName];
+				plugin.collectGlobalConfiguration(function(err, pluginConfig) {
+					if(err) { 
+						callback(err);
+					} else {
+						config[pluginName] = pluginConfig;
+						callback();
+					}
+				});
+			} else {
+				callback();
 			}
+		}, function(err) {
+			callback(err, config);
 		});
-	}
+	};
 
 	// this.createServiceInstance = function(env, serviceName, service, callback) {
 	// 	// Find the plugin for the service
@@ -111,7 +116,7 @@ function Context(zf, zfpath, ui) {
 }
 
 Context.prototype.loadPlugin = function(path) {
-	require(path).attach(this, ui);
+	require(path).attach(this, this.ui);
 };
 
 exports = module.exports = Context;

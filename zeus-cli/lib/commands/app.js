@@ -1,16 +1,16 @@
 var zeus = require('zeus');
 
-exports.init = function(cli) {
-	var log = cli.output;
-	var app = cli.category('app')
+exports.init = function(ui) {
+	var log = ui.cli.output;
+	var app = ui.cli.category('app')
 		.description('Commands for managing Zeusfiles')
 
 	function init(appname, options, cb) {
 		// Set up a zeus context
-		zeus.context(cli, log, process.cwd(), appname, function(err, context) {
+		zeus.context(ui, process.cwd(), appname, function(err, context) {
 			if(err) throw err;
 
-			log.info("Saving new Zeusfile to: " + context.path);
+			ui.log.info("Saving new Zeusfile to: " + context.path);
 			context.save(cb);
 		});
 	}

@@ -1,4 +1,6 @@
 var Plugin = require('../plugin'),
+    fs = require('fs'),
+    path = require('path'),
     azure = require('azure'),
     xml2js = require('xml2js'),
     _ = require('underscore'),
@@ -21,7 +23,7 @@ function azureDir() {
     var dir = process.env.AZURE_CONFIG_DIR ||
         path.join(homeFolder(), '.azure');
 
-    if (!exports.pathExistsSync(dir)) {
+    if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, 502); // 0766
     }
 
@@ -51,7 +53,7 @@ function readSubscriptions (publishSettingsFilePath, callback) {
                     }
 
                     if (publishSettings) {
-                        var subs = publishSettings.PublishProfile.Subscription;
+                        var subs = publishSettings.PublishData.PublishProfile[0].Subscription;
                         if (typeof subs === 'undefined' || subs === undefined) {
                             subs = [];
                         } else if (typeof (subs[0]) === 'undefined') {
@@ -60,7 +62,7 @@ function readSubscriptions (publishSettingsFilePath, callback) {
 
                         var subscriptions = [];
                         for (var s in subs) {
-                            subscriptions[s] = subs[s]['@'];
+                            subscriptions[s] = subs[s]['$'];
                         }
                         callback(null, subscriptions);
                     } else {
@@ -73,7 +75,7 @@ function readSubscriptions (publishSettingsFilePath, callback) {
 }
 
 function getSubscriptions(callback) {
-    var azureDirectory = utils.azureDir();
+    var azureDirectory = azureDir();
     var pemPath = path.join(azureDirectory, 'managementCertificate.pem');
     var publishSettingsFilePath = path.join(azureDirectory, 'publishSettings.xml');
     
@@ -96,18 +98,28 @@ function AzurePlugin(context, ui) {
 exports.AzurePlugin = AzurePlugin;
 
 AzurePlugin.prototype.collectGlobalConfiguration = function(callback) {
+    var self = this;
+
     // Ask the user which subscription they want
     getSubscriptions(function(err, subscriptions) {
-        if(err) throw err;
-        this.ui.choose(subscriptions, function(i) {
-            this.log.info('Selected: ' + subscriptions[i]);
-        });
+        if(err) {
+            callback(err);
+        } else {
+            self.ui.cli.choose(_.pluck(subscriptions, 'Name'), function(i) {
+                callback(null, {
+                    subscription: {
+                        name: subscriptions[i].Name,
+                        id: subscriptions[i].Id
+                    }
+                });
+            });
+        }
     });
 };
 
 exports.attach = function(context, ui) {
     ui.log.verbose('loading azure plugin');
 
-    context.plugins['Azure'] = new AzurePlugin(context, ui);
+    context.plugins.azure = new AzurePlugin(context, ui);
 };
 module.exports = exports;

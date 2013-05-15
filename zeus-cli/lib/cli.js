@@ -790,6 +790,9 @@ function helpOptions(cmd, cmdExtra) {
 //////////////////////////////
 // load command plugins
 
+var zeus = require('zeus');
+var ui = new zeus.UIService(cli, log);
+
 function harvestPlugins() {
   function scan(scanPath) {
     var results = fs.readdirSync(scanPath);
@@ -829,7 +832,7 @@ function harvestPlugins() {
   var basePath = path.dirname(__filename);
 
   var plugins = scan(path.join(basePath, 'commands'));
-  plugins.forEach(function (plugin) { plugin.init(cli); });
+  plugins.forEach(function (plugin) { plugin.init(ui); });
 }
 
 function harvestModules() {
@@ -853,7 +856,7 @@ function harvestModules() {
   });
 
   modules.forEach(function (module) {
-    module.plugin.init(cli);
+    module.plugin.init(ui);
   });
 
   function scan(scanPath) {
@@ -921,30 +924,6 @@ function harvestModules() {
     return result;
   }
 }
-
-//Check node.js version.
-//Do it after changing exception handler.
-checkVersion();
-
-function checkVersion() {
-  // Uploading VHD needs 0.6.15 on Windows
-  var version = process.version;
-  var ver = version.split('.');
-  var ver1num = parseInt(ver[1], 10);
-  var ver2num = parseInt(ver[2], 10);
-  if (ver[0] === 'v0') {
-    if (ver1num < 6 || (ver1num === 6 && ver2num < 15)) {
-      throw new Error('You need node.js v0.6.15 or higher to run this code. Your version: ' +
-          version);
-    }
-    if (ver1num === 7 && ver2num <= 7) {
-      throw new Error('You need node.js v0.6.15 or higher to run this code. Your version ' +
-          version + ' won\'t work either.');
-    }
-  }
-}
-
-
 
 harvestPlugins();
 harvestModules();

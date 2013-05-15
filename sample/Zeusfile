@@ -2,7 +2,7 @@
   "name": "sample",
   "services": {
     "frontend": {
-      "type": "Azure.CloudService",
+      "type": "azure.website",
       "config": {}
     }
   }

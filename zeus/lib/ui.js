@@ -1,4 +1,5 @@
 function UIService(cli, log) {
+	this.cli = cli;
 	this.log = log;
 }
 

@@ -1,19 +1,19 @@
 var zeus = require('zeus'),
 	_ = require('underscore');
 
-exports.init = function(cli) {
-	var log = cli.output;
-	var service = cli.category('service')
+exports.init = function(ui) {
+	var log = ui.cli.output;
+	var service = ui.cli.category('service')
 		.description("Manage services in an existing Zeusfile");
 
 	function add(name, type, options, cb) {
 		// Get the zeus context
-		zeus.context(process.cwd(), log, function(err, context) {
+		zeus.context(ui, process.cwd(), function(err, context) {
 			if(err) throw err;
 			
 			// Check if the service already exists
 			if(name in context.zf.services) {
-				log.error("Service already defined: " + name);
+				ui.log.error("Service already defined: " + name);
 			} else {
 				context.zf.services[name] = new zeus.ZeusService(type);
 				context.save(cb);
@@ -23,11 +23,11 @@ exports.init = function(cli) {
 
 	function list(options, cb) {
 		// Get the zeus context
-		zeus.context(process.cwd(), log, function(err, context) {
+		zeus.context(ui, process.cwd(), function(err, context) {
 			if(err) throw err;
 
 			_.each(context.zf.services, function(value, name, list) {
-				log.info(" * " + name + ": " + value.type);
+				ui.log.info(" * " + name + ": " + value.type);
 			});
 
 			cb();
@@ -36,12 +36,12 @@ exports.init = function(cli) {
 
 	function remove(name, options, cb) {
 		// Get the zeus context
-		zeus.context(process.cwd(), log, function(err, context) {
+		zeus.context(ui, process.cwd(), function(err, context) {
 			if(err) throw err;
 			
 			// Check if the service exists
 			if(!(name in context.zf.services)) {
-				log.error("Service not defined: " + name);
+				ui.log.error("Service not defined: " + name);
 			} else {
 				delete context.zf.services[name];
 				context.save(cb);

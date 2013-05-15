@@ -17,19 +17,19 @@
 
 var _ = require('underscore');
 
-exports.init = function (cli) {
-  cli.command('help [command]')
+exports.init = function (ui) {
+  ui.cli.command('help [command]')
         .description('Display help for a given command')
         .action(function (name) {
           if (!name) {
-            cli.parse(['', '', '-h']);
-          } else if(_.findWhere(cli.commands, {name: name})) {
-            cli.parse(['', '', name, '-h']);
-          } else if (!cli.categories[name]) {
+            ui.cli.parse(['', '', '-h']);
+          } else if(_.findWhere(ui.cli.commands, {name: name})) {
+            ui.cli.parse(['', '', name, '-h']);
+          } else if (!ui.cli.categories[name]) {
             throw new Error('Unknown command name ' + name);
           } else {
-            var args = ['', ''].concat(cli.rawArgs.slice(4), ['-h']);
-            cli.categories[name].parse(args);
+            var args = ['', ''].concat(ui.cli.rawArgs.slice(4), ['-h']);
+            ui.cli.categories[name].parse(args);
           }
         });
 };
