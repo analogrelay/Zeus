@@ -4,6 +4,10 @@
     "frontend": {
       "type": "azure.website",
       "config": {}
+    },
+    "database": {
+      "type": "azure.sqlserver",
+      "config": {}
     }
   }
 }
