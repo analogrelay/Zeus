@@ -3,19 +3,8 @@ var Plugin = require('../plugin'),
     path = require('path'),
     _ = require('underscore'),
     ServiceInstance = require('../serviceinstance'),
-    Channel = require('./azure/channel'),
-    utils = require('./azure/utils'),
-    account = require('./azure/account');
-
-// azure-cli uses a fixed list for this, so I guess we will too?
-var webspaces = [
-      { GeoRegion: 'North Europe', WebSpace: 'northeuropewebspace' },
-      { GeoRegion: 'West Europe', WebSpace: 'westeuropewebspace' },
-      { GeoRegion: 'East US', WebSpace: 'eastuswebspace' },
-      { GeoRegion: 'North Central US', WebSpace: 'northcentraluswebspace' },
-      { GeoRegion: 'West US', WebSpace: 'westuswebspace' },
-      { GeoRegion: 'East Asia', WebSpace: 'eastasiawebspace' }
-];
+    scripty = require('azure-scripty'),
+    async = require('async');
 
 function WebsiteServiceType(plugin) {
     this.plugin = plugin;
@@ -25,31 +14,77 @@ function WebsiteServiceType(plugin) {
 
 WebsiteServiceType.prototype.createInstance = function(zeusfile, environmentName, service, serviceName, callback) {
     // Set the name
+    var self = this;
     var name = zeusfile.name + '-' + environmentName + '-' + serviceName;
 
-    // Ask the user which location they want to use
-    if()
-    self.log.info("Please choose the location in which to put the site")
-    self.ui.cli.choose(_.pluck(webspaces, 'GeoRegion'), function(i) {
-        var webspace = webspaces[i];
-
-        // All we need to do now is return a service instance object
-        callback(null, new ServiceInstance({
-            name: name
-            webspace: webspace.WebSpace
-        }));
-    });
+    // Get the list of available location
+    self.ui.log.info("configuring website: '" + name + "'");
+    self.ui.log.info("enumerating locations...");
+    async.waterfall([
+        function(callback) {
+            scripty.invoke({
+                command: 'site location list'
+            }, function(err, locations) {
+                if(err) {
+                    callback(err);
+                } else if(locations.length == 0) {
+                    callback(new Error("You must create at least one website through the portal to use this. You can remove it after it is created."));
+                } else if(locations.length == 1) {
+                    callback(null, instance.config.location);
+                } else {
+                    self.ui.log.help("Choose a location for the '" + name + "' website");
+                    self.ui.cli.choose(_.pluck(locations, 'Name'), function(i) {
+                        callback(null, locations[i].Name);
+                    });
+                }
+            });
+        }, function(location, callback) {
+            callback(null, new ServiceInstance({
+                name: name,
+                location: location
+            }));
+        }
+    ], callback);
 };
 
 WebsiteServiceType.prototype.provision = function(zeusfile, env, service, instance, callback) {
-    this.ui.log.info("provisioning azure website: " + instance.config.name);
+    var self = this;
+    var subscription = env.config.azure.subscription;
+    self.ui.log.info("provisioning azure website: " + instance.config.name);
+    self.ui.log.info(" in subscription: " + subscription.name);
 
-    // Open channel
-    var channel = Channel.open();
-
-    
-
-    callback();
+    // Check if the site exists already
+    async.waterfall([
+        function(callback) {
+            self.ui.log.info("checking if site already exists...");
+            scripty.invoke({
+                command: 'site show',
+                positional: [instance.config.name],
+                subscription: subscription.id
+            }, function(err) {
+                if(!err) {
+                    callback(new Error("Website already exists: " + instance.config.name));
+                } else {
+                    callback(null);    
+                }
+            });
+        }, function(callback) {
+            self.ui.log.info("creating site in '" + instance.config.location + "' region");
+            scripty.invoke({
+                command: 'site create',
+                positional: [instance.config.name],
+                location: '"' + instance.config.location + '"',
+                subscription: subscription.id
+            }, callback);
+        }
+    ], function(err, results) {
+        if(err) {
+            callback(err);
+        } else {
+            self.ui.log.info("successfully provisioned '" + instance.config.name + "'");
+            callback(null, results);
+        }
+    });
 };
 
 function AzurePlugin(context, ui) {
@@ -63,11 +98,13 @@ AzurePlugin.prototype.collectGlobalConfiguration = function(callback) {
     var self = this;
 
     // Ask the user which subscription they want
-    account.getSubscriptions(function(err, subscriptions) {
+    scripty.invoke({
+        command: 'account list'
+    }, function(err, subscriptions) {
         if(err) {
             callback(err);
         } else {
-            self.log.info("Please Choose the subscription to use")
+            self.ui.log.help("choose a subscription")
             self.ui.cli.choose(_.pluck(subscriptions, 'Name'), function(i) {
                 var sub = subscriptions[i];
 

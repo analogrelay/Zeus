@@ -13,12 +13,22 @@ function Environment(app, name, services, config) {
 }
 
 /** Loads a true Environment object out of a plain JS object with matching properties */
-Environment.revive = function(obj) {
-	return new Environment(
+Environment.revive = function(path, obj) {
+	if(typeof path === 'object') {
+		obj = path;
+		path = null;
+	}
+
+	var env = new Environment(
 		obj.app, 
 		obj.name,
 		utils.mapObject(obj.services, ServiceInstance.revive),
 		obj.config);
+
+	if(path) {
+		env.path = path;
+	}
+	return env;
 };
 
 Environment.cryofreeze = function(self) {
@@ -36,12 +46,16 @@ Environment.load = function(path, callback) {
 		if(err) {
 			callback(err);
 		} else {
-			callback(null, Environment.revive(JSON.parse(data)));
+			callback(null, Environment.revive(path, JSON.parse(data)));
 		}
 	});
 }
 
 Environment.prototype.save = function(path, callback) {
+	if(typeof path === 'function') {
+		callback = path;
+		path = this.path;
+	}
 	// Pretty-print the JSON
 	var str = JSON.stringify(Environment.cryofreeze(this), null, 2);
 	

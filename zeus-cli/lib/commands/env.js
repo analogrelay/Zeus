@@ -16,8 +16,6 @@ exports.init = function(ui) {
 			}
 			else {
 				zeus.context(ui, process.cwd(), function(err, context) {
-					ui.log.info('Collecting global configuration information...');
-
 					// Create the environment object
 					context.createEnvironment(name, function(err, env) {
 						if(err) {

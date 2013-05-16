@@ -56,8 +56,9 @@ function Context(zf, zfpath, ui) {
         if(self.plugins.hasOwnProperty(type.plugin)) {
             var plugin = self.plugins[type.plugin];
             plugin.provision(self.zf, env, type.name, service, instance, callback);
+        } else {
+            callback(new Error("No plugin for '" + service.type + "'"));
         }
-        callback(new Error("No plugin for '" + service.type + "'"));
     }
 
     this.createEnvironment = function(name, callback) {
@@ -105,6 +106,8 @@ function Context(zf, zfpath, ui) {
         var pluginNames = findPlugins(this.zf.services);
 
         var config = {};
+        
+        self.ui.log.info('collecting global configuration information...');
         async.eachSeries(pluginNames, function(pluginName, callback) {
             if(self.plugins.hasOwnProperty(pluginName)) {
                 var plugin = self.plugins[pluginName];
