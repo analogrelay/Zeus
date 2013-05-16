@@ -1,0 +1,12 @@
+function UIService(cli, log) {
+	this.cli = cli;
+	this.log = log;
+}
+
+UIService.empty = new UIService(null, {
+	verbose: function() {},
+	info: function() {},
+	warn: function() {}
+});
+
+module.exports = exports = UIService;

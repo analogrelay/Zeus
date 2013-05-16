@@ -1,0 +1,5 @@
+C:\Code\Git\Zeus\zeus\obj\Debug\zeus.csprojResolveAssemblyReference.cache
+C:\Code\Git\Zeus\zeus\obj\Debug\zeus.dll
+C:\Code\Git\Zeus\zeus\obj\Debug\zeus.pdb
+C:\Code\Git\Zeus\zeus\bin\zeus.dll
+C:\Code\Git\Zeus\zeus\bin\zeus.pdb
