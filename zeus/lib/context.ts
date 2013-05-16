@@ -1,13 +1,13 @@
 /// <reference path="../ref/_references.d.ts" />
 
-import utils = module('./utils');
 import model = module('./model');
 import _ = module('underscore');
 
 var ServiceTypeRegex = /([^\.]*)\.(.*)/;
 
-function findPlugins(services: utils.IMap<model.ZeusService>): string {
-    var mapped = _.map(service, value => parseServiceType(value.type).plugin);
+function findPlugins(services: IMap<model.ZeusService>): string {
+    _.chain(services)
+    var mapped = _.map(services, value => parseServiceType(value.type).plugin);
     //return _.uniq(_.filter(_.map(services, (value, key, list) => parseServiceType(value.type).plugin), _.isString));
 }
 

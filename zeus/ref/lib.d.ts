@@ -1147,3 +1147,7 @@ declare var DataView: {
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): DataView;
 }
 
+// Helpful interfaces
+interface Map<T> {
+    [key: string]: T;
+}

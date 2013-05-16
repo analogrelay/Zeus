@@ -1,9 +1,5 @@
 /// <reference path="../ref/_references.d.ts" />
 
-export interface IMap<T> extends Object {
-    [key: string]: T;
-}
-
 export function mapObject(object: Object, callback: () => any);
 export function mapObject(object: Object, callback: (value: any) => any);
 export function mapObject(object: Object, callback: (value: any, key: string) => any);
