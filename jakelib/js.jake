@@ -4,7 +4,7 @@ var fs = require('fs');
 namespace('js', function() {
 	desc('sync source files to lib');
 	task('sync', function(src, lib) {
-		console.log(src + "*.js -> " + lib + "*.js");
+		console.log(" " + src + "*.js -> " + lib + "*.js");
 		var sourcefiles = jake.readdirR(src).filter(function(file) {
 			return path.extname(file) === '.js';
 		});

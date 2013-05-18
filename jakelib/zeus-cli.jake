@@ -3,6 +3,7 @@ namespace('zeus-cli', function() {
 
 	desc("Build zeus-cli");
 	task('all', ['zeus-cli/lib'], function() {
+		jake.logger.log("building zeus-cli");
 		jake.Task['coffee:compile'].invoke('zeus-cli/src/', 'zeus-cli/lib/');
 		jake.Task['coffee:compile'].reenable();
 
