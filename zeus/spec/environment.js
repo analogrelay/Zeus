@@ -126,7 +126,7 @@ describe('Environment', function() {
 		});
 	});
 
-	describe('.cryofreeze', function() {
+	describe('#cryofreeze', function() {
 		it('should return a frozen environment object', function() {
 			var expected = {
 				app: 'nugetgallery',
@@ -137,13 +137,13 @@ describe('Environment', function() {
 					}
 				},
 				config: {
-					bar: /abc/
+					bar: 'abc'
 				}
 			};
 			var live = new Environment('nugetgallery', 'qa', {
 				frontend: new ServiceInstance({foo: 42})
-			}, { bar: /abc/ });
-			var frozen = Environment.cryofreeze(live);
+			}, { bar: 'abc' });
+			var frozen = live.cryofreeze();
 
 			assert.deepEqual(frozen, expected);
 		});

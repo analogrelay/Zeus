@@ -33,13 +33,13 @@ describe('ServiceInstance', function() {
 		});
 	});
 
-	describe('.cryofreeze', function() {
+	describe('#cryofreeze', function() {
 		it('should return a frozen serviceinstance object', function() {
 			var expected = {
 				config: {'foo': 42}
 			};
 			var live = new ServiceInstance({foo: 42});
-			var frozen = ServiceInstance.cryofreeze(live);
+			var frozen = live.cryofreeze();
 
 			assert.deepEqual(frozen, expected);
 		});

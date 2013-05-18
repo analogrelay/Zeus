@@ -26,8 +26,8 @@ module.exports = class Context
         @plugins = {}
 
     check: () ->
-        for own key of @zeusfile.services when @plugins.hasOwnProperty parseServiceType(@zeusfile.services[key].type).plugin
-            { type: 'missing_plugin', name: type.plugin, service: name }
+        for own key of @zeusfile.services when not @plugins.hasOwnProperty (type = parseServiceType(@zeusfile.services[key].type)).plugin
+            { type: 'missing_plugin', name: type.plugin, service: key }
 
     provision: (env, serviceName, callback) ->
         # Find the plugin
@@ -86,7 +86,7 @@ module.exports = class Context
     loadPlugins: (dir, callback) ->
         [callback, dir] = [dir, path.join __dirname, 'plugins'] if typeof dir is 'function'
 
-        self.ui.log.verbose 'scanning ' + dir + ' for plugins'
+        @ui.log.verbose 'scanning ' + dir + ' for plugins'
         fs.readdir dir, (err, files) =>
             if err
                 callback err
@@ -106,7 +106,7 @@ module.exports = class Context
         str = JSON.stringify @zeusfile.cryofreeze(), null, 2
         
         # Write it out
-        @ui.log.verbose 'writing Zeusfile: ' + self.path
+        @ui.log.verbose 'writing Zeusfile: ' + @path
         fs.writeFile @path, str, callback
 
     loadPlugin: (path) ->

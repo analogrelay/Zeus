@@ -2,7 +2,7 @@ utils = require './utils'
 ZeusService = require './zeusservice'
 
 module.exports = class Zeusfile
-	constructor: (@name, @services) ->
+	constructor: (@name = '', @services = {}) ->
 
 	@revive: (obj) ->
 		new Zeusfile obj.name, utils.mapObject(obj.services, ZeusService.revive);

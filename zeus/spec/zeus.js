@@ -50,7 +50,7 @@ describe('#context(dir, appname)', function() {
 			// Assert
 			assert.ifError(err);
 			assert.equal(context.path, path.join('mydir', 'Zeusfile'));
-			assert.equal(context.zf.name, 'myApp');
+			assert.equal(context.zeusfile.name, 'myApp');
 			done();
 		});
 	});
@@ -82,7 +82,7 @@ describe('#context(dir, appname)', function() {
 		var context = zeus.context(ui, subsub, function(err, context) {
 			assert.ifError(err);
 			assert.equal(context.path, zfpath);
-			assert.equal(context.zf.name, 'the test app');
+			assert.equal(context.zeusfile.name, 'the test app');
 			done();
 		});
 	});
@@ -106,7 +106,7 @@ describe('#context(dir, appname)', function() {
 		var context = zeus.context(ui, subsub, function(err, context) {
 			assert.ifError(err);
 			assert.equal(context.path, zfpath);
-			assert.equal(context.zf.name, 'the test app');
+			assert.equal(context.zeusfile.name, 'the test app');
 			done();
 		});
 	});
@@ -134,7 +134,7 @@ describe('#context(dir, appname)', function() {
 		var context = zeus.context(ui, subsub, function(err, context) {
 			assert.ifError(err);
 			assert.equal(context.path, zfpath);
-			assert.equal(context.zf.name, 'the test app');
+			assert.equal(context.zeusfile.name, 'the test app');
 			done();
 		});
 	});

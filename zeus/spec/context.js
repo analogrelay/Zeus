@@ -41,7 +41,7 @@ describe('Context', function() {
 				done();
 			});
 		});
-		it('should produce falsey arg if successful', function(done) {
+		it('should produce no error if successful', function(done) {
 			// Arrange
 			var context = new zeus.Context(zf, 'this/aint/real');
 			fs.writeFile.yields(false);
@@ -77,15 +77,15 @@ describe('Context', function() {
 				baz: new zeus.ZeusService('Azure.Thing', {})
 			});
 			var context = new zeus.Context(zeusfile, 'path', ui);
-			context.plugins['Azure.Thing'] = {};
+			context.plugins['Azure'] = {};
 			fs.writeFile.yields();
 
 			// Act
 			var results = context.save(function(err, callback) {
-				assert.ok(ui.log.warn.calledWith("plugin for 'Not.A.Thing' could not be found"));
-				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'foo' service"));
-				assert.ok(ui.log.warn.calledWith("plugin for 'Whats.This' could not be found"));
-				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'bar' service"));
+				assert.ok(ui.log.warn.calledWith("plugin for 'Not' could not be found"), '1');
+				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'foo' service"), '2');
+				assert.ok(ui.log.warn.calledWith("plugin for 'Whats' could not be found"), '3');
+				assert.ok(ui.log.warn.calledWith(" you will not be able to work with the 'bar' service"), '4');
 				done();
 			});
 		});
@@ -158,15 +158,15 @@ describe('Context', function() {
 				baz: new zeus.ZeusService('Azure.Thing', {})
 			});
 			var context = new zeus.Context(zeusfile, 'path');
-			context.plugins['Azure.Thing'] = {};
+			context.plugins['Azure'] = {};
 
 			// Act
 			var results = context.check();
 
 			// Assert
 			assert.deepEqual(results, [
-				{ type: 'missing_plugin', name: 'Not.A.Thing', service: 'foo' },
-				{ type: 'missing_plugin', name: 'Whats.This', service: 'bar' }
+				{ type: 'missing_plugin', name: 'Not', service: 'foo' },
+				{ type: 'missing_plugin', name: 'Whats', service: 'bar' }
 			]);
 		});
 	});

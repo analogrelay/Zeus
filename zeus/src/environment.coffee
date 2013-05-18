@@ -23,7 +23,7 @@ module.exports = class Environment
 	cryofreeze: ->
 		app: @app,
 		name: @name,
-		services: utils.mapObject(@services, ServiceInstance.cryofreeze),
+		services: utils.mapObject(@services, ServiceInstance.prototype.cryofreeze),
 		config: @config
 
 	load: (path, callback) ->
