@@ -2,7 +2,7 @@ utils = require './utils'
 ConfigSetting = require './configsetting'
 
 module.exports = class ZeusService
-	constructor: (@type, @config) ->
+	constructor: (@type, @config = {}) ->
 
 	@revive: (obj) ->
 		new ZeusService obj.type, utils.mapObject(obj.config, ConfigSetting.revive)
