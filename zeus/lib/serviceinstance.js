@@ -5,10 +5,7 @@
   module.exports = ServiceInstance = (function() {
 
     function ServiceInstance(config) {
-      var _ref;
-      if ((_ref = this.config) == null) {
-        this.config = {};
-      }
+      this.config = config != null ? config : {};
     }
 
     ServiceInstance.revive = function(obj) {

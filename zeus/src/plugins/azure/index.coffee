@@ -18,9 +18,7 @@ module.exports = class AzurePlugin extends Plugin
             else
                 @ui.log.help "choose a subscription"
                 @ui.cli.choose (s.Name for s in subscriptions), (i) ->
-                    callback null, {
-                        subscription: {
+                    callback null,
+                        subscription:
                             name: subscriptions[i].Name,
                             id: subscriptions[i].Id
-                        }
-                    }

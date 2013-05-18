@@ -15,50 +15,52 @@
   module.exports = Environment = (function() {
 
     function Environment(app, name, services, config) {
-      this.app = app || '';
-      this.name = name || '';
-      this.services = services || {};
-      this.config = config || {};
-      ({
-        this.revive: function(path, obj) {
-          var env, _ref;
-          if (typeof path === 'object') {
-            _ref = [path, null], obj = _ref[0], path = _ref[1];
-          }
-          env = new Environment(obj.app, obj.name, utils.mapObject(obj.services, ServiceInstance.revive), obj.config);
-          if (path != null) {
-            env.path = path;
-          }
-          return env;
-        },
-        cryofreeze: function() {
-          return {
-            app: this.app,
-            name: this.name,
-            services: utils.mapObject(this.services, ServiceInstance.cryofreeze),
-            config: this.config
-          };
-        },
-        load: function(path, callback) {
-          return fs.readFile(path, function(err, data) {
-            if (err) {
-              return callback(err);
-            } else {
-              return callback(null, Environment.revive(path, JSON.parse(data)));
-            }
-          });
-        },
-        save: function(path, callback) {
-          var str, _ref;
-          if (typeof path === 'function') {
-            _ref = [path, this.path], callback = _ref[0], path = _ref[1];
-          }
-          str = JSON.stringify(this.cryofreeze(), null, 2);
-          log.verbose('writing Zeusspec: ' + path);
-          return fs.writeFile(path, str, callback);
+      this.app = app != null ? app : '';
+      this.name = name != null ? name : '';
+      this.services = services != null ? services : {};
+      this.config = config != null ? config : {};
+    }
+
+    Environment.revive = function(path, obj) {
+      var env, _ref;
+      if (typeof path === 'object') {
+        _ref = [path, null], obj = _ref[0], path = _ref[1];
+      }
+      env = new Environment(obj.app, obj.name, utils.mapObject(obj.services, ServiceInstance.revive), obj.config);
+      if (path != null) {
+        env.path = path;
+      }
+      return env;
+    };
+
+    Environment.prototype.cryofreeze = function() {
+      return {
+        app: this.app,
+        name: this.name,
+        services: utils.mapObject(this.services, ServiceInstance.cryofreeze),
+        config: this.config
+      };
+    };
+
+    Environment.prototype.load = function(path, callback) {
+      return fs.readFile(path, function(err, data) {
+        if (err) {
+          return callback(err);
+        } else {
+          return callback(null, Environment.revive(path, JSON.parse(data)));
         }
       });
-    }
+    };
+
+    Environment.prototype.save = function(path, callback) {
+      var str, _ref;
+      if (typeof path === 'function') {
+        _ref = [path, this.path], callback = _ref[0], path = _ref[1];
+      }
+      str = JSON.stringify(this.cryofreeze(), null, 2);
+      log.verbose('writing Zeusspec: ' + path);
+      return fs.writeFile(path, str, callback);
+    };
 
     return Environment;
 

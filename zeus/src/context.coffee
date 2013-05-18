@@ -16,22 +16,18 @@ findPlugins = (services) ->
 
 parseServiceType = (serviceType) ->
     if m = serviceType.match(ServiceTypeRegex)
-        {
-            plugin: m[1],
-            name: m[2]
-        }
+        plugin: m[1],
+        name: m[2]
     else
         {}
 
 module.exports = class Context
-    constructor: (@zeusfile, @path, ui) ->
-        @ui = ui || UIService.empty
+    constructor: (@zeusfile, @path, @ui = UIService.empty) ->
         @plugins = {}
 
     check: () ->
-        ({ type: 'missing_plugin', name: type.plugin, service: name } \
-            for own key of @zeusfile.services \
-                when not @plugins.hasOwnProperty parseServiceType(@zeusfile.services[key].type).plugin)
+        for own key of @zeusfile.services when @plugins.hasOwnProperty parseServiceType(@zeusfile.services[key].type).plugin
+            { type: 'missing_plugin', name: type.plugin, service: name }
 
     provision: (env, serviceName, callback) ->
         # Find the plugin
@@ -114,4 +110,4 @@ module.exports = class Context
         fs.writeFile @path, str, callback
 
     loadPlugin: (path) ->
-        require(path).attach @, @ui
+        new (require path)(@, @ui)

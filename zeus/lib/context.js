@@ -42,7 +42,7 @@
     function Context(zeusfile, path, ui) {
       this.zeusfile = zeusfile;
       this.path = path;
-      this.ui = ui || UIService.empty;
+      this.ui = ui != null ? ui : UIService.empty;
       this.plugins = {};
     }
 
@@ -52,7 +52,7 @@
       _results = [];
       for (key in _ref) {
         if (!__hasProp.call(_ref, key)) continue;
-        if (!this.plugins.hasOwnProperty(parseServiceType(this.zeusfile.services[key].type).plugin)) {
+        if (this.plugins.hasOwnProperty(parseServiceType(this.zeusfile.services[key].type).plugin)) {
           _results.push({
             type: 'missing_plugin',
             name: type.plugin,
@@ -178,7 +178,7 @@
     };
 
     Context.prototype.loadPlugin = function(path) {
-      return require(path).attach(this, this.ui);
+      return new (require(path))(this, this.ui);
     };
 
     return Context;
