@@ -2,11 +2,11 @@ desc('Build the default stuff');
 task('default', ['world']);
 
 desc('Build the world');
-task('world', ['zeus:nation', 'zeus-cli:nation']);
+task('world', ['zeus:all', 'zeus-cli:all']);
 
 namespace('zeus', function() {
-	desc("Build the zeus nation");
-	task('nation', ['zeus:compile']);
+	desc("Build zeus");
+	task('all', ['zeus:compile']);
 
 	desc("Compile CoffeeScript files");
 	task('compile', function() {
@@ -15,5 +15,5 @@ namespace('zeus', function() {
 });
 
 namespace('zeus-cli', function() {
-	task('nation');
+	task('all');
 });

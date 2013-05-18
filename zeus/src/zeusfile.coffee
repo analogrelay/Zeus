@@ -1,15 +1,13 @@
 utils = require('./utils')
 ZeusService = require('./zeusservice')
 
-class Zeusfile
+module.exports = class Zeusfile
 	constructor: (@name, @services) ->
 
-	@revive: obj ->
+	@revive: (obj) ->
 		new Zeusfile obj.name, utils.mapObject(obj.services, ZeusService.revive);
 
-	cryofreeze: ->
-		{
+	cryofreeze: -> {
 			name: @name,
 			services: utils.mapObject(@services, ZeusService.prototype.cryofreeze)
 		}
-exports = module.exports = Zeusfile;

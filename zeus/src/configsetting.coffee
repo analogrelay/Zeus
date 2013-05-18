@@ -1,4 +1,4 @@
-class ConfigSetting
+module.exports = class ConfigSetting
 	constructor: (template, required) ->
 		if typeof template is 'boolean'
 			@template = ''
@@ -9,13 +9,13 @@ class ConfigSetting
 
 	@revive: (obj) ->
 		if !obj
-			new ConfigSetting('', true)
+			new ConfigSetting '', true
 		else if typeof obj is 'string'
-			new ConfigSetting(obj, true)
+			new ConfigSetting obj, true
 		else
-			new ConfigSetting(obj.template, obj.required)
+			new ConfigSetting obj.template, obj.required
 
-	cryofreeze: () ->
+	cryofreeze: ->
 		if !@template && @required
 			null
 		else if @template && @required
@@ -25,7 +25,5 @@ class ConfigSetting
 			if @template
 				frozen.template = @template
 			if !@required
-				frozen.required = false;
-			return frozen;
-
-exports = module.exports = ConfigSetting;
+				frozen.required = false
+			return frozen
