@@ -4,11 +4,14 @@ module.exports = class ConfigSetting
 			@template = ''
 			@required = template
 		else
-			@template = template
-			@required = required
+			if not required?
+				@required = true
+			else
+				@required = required
+			@template = template || ''
 
 	@revive: (obj) ->
-		if !obj
+		if not obj?
 			new ConfigSetting '', true
 		else if typeof obj is 'string'
 			new ConfigSetting obj, true
