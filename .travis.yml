@@ -5,6 +5,6 @@ node_js:
     - "0.8"
     - "0.6"
 
-install: "./scripts/install"
+install: "./scripts/install.sh"
 
 script: "jake travis"
