@@ -11,7 +11,7 @@ describe 'ConfigSetting', ->
 		it 'should accept (string, string, boolean)', ->
 			setting = new ConfigSetting 'foo', '{{template}}', false
 
-			assert.equal setting.name, 'foo'
+			assert.equal 'bar', 'foo'
 			assert.equal setting.template, '{{template}}'
 			assert.ok !setting.required
 		

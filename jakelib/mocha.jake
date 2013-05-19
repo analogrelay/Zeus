@@ -1,6 +1,7 @@
 var cp = require('child_process');
 var path = require('path');
 var fs = require('fs');
+var os = require('os');
 
 var root = path.resolve(__dirname, '..')
 var reports = path.join(root, 'build')
@@ -14,7 +15,7 @@ function runMocha(specs, reporter, outputFile, callback) {
 	list.include(path.join(specs, '*.coffee'));
 	list.include(path.join(specs, '**/*.coffee'));
 
-	var baseArgs = ['/c', 'mocha', '--compilers', 'coffee:coffee-script', '--reporter', reporter]
+	var baseArgs = ['--compilers', 'coffee:coffee-script', '--reporter', reporter]
 	var args = baseArgs.concat(list.toArray())
 	//console.log(" running cmd " + args.join(''));
 
@@ -29,10 +30,19 @@ function runMocha(specs, reporter, outputFile, callback) {
 		output = fileOutput = fs.openSync(file, 'w+');
 	}
 
-	var mocha = cp.spawn('cmd', args, {stdio: [process.stdin, output, process.stderr]});
-	mocha.on('exit', function() {
+	var mocha;
+	var options = {stdio: [process.stdin, output, process.stderr]};
+	if(os.platform() === 'win32') {
+		mocha = cp.spawn('cmd', ['/c', 'mocha'].concat(args), options);
+	} else {
+		mocha = cp.spawn('mocha', args, options);
+	}
+	mocha.on('exit', function(code) {
 		if(fileOutput) {
 			fs.closeSync(fileOutput);
+		}
+		if(code !== 0) {
+			fail('specs failed!', 1);
 		}
 		callback();
 	});
