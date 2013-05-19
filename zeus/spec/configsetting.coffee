@@ -7,43 +7,46 @@ ConfigSetting = require libpath + '/configsetting.js'
 
 describe 'ConfigSetting', ->
 	describe '#constructor', ->
-		it 'should accept (string, boolean)', ->
-			setting = new ConfigSetting '{{template}}', false
+		it 'should accept (string, string, boolean)', ->
+			setting = new ConfigSetting 'foo', '{{template}}', false
 
+			assert.equal setting.name, 'foo'
 			assert.equal setting.template, '{{template}}'
 			assert.ok !setting.required
 		
-		it 'should accept (string)', ->
-			setting = new ConfigSetting '{{template}}'
+		it 'should accept (string, string)', ->
+			setting = new ConfigSetting 'foo', '{{template}}'
 
+			assert.equal setting.name, 'foo'
 			assert.equal setting.template, '{{template}}'
 			assert.ok setting.required
 		
-		it 'should accept (boolean)', ->
-			setting = new ConfigSetting false
+		it 'should accept (string, boolean)', ->
+			setting = new ConfigSetting 'foo', false
 
+			assert.equal setting.name, 'foo'
 			assert.equal setting.template, ''
 			assert.ok !setting.required
 
 	describe '#cryofreeze', ->
 		it 'should cryo-freeze to null for required non-template argument', ->
-			setting = new ConfigSetting '', true
+			setting = new ConfigSetting 'foo', '', true
 
 			assert.isNull setting.cryofreeze()
 		
 		it 'should cryo-freeze to string for required template argument', ->
-			setting = new ConfigSetting '{{template}}', true
+			setting = new ConfigSetting 'foo', '{{template}}', true
 
 			assert.equal setting.cryofreeze(), '{{template}}'
 		
 		it 'should cryo-freeze to object for optional non-template argument', ->
-			setting = new ConfigSetting '', false
+			setting = new ConfigSetting 'foo', '', false
 
 			assert.deepEqual setting.cryofreeze(), { required:false }
 		
 
 		it 'should cryo-freeze to object for optional template argument', ->
-			setting = new ConfigSetting '{{template}}', false
+			setting = new ConfigSetting 'foo', '{{template}}', false
 
 			assert.deepEqual setting.cryofreeze(), { template: '{{template}}', required:false }
 		

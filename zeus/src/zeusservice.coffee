@@ -11,3 +11,4 @@ module.exports = class ZeusService
 		type: @type,
 		config: utils.mapObject @config, ConfigSetting.prototype.cryofreeze
 
+	@$revivers: config: ConfigSetting.List.revive

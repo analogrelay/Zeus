@@ -1,5 +1,7 @@
+utils = require './utils'
+
 module.exports = class ConfigSetting
-	constructor: (template, required) ->
+	constructor: (@name, template, required) ->
 		if typeof template is 'boolean'
 			@template = ''
 			@required = template
@@ -30,3 +32,5 @@ module.exports = class ConfigSetting
 			if !@required
 				frozen.required = false
 			return frozen
+
+	@List: utils.keyedListFor 'name', ConfigSetting
