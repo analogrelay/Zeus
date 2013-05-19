@@ -7,4 +7,10 @@ namespace('coffee', function() {
 		jake.logger.log(" compiling coffee-script...");
 		jake.exec(['coffee --compile --output ' + lib + ' ' + src]);
 	});
+
+	desc("Compile CoffeeScript files with coverage");
+	task('compile-cov', function(src, lib) {
+		jake.logger.log(" compiling coffee-script with coverage...");
+		jake.exec(['coffeecoverage ' + src + ' ' + lib]);
+	});
 });
