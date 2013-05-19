@@ -3,7 +3,8 @@ libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
 assert = require('chai').assert
 path = require 'path'
 sinon = require 'sinon'
-ConfigSetting = require libpath + '/configsetting.js'
+ConfigSetting = require libpath + '/configsetting'
+cryo = require libpath + '/utils/cryo'
 
 describe 'ConfigSetting', ->
 	describe '#constructor', ->
@@ -20,7 +21,7 @@ describe 'ConfigSetting', ->
 			assert.equal setting.name, 'foo'
 			assert.equal setting.template, '{{template}}'
 			assert.ok setting.required
-		
+
 		it 'should accept (string, boolean)', ->
 			setting = new ConfigSetting 'foo', false
 
@@ -28,80 +29,80 @@ describe 'ConfigSetting', ->
 			assert.equal setting.template, ''
 			assert.ok !setting.required
 
-	describe '#cryofreeze', ->
+	describe 'cryo.freeze', ->
 		it 'should cryo-freeze to null for required non-template argument', ->
 			setting = new ConfigSetting 'foo', '', true
 
-			assert.isNull setting.cryofreeze()
+			assert.isNull cryo.freeze(setting)
 		
 		it 'should cryo-freeze to string for required template argument', ->
 			setting = new ConfigSetting 'foo', '{{template}}', true
 
-			assert.equal setting.cryofreeze(), '{{template}}'
+			assert.equal cryo.freeze(setting), '{{template}}'
 		
 		it 'should cryo-freeze to object for optional non-template argument', ->
 			setting = new ConfigSetting 'foo', '', false
 
-			assert.deepEqual setting.cryofreeze(), { required:false }
+			assert.deepEqual cryo.freeze(setting), { required:false }
 		
 
 		it 'should cryo-freeze to object for optional template argument', ->
 			setting = new ConfigSetting 'foo', '{{template}}', false
 
-			assert.deepEqual setting.cryofreeze(), { template: '{{template}}', required:false }
+			assert.deepEqual cryo.freeze(setting), { template: '{{template}}', required:false }
 		
-	describe '.revive', ->
+	describe 'cryo.revive', ->
 		it 'should load required template setting from string argument', ->
-			setting = ConfigSetting.revive '{{template}}'
+			setting = cryo.revive('{{template}}', ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, '{{template}}'
 			assert.ok setting.required
 		
 		it 'should load required template setting from object argument', ->
-			setting = ConfigSetting.revive { template: '{{template}}' }
+			setting = cryo.revive({ template: '{{template}}' }, ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, '{{template}}'
 			assert.ok setting.required
 		
 		it 'should load required template setting from object argument with explicit required setting', ->
-			setting = ConfigSetting.revive { required: true, template: '{{template}}' }
+			setting = cryo.revive({ required: true, template: '{{template}}' }, ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, '{{template}}'
 			assert.ok setting.required
 		
 		it 'should load optional template setting from object argument', ->
-			setting = ConfigSetting.revive { required: false, template: '{{template}}' }
+			setting = cryo.revive({ required: false, template: '{{template}}' }, ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, '{{template}}'
 			assert.ok !setting.required
 		
 		it 'should load optional setting from object argument', ->
-			setting = ConfigSetting.revive { required: false }
+			setting = cryo.revive({ required: false }, ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, ''
 			assert.ok !setting.required
 		
 		it 'should load required setting from object argument', ->
-			setting = ConfigSetting.revive { required: true }
+			setting = cryo.revive({ required: true }, ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, ''
 			assert.ok setting.required
 		
 		it 'should load required setting from null argument', ->
-			setting = ConfigSetting.revive null
+			setting = cryo.revive(null, ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, ''
 			assert.ok setting.required
 		
 		it 'should load required setting from undefined argument', ->
-			setting = ConfigSetting.revive()
+			setting = cryo.revive(((undef) -> undef)(), ConfigSetting)
 
 			assert.instanceOf setting, ConfigSetting
 			assert.equal setting.template, ''

@@ -6,6 +6,7 @@ async = require 'async'
 
 UIService = require './ui'
 Environment = require './Environment'
+cryo = require './utils/cryo'
 
 ServiceTypeRegex = /([^\.]*)\.(.*)/
 
@@ -103,7 +104,7 @@ module.exports = class Context
                 @ui.log.warn " you will not be able to work with the '" + issue.service + "' service" 
         
         # Pretty-print the JSON
-        str = JSON.stringify @zeusfile.cryofreeze(), null, 2
+        str = JSON.stringify cryo.freeze(@zeusfile), null, 2
         
         # Write it out
         @ui.log.verbose 'writing Zeusfile: ' + @path

@@ -17,26 +17,3 @@ describe 'ServiceInstance', ->
 			instance = new ServiceInstance()
 
 			assert.isNotNull instance.config
-
-	describe '.revive', ->
-		it 'should return a true service instance', ->
-			frozen =
-				config:
-					 'foo': 42
-
-			expected = new ServiceInstance {foo: 42}
-			revived = ServiceInstance.revive frozen
-
-			assert.deepEqual revived, expected
-			assert.instanceOf revived, ServiceInstance
-
-	describe '#cryofreeze', ->
-		it 'should return a frozen serviceinstance object', ->
-			expected =
-				config: 
-					'foo': 42
-
-			live = new ServiceInstance {foo: 42}
-			frozen = live.cryofreeze()
-
-			assert.deepEqual frozen, expected

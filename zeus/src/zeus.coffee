@@ -12,6 +12,10 @@ Environment = exports.Environment = require './environment'
 ServiceInstance = exports.ServiceInstance = require './serviceinstance'
 UIService = exports.UIService = require './ui'
 
+# Utils
+utils = exports.utils = require './utils'
+cryo = exports.cryo = require './utils/cryo'
+
 # Local Functions
 findZeusfile = (ui, dir, callback) ->
 	zfpath = path.join dir, 'Zeusfile'
@@ -48,7 +52,7 @@ load = (ui, zfpath, callback) ->
 			callback err
 		else
 			ui.log.verbose 'reviving Zeusfile'
-			zf = Zeusfile.revive JSON.parse data;
+			zf = cryo.revive JSON.parse(data), Zeusfile
 			context = new Context zf, zfpath, ui;
 			context.loadPlugins (err) ->
 				if err

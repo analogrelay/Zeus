@@ -1,18 +1,20 @@
 libpath = if process.env['ZEUS_COV'] then '../../lib-cov' else '../../lib'
 
 utils = require libpath + '/utils'
+cryo = require libpath + '/utils/cryo'
 sinon = require 'sinon'
 assert = require('chai').assert;
 
 class Widget
 	constructor: (@name, @flarbRatio) ->
 
-	cryofreeze: ->
-		name: @name
-		flarbRatio: @flarbRatio * 10
-
-	@revive: (frozen) -> new Widget(frozen.name, frozen.flarbRatio / 10)
-	@List: utils.keyedListFor 'name', Widget.revive
+	@$cryo:
+		$freeze: (self) ->
+			name: self.name
+			flarbRatio: self.flarbRatio * 10
+		$revive: (frozen) -> new Widget(frozen.name, frozen.flarbRatio / 10)
+	
+	@List: utils.keyedListFor 'name', Widget
 
 describe 'Widget.List', ->
 	describe '#constructor', ->
@@ -142,27 +144,31 @@ describe 'Widget.List', ->
 			list.delete 'b'
 			assert.deepEqual list.values(), [a, c]
 
-	describe '#cryofreeze', ->
+	describe 'cryo.freeze', ->
 		it 'should return empty object if list empty', ->
 			list = new Widget.List
-			assert.deepEqual list.cryofreeze(), {}
+			assert.deepEqual cryo.freeze(list), {}
 
 		it 'should return map with name properties removed from values if list non-empty', ->
 			list = new Widget.List [
 				new Widget('a', 1.0),
 				new Widget('b', 2.0)
 			]
-			assert.deepEqual list.cryofreeze(),
+			assert.deepEqual cryo.freeze(list),
 				a: {flarbRatio: 10.0},
 				b: {flarbRatio: 20.0}
 
-	describe '.revive', ->
+	describe 'cryo.revive', ->
 		it 'should return empty list if frozen object empty', ->
-			list = Widget.List.revive {}
+			list = cryo.revive({}, Widget.List)
 			assert.equal list.length, 0
 
 		it 'should return revived list if frozen object has values', ->
-			list = Widget.List.revive {'foo': {flarbRatio: 420.0}}
+			list = cryo.revive({'foo': {flarbRatio: 420.0}}, Widget.List)
 			assert.equal list.length, 1
 			assert.ok list.has 'foo'
 			assert.equal list.get('foo').flarbRatio, 42.0
+
+		it 'should restore key property to revived objects', ->
+			list = cryo.revive({'foo': {flarbRatio: 420.0}}, Widget.List)
+			assert.equal list.get('foo').name, 'foo'
