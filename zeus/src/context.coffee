@@ -55,7 +55,7 @@ module.exports = class Context
                             }
                 else
                     callback()
-            then (err, instances) =>
+            , (err, instances) =>
                 if err
                     callback err
                 else
@@ -80,7 +80,7 @@ module.exports = class Context
                         callback()
             else
                 callback()
-        then (err) =>
+        , (err) =>
             callback err, config
 
     loadPlugins: (dir, callback) ->
