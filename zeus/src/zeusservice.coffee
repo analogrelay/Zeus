@@ -10,3 +10,4 @@ module.exports = class ZeusService
 	cryofreeze: ->
 		type: @type,
 		config: utils.mapObject @config, ConfigSetting.prototype.cryofreeze
+

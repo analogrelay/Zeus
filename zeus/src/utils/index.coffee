@@ -1,3 +1,7 @@
+module.exports = exports = {}
+
+exports.keyedListFor = require './keyedlist'
+
 exports.mapObject = mapObject = (object, callback, context) ->
 	return object unless callback? and object?
 	
