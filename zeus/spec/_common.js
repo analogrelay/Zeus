@@ -8,8 +8,7 @@ var libname = process.env['ZEUS_COV'] ? 'lib-cov' : 'lib'
 global.libpath = path.resolve(path.join(__dirname, '..', libname));
 
 global.apprequire = function(libname) {
-	// if(!libname.match(/.*\.js/)) {
-	// 	libname += '.js'
-	// }
 	return require(path.join(libpath, libname));
 }
+
+sinon.assert.expose(assert, {prefix: ''})

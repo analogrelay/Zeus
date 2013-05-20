@@ -9,19 +9,11 @@ describe '#context(dir, appname)', ->
 	sub = path.join root, 'sub'
 	subsub = path.join sub, 'subsub'
 
-	sandbox = null
-	
 	beforeEach ->
-		sandbox = sinon.sandbox.create();
-
 		# Stub out functions
 		sandbox.stub fs, 'exists'
 		sandbox.stub fs, 'readFile'
 		sandbox.stub zeus.Context.prototype, 'loadPlugin'
-
-	afterEach ->
-		# Clean up the sandbox
-		sandbox.restore()
 
 	it 'should throw if zeus context already exists', (done) ->
 		# Arrange

@@ -5,8 +5,8 @@ utils = require './utils'
 ServiceInstance = require './serviceinstance'
 
 module.exports = class Environment
-	constructor: (@app = '', @name = '', @config = {}, services...) ->
-		@services = new ServiceInstance.List(services)
+	constructor: (@app = '', @name = '', @config = {}, instances...) ->
+		@instances = new ServiceInstance.List(instances)
 
 	load: (path, callback) ->
 		# Read the file
@@ -26,4 +26,4 @@ module.exports = class Environment
 		log.verbose 'writing Zeusspec: ' + path
 		fs.writeFile path, str, callback
 
-	@$cryo: services: ServiceInstance.List
+	@$cryo: instances: ServiceInstance.List

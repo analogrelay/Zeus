@@ -5,14 +5,8 @@ Environment = apprequire 'environment'
 ServiceInstance = apprequire 'serviceinstance'
 
 describe 'Environment', ->
-	sandbox = null
-	
 	beforeEach ->
-		sandbox = sinon.sandbox.create()
 		sandbox.stub fs, 'writeFile'
-
-	afterEach ->
-		sandbox.restore()
 
 	describe '#constructor', ->
 		it 'should accept (string, string, object, object)', ->
@@ -23,8 +17,8 @@ describe 'Environment', ->
 
 			assert.strictEqual app, env.app
 			assert.strictEqual name, env.name
-			assert.instanceOf env.services, ServiceInstance.List
-			assert.equal env.services.length, 0
+			assert.instanceOf env.instances, ServiceInstance.List
+			assert.equal env.instances.length, 0
 			assert.strictEqual config, env.config
 
 		it 'should accept (string, string, object)', ->
@@ -44,7 +38,7 @@ describe 'Environment', ->
 
 			assert.strictEqual app, env.app
 			assert.strictEqual name, env.name
-			assert.isNotNull env.services
+			assert.isNotNull env.instances
 			assert.isNotNull env.config
 
 		it 'should accept (string)', ->
@@ -53,7 +47,7 @@ describe 'Environment', ->
 
 			assert.strictEqual app, env.app
 			assert.strictEqual '', env.name
-			assert.isNotNull env.services
+			assert.isNotNull env.instances
 			assert.isNotNull env.config
 
 		it 'should accept ()', ->
@@ -61,7 +55,7 @@ describe 'Environment', ->
 
 			assert.strictEqual '', env.app
 			assert.strictEqual '', env.name
-			assert.isNotNull env.services
+			assert.isNotNull env.instances
 			assert.isNotNull env.config
 
 	# describe '#save', ->

@@ -52,15 +52,32 @@ module.exports = class Context
         env = new Environment @zeusfile.name, name
 
         # Check for errors
-        errors = @check()
+        errors = @check() || []
 
         # Instantiate services
-        # async.mapSeries @zeusfile.services.values(), (service, callback) =>
-        #     type = parseServiceType service.type
-        #     if not @plugins.hasOwnProperty type.plugin
-                
-        # Return the environment
-        callback errors, env
+        async.mapSeries @zeusfile.services.values(), ((service, callback) =>
+            type = parseServiceType service.type
+            if not @plugins.hasOwnProperty type.plugin
+                callback()
+            else if not @plugins[type.plugin].hasOwnProperty 'createServiceInstance'
+                errors.push new Error "'#{type.plugin}' plugin does not implement createServiceInstance!"
+                callback()
+            else 
+                @plugins[type.plugin].createServiceInstance @zeusfile, service, env, (err, instance) ->
+                    if err?
+                        errors.push err
+                    else
+                        env.instances.add instance
+                    callback()
+        ),((err) =>
+            if err?
+                # Fatal error, rather than an error due to missing or failed plugin execution
+                callback err
+            else
+                # Return the environment
+                # Error parameter needs to be null if there are no errors, so coalesce to that.
+                callback (if errors.length > 0 then errors else null), env
+        )
 
     #     @collectGlobalConfiguration (err, config) =>
     #         async.mapSeries Object.keys(@zeusfile.services), (key, callback) =>

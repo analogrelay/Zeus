@@ -1,29 +1,25 @@
 path = require 'path'
 fs = require 'fs'
 
-UIService = apprequire 'ui'
-ui = UIService.empty;
-
 zeus = apprequire 'zeus'
+UIService = apprequire 'ui'
+Environment = apprequire 'environment'
+
+ui = UIService.empty;
 
 emptyZeusfile = new zeus.Zeusfile 'test'
 
 zeusfileWithUnknownService = new zeus.Zeusfile 'test',
-	new zeus.ZeusService 'foo', 'something'
+	unknownService = new zeus.ZeusService 'foo', 'something'
 
 zeusfileWithKnownService = new zeus.Zeusfile 'test',
-	new zeus.ZeusService 'foo', 'azure.website'
+	knownService = new zeus.ZeusService 'foo', 'azure.website'
 
 expectedString = JSON.stringify {name: "test", services: {}}, null, 2
-sandbox = null
-
-sinon.assert.expose assert, {prefix: ''}
 
 describe 'Context', ->
 
 	beforeEach ->
-		sandbox = sinon.sandbox.create()
-
 		# Stub out functions
 		sandbox.stub fs, 'writeFile'
 		sandbox.stub fs, 'readdir'
@@ -54,9 +50,24 @@ describe 'Context', ->
 				assert.deepEqual errs, [{ type: 'missing_plugin', name: 'something', service: 'foo' }]
 				assert.isNotNull env
 				assert.deepEqual env, new zeus.Environment 'test', 'foo'
-				assert.strictEqual env.services.length, 0
+				assert.strictEqual env.instances.length, 0
 				done()
 
+		it 'should instantiate services with plugins', (done) ->
+			# Arrange
+			context = new zeus.Context zeusfileWithKnownService, 'this/aint/real'
+			instance = {serviceName: 'foo'}
+			context.plugins.azure = azure = 
+				createServiceInstance: sinon.stub()
+			azure.createServiceInstance.yields null, instance
+
+			# Act
+			context.createEnvironment 'foo', (errs, env) ->
+				assert.ifError errs
+				assert.strictEqual env.instances.length, 1
+				assert.strictEqual env.instances.get('foo'), instance
+				assert.calledWith azure.createServiceInstance, zeusfileWithKnownService, knownService, sinon.match.instanceOf(Environment)
+				done()
 
 	describe '#save', ->
 		it 'should pass through errors from FS module', (done) ->
