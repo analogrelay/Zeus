@@ -5,7 +5,7 @@ winston = require 'winston'
 async = require 'async'
 
 UIService = require './ui'
-Environment = require './Environment'
+Environment = require './environment'
 cryo = require './utils/cryo'
 
 ServiceTypeRegex = /([^\.]*)\.(.*)/
