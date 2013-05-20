@@ -28,13 +28,13 @@ module.exports = function(root) {
 
 		desc("Run specs");
 		task('specs', ['compile'], function() {
-			jake.Task['mocha:spec'].invoke(root+'/spec/');
+			jake.Task['mocha:spec'].invoke(root+'/test/');
 			jake.Task['mocha:spec'].reenable();
 		});
 
 		desc("Run specs with coverage");
 		task('cov', ['compile-cov'], function() {
-			jake.Task['mocha:coverage'].invoke(root+'/spec/', root);
+			jake.Task['mocha:coverage'].invoke(root+'/test/', root);
 			jake.Task['mocha:coverage'].reenable();
 		});
 
