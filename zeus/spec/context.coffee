@@ -4,14 +4,20 @@ assert = require('chai').assert
 path = require 'path'
 sinon = require 'sinon'
 fs = require 'fs'
-ui = require(libpath + '/ui').empty
+
+UIService = require libpath + '/ui'
+ui = UIService.empty;
+
+zeus = require libpath + '/zeus'
+
+emptyZeusfile = new zeus.Zeusfile 'test'
+expectedString = JSON.stringify {name: "test", services: {}}, null, 2
+sandbox = null
+
+sinon.assert.expose assert, {prefix: ''}
 
 describe 'Context', ->
-	zeus = require libpath + '/zeus'
 
-	zf = new zeus.Zeusfile 'test'
-	expectedString = JSON.stringify {name: "test", services: {}}, null, 2
-	sandbox = null
 	beforeEach ->
 		sandbox = sinon.sandbox.create()
 
@@ -24,10 +30,21 @@ describe 'Context', ->
 		# Clean up the sandbox
 		sandbox.restore()
 
+	describe '#createEnvironment', ->
+		it 'should return a new environment for an empty context with no services', (done) ->
+			# Arrange
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
+
+			# Act
+			context.createEnvironment 'foo', (err, env) ->
+				assert.isNotNull env
+				assert.deepEqual env, new zeus.Environment 'test', 'foo'
+				done()
+
 	describe '#save', ->
 		it 'should pass through errors from FS module', (done) ->
 			# Arrange
-			context = new zeus.Context zf, 'this/aint/real'
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 			expected = new Error 'Ruh roh!'
 			fs.writeFile.yields expected
 
@@ -38,7 +55,7 @@ describe 'Context', ->
 
 		it 'should produce no error if successful', (done) ->
 			# Arrange
-			context = new zeus.Context zf, 'this/aint/real'
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 			fs.writeFile.yields false
 
 			# Act
@@ -51,7 +68,7 @@ describe 'Context', ->
 
 		it 'should warn if there are issues when saving', (done) ->
 			# Arrange
-			context = new zeus.Context zf, 'this/aint/real'
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 			fs.writeFile.yields false
 
 			# Act
@@ -64,27 +81,27 @@ describe 'Context', ->
 
 		it 'should log warning if service has issues', (done) ->
 			# Arrange
-			zeusfile = new zeus.Zeusfile 'test', {
-				foo: new zeus.ZeusService('Not.A.Thing', {}),
-				bar: new zeus.ZeusService('Whats.This', {}),
-				baz: new zeus.ZeusService('Azure.Thing', {})
-			}
+			zeusfile = new zeus.Zeusfile 'test',
+				new zeus.ZeusService('foo', 'Not.A.Thing'),
+				new zeus.ZeusService('bar', 'Whats.This'),
+				new zeus.ZeusService('baz', 'Azure.Thing')
+			
 			context = new zeus.Context(zeusfile, 'path', ui)
 			context.plugins['Azure'] = {}
 			fs.writeFile.yields()
 
 			# Act
 			results = context.save (err, callback) ->
-				assert.ok ui.log.warn.calledWith "plugin for 'Not' could not be found"
-				assert.ok ui.log.warn.calledWith " you will not be able to work with the 'foo' service"
-				assert.ok ui.log.warn.calledWith "plugin for 'Whats' could not be found"
-				assert.ok ui.log.warn.calledWith " you will not be able to work with the 'bar' service"
+				assert.calledWith ui.log.warn, "plugin for 'Not' could not be found"
+				assert.calledWith ui.log.warn, " you will not be able to work with the 'foo' service"
+				assert.calledWith ui.log.warn, "plugin for 'Whats' could not be found"
+				assert.calledWith ui.log.warn, " you will not be able to work with the 'bar' service"
 				done()
 
 	describe '#loadPlugins', ->
 		it 'should pass through errors from FS module', (done) ->
 			# Arrange
-			context = new zeus.Context zf, 'this/aint/real'
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 			expected = new Error 'Ruh roh!'
 			fs.readdir.yields expected
 
@@ -95,7 +112,7 @@ describe 'Context', ->
 
 		it 'should require each js file it finds', (done) ->
 			# Arrange
-			context = new zeus.Context zf, 'this/aint/real'
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 			expected = new Error 'Ruh roh!'
 			fs.readdir.yields null, [
 				'foo.js',
@@ -114,7 +131,7 @@ describe 'Context', ->
 
 		it 'should use the plugins directory beside the context.js file if no directory specfied', (done) ->
 			# Arrange
-			context = new zeus.Context zf, 'this/aint/real'
+			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 			expected = new Error 'Ruh roh!'
 			fs.readdir.yields null, [
 				'foo.js',
@@ -135,11 +152,11 @@ describe 'Context', ->
 	describe '#check', ->
 		it 'should return error for each service without a plugin', ->
 			# Arrange
-			zeusfile = new zeus.Zeusfile 'test', {
-				foo: new zeus.ZeusService('Not.A.Thing', {}),
-				bar: new zeus.ZeusService('Whats.This', {}),
-				baz: new zeus.ZeusService('Azure.Thing', {})
-			}
+			zeusfile = new zeus.Zeusfile 'test',
+				new zeus.ZeusService('foo', 'Not.A.Thing'),
+				new zeus.ZeusService('bar', 'Whats.This'),
+				new zeus.ZeusService('baz', 'Azure.Thing')
+
 			context = new zeus.Context zeusfile, 'path'
 			context.plugins['Azure'] = {}
 

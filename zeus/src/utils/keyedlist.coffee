@@ -5,12 +5,8 @@ module.exports = (keyProperty, ItemConstructor = Object) ->
 		constructor: (initialItems = []) ->
 			@_rawtable = {}
 
-			@_count = initialItems.length;
-			for item in initialItems
-				if not item.hasOwnProperty keyProperty
-					throw new Error "Provided value has no '" + keyProperty + "' property"
-				key = item[keyProperty]
-				@_rawtable[key] = item
+			@_count = 0;
+			@add item for item in initialItems
 
 			Object.defineProperty(@, 'length', 
 				configurable: false,

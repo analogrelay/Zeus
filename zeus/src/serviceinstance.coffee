@@ -1,2 +1,6 @@
+utils = require './utils'
+
 module.exports = class ServiceInstance
-	constructor: (@config = {}) ->
+	constructor: (@name, @config = {}) ->
+
+	@List: utils.keyedListFor 'name', ServiceInstance

@@ -9,7 +9,10 @@ ConfigSetting = require libpath + '/configsetting.js'
 describe 'ZeusService', ->
 	describe '#constructor', ->
 		it 'should initialize config', ->
-			assert.isNotNull new ZeusService('foo').config
+			assert.isNotNull new ZeusService('foo', 'bar').config
 		
+		it 'should initialize name', ->
+			assert.equal new ZeusService('foo', 'bar').name, 'foo'
+
 		it 'should initialize type', ->
-			assert.equal new ZeusService('foo').type, 'foo'
+			assert.equal new ZeusService('foo', 'bar').type, 'bar'
