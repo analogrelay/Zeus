@@ -1,8 +1,4 @@
-libpath = if process.env['ZEUS_COV'] then '../../lib-cov' else '../../lib'
-
-utils = require libpath + '/utils'
-sinon = require 'sinon'
-assert = require('chai').assert;
+utils = apprequire 'utils'
 
 sinon.assert.expose assert, {prefix: ''}
 

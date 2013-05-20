@@ -1,17 +1,14 @@
-libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
-
-assert = require('chai').assert
 path = require 'path'
-sinon = require 'sinon'
+fs = require 'fs'
 
+ui = apprequire('ui').empty
+zeus = apprequire 'zeus'
+	
 describe '#context(dir, appname)', ->
 	root = 'root'
 	sub = path.join root, 'sub'
 	subsub = path.join sub, 'subsub'
 
-	ui = require(libpath + '/ui').empty
-	fs = require 'fs'
-	zeus = require libpath + '/zeus'
 	sandbox = null
 	
 	beforeEach ->

@@ -1,9 +1,6 @@
-libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
-
-assert = require('chai').assert
 path = require 'path'
-sinon = require 'sinon'
-ServiceInstance = require libpath + '/serviceinstance'
+
+ServiceInstance = apprequire 'serviceinstance'
 
 describe 'ServiceInstance', ->
 	describe '#constructor', ->

@@ -14,10 +14,17 @@ function runMocha(specs, reporter, outputFile, callback) {
 	list.include(path.join(specs, '**/*.js'));
 	list.include(path.join(specs, '*.coffee'));
 	list.include(path.join(specs, '**/*.coffee'));
+	list.exclude(path.join(specs, '_common.js'));
+	list.exclude(path.join(specs, '**/_common.js'));
 
 	var baseArgs = ['--compilers', 'coffee:coffee-script', '--reporter', reporter]
+	var commonModule = path.join(specs, '_common.js')
+	if(fs.existsSync(commonModule)) {
+		baseArgs = baseArgs.concat(['--require', commonModule]);
+	}
+
 	var args = baseArgs.concat(list.toArray())
-	//console.log(" running cmd " + args.join(''));
+	//console.log(" running cmd " + args.join(' '));
 
 	var output = process.stdout;
 	var fileOutput;

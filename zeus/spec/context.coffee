@@ -1,16 +1,19 @@
-libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
-
-assert = require('chai').assert
 path = require 'path'
-sinon = require 'sinon'
 fs = require 'fs'
 
-UIService = require libpath + '/ui'
+UIService = apprequire 'ui'
 ui = UIService.empty;
 
-zeus = require libpath + '/zeus'
+zeus = apprequire 'zeus'
 
 emptyZeusfile = new zeus.Zeusfile 'test'
+
+zeusfileWithUnknownService = new zeus.Zeusfile 'test',
+	new zeus.ZeusService 'foo', 'something'
+
+zeusfileWithKnownService = new zeus.Zeusfile 'test',
+	new zeus.ZeusService 'foo', 'azure.website'
+
 expectedString = JSON.stringify {name: "test", services: {}}, null, 2
 sandbox = null
 
@@ -36,10 +39,24 @@ describe 'Context', ->
 			context = new zeus.Context emptyZeusfile, 'this/aint/real'
 
 			# Act
-			context.createEnvironment 'foo', (err, env) ->
+			context.createEnvironment 'foo', (errs, env) ->
+				assert.ifError errs
 				assert.isNotNull env
 				assert.deepEqual env, new zeus.Environment 'test', 'foo'
 				done()
+
+		it 'should log warning for services without plugins and should not instantiate them', (done) ->
+			# Arrange
+			context = new zeus.Context zeusfileWithUnknownService, 'this/aint/real'
+
+			# Act
+			context.createEnvironment 'foo', (errs, env) ->
+				assert.deepEqual errs, [{ type: 'missing_plugin', name: 'something', service: 'foo' }]
+				assert.isNotNull env
+				assert.deepEqual env, new zeus.Environment 'test', 'foo'
+				assert.strictEqual env.services.length, 0
+				done()
+
 
 	describe '#save', ->
 		it 'should pass through errors from FS module', (done) ->
@@ -143,13 +160,14 @@ describe 'Context', ->
 			sandbox.stub context, 'loadPlugin'
 			context.loadPlugins (err) ->
 				assert.ifError err
-				root = path.normalize path.join __dirname, libpath
-				assert.ok context.loadPlugin.calledWith root + '\\plugins\\foo.js'
-				assert.ok context.loadPlugin.calledWith root + '\\plugins\\bar.js'
-				assert.isFalse context.loadPlugin.calledWith root + '\\plugins\\baz.ts'
+				root = libpath
+				assert.ok context.loadPlugin.calledWith path.join(root, 'plugins', 'foo.js')
+				assert.ok context.loadPlugin.calledWith path.join(root, 'plugins', 'bar.js')
+				assert.isFalse context.loadPlugin.calledWith path.join(root, 'plugins', 'baz.ts')
 				done()
 
 	describe '#check', ->
+		it 'should return null if no errors'
 		it 'should return error for each service without a plugin', ->
 			# Arrange
 			zeusfile = new zeus.Zeusfile 'test',

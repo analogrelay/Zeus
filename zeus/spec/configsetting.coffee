@@ -1,10 +1,7 @@
-libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
-
-assert = require('chai').assert
 path = require 'path'
-sinon = require 'sinon'
-ConfigSetting = require libpath + '/configsetting'
-cryo = require libpath + '/utils/cryo'
+
+ConfigSetting = apprequire 'configsetting'
+cryo = apprequire 'utils/cryo'
 
 describe 'ConfigSetting', ->
 	describe '#constructor', ->

@@ -1,11 +1,8 @@
-libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
-
-assert = require('chai').assert
 path = require 'path'
-sinon = require 'sinon'
 fs = require 'fs'
-Environment = require libpath + '/environment'
-ServiceInstance = require libpath + '/serviceinstance'
+
+Environment = apprequire 'environment'
+ServiceInstance = apprequire 'serviceinstance'
 
 describe 'Environment', ->
 	sandbox = null

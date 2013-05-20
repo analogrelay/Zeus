@@ -1,10 +1,7 @@
-libpath = if process.env['ZEUS_COV'] then '../lib-cov' else '../lib'
-
-assert = require('chai').assert
 path = require 'path'
-sinon = require 'sinon'
-ZeusService = require libpath + '/zeusservice.js'
-ConfigSetting = require libpath + '/configsetting.js'
+
+ZeusService = apprequire 'zeusservice.js'
+ConfigSetting = apprequire 'configsetting.js'
 
 describe 'ZeusService', ->
 	describe '#constructor', ->

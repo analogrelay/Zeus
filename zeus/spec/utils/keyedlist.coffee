@@ -1,9 +1,5 @@
-libpath = if process.env['ZEUS_COV'] then '../../lib-cov' else '../../lib'
-
-utils = require libpath + '/utils'
-cryo = require libpath + '/utils/cryo'
-sinon = require 'sinon'
-assert = require('chai').assert;
+utils = apprequire 'utils'
+cryo = apprequire 'utils/cryo'
 
 class Widget
 	constructor: (@name, @flarbRatio) ->

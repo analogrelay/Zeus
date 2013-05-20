@@ -1,6 +1,6 @@
 fs = require 'fs'
 path = require 'path'
-_ = require 'underscore'
+_ = require 'lodash'
 winston = require 'winston'
 async = require 'async'
 
@@ -11,31 +11,56 @@ cryo = require './utils/cryo'
 ServiceTypeRegex = /([^\.]*)\.(.*)/
 
 findPlugins = (services) ->
-    return _.uniq _.filter _.map(services, (value, key, list) ->
-        parseServiceType(value.type).plugin
-    ), _.isString
+    return _(services)
+        .map((value, key, list) ->
+            parseServiceType(value.type).plugin
+        )
+        .filter(_.isString)
+        .uniq()
 
 parseServiceType = (serviceType) ->
     if m = serviceType.match(ServiceTypeRegex)
         plugin: m[1],
         name: m[2]
     else
-        {}
+        plugin: serviceType,
+        name: ''
+
+missingPluginError = (plugin, service) -> 
+    type: 'missing_plugin', 
+    name: plugin, 
+    service: service
 
 module.exports = class Context
     constructor: (@zeusfile, @path, @ui = UIService.empty) ->
         @plugins = {}
 
     check: () ->
-        issues = []
-        for key in @zeusfile.services.keys()
-            type = parseServiceType(@zeusfile.services.get(key).type);
+        issues = null
+        for service in @zeusfile.services.values()
+            type = parseServiceType service.type
             if not @plugins.hasOwnProperty type.plugin
-                issues.push { type: 'missing_plugin', name: type.plugin, service: key }
+                issue = missingPluginError type.plugin, service.name
+                if not issues?
+                    issues = [issue]
+                else
+                    issues.push issue
         return issues
 
     createEnvironment: (name, callback) ->
-        callback null, new Environment(@zeusfile.name, name)
+        # Create the environment object
+        env = new Environment @zeusfile.name, name
+
+        # Check for errors
+        errors = @check()
+
+        # Instantiate services
+        # async.mapSeries @zeusfile.services.values(), (service, callback) =>
+        #     type = parseServiceType service.type
+        #     if not @plugins.hasOwnProperty type.plugin
+                
+        # Return the environment
+        callback errors, env
 
     #     @collectGlobalConfiguration (err, config) =>
     #         async.mapSeries Object.keys(@zeusfile.services), (key, callback) =>
@@ -94,7 +119,7 @@ module.exports = class Context
     save: (callback) ->
         # Check for issues
         issues = @check()
-        if issues.length > 0
+        if issues?
             for issue in issues when issue.type is 'missing_plugin'
                 @ui.log.warn "plugin for '" + issue.name + "' could not be found"
                 @ui.log.warn " you will not be able to work with the '" + issue.service + "' service" 

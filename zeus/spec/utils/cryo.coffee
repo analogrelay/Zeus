@@ -1,8 +1,4 @@
-libpath = if process.env['ZEUS_COV'] then '../../lib-cov' else '../../lib'
-
-cryo = require libpath + '/utils/cryo'
-sinon = require 'sinon'
-assert = require('chai').assert;
+cryo = apprequire 'utils/cryo'
 
 class DumbObject
     constructor: (@foo, @bar) ->
