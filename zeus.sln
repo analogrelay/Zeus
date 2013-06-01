@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zeus", "zeus\zeus.csproj", "{F755213B-DB74-4633-AC4A-1B4BB0F0A3BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commander", "Commander\Commander.csproj", "{2F8AA3FF-54E2-44B5-BF48-DF436BB1C93D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commander.Facts", "Commander.Facts\Commander.Facts.csproj", "{6FE010B3-C91E-48C0-A29D-256B965792DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F755213B-DB74-4633-AC4A-1B4BB0F0A3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F755213B-DB74-4633-AC4A-1B4BB0F0A3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F755213B-DB74-4633-AC4A-1B4BB0F0A3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F755213B-DB74-4633-AC4A-1B4BB0F0A3BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F8AA3FF-54E2-44B5-BF48-DF436BB1C93D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8AA3FF-54E2-44B5-BF48-DF436BB1C93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8AA3FF-54E2-44B5-BF48-DF436BB1C93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8AA3FF-54E2-44B5-BF48-DF436BB1C93D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FE010B3-C91E-48C0-A29D-256B965792DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FE010B3-C91E-48C0-A29D-256B965792DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FE010B3-C91E-48C0-A29D-256B965792DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FE010B3-C91E-48C0-A29D-256B965792DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
