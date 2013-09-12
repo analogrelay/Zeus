@@ -39,12 +39,19 @@ namespace Zeus
             });
         }
 
-        public virtual void Invoke(CommandLineApplication app)
+        public virtual void Invoke(CommandLineApplication app, IEnumerable<string> args)
         {
             App = app;
             Log = LogManager.GetLogger(GetType().FullName);
 
+            BindArguments(args);
+
             Execute();
+        }
+
+        private void BindArguments(IEnumerable<string> args)
+        {
+            var config = new ArgumentModelInitializer(this);
         }
 
         protected abstract void Execute();

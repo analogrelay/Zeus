@@ -47,8 +47,10 @@ namespace Zeus
         public void Run(IEnumerable<string> args)
         {
             ConfigureLogging();
+            
             try
             {
+                // Configure arguments
                 Command toExecute = null;
                 if (args.FirstOrDefault() == null)
                 {
@@ -74,12 +76,13 @@ namespace Zeus
                     else
                     {
                         actualCommandName = new CommandName(groupOrCommandName, commandName);
+                        args = args.Skip(1); // Shift to the next arg
                     }
 
                     // Execute the command
                     toExecute = EnsureCommand(actualCommandName);
                 }
-                toExecute.Invoke(this);
+                toExecute.Invoke(this, args);
             }
             catch (Exception ex)
             {
