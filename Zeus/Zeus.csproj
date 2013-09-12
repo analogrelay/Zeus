@@ -48,22 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arguments\ArgumentModel.cs" />
-    <Compile Include="Arguments\OptionAttribute.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandAttribute.cs" />
-    <Compile Include="CommandLineApplication.cs" />
-    <Compile Include="CommandName.cs" />
+    <Compile Include="Commands\Application\ApplicationCommandGroup.cs" />
+    <Compile Include="Commands\CommandGroup.cs" />
+    <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\Application\InitCommand.cs" />
-    <Compile Include="Commands\CommandGroups.cs" />
-    <Compile Include="DefaultHelpCommand.cs" />
-    <Compile Include="HashCodeCombiner.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnazzyConsoleTarget.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
