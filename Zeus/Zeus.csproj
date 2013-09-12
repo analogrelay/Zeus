@@ -49,6 +49,8 @@
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="CommandLineApplication.cs" />
     <Compile Include="CommandName.cs" />
+    <Compile Include="Commands\Application\InitCommand.cs" />
+    <Compile Include="Commands\CommandGroups.cs" />
     <Compile Include="DefaultHelpCommand.cs" />
     <Compile Include="HashCodeCombiner.cs" />
     <Compile Include="Program.cs" />

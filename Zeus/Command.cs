@@ -10,8 +10,9 @@ namespace Zeus
     public abstract class Command
     {
         private Lazy<CommandAttribute> _attribute;
+        private Lazy<CommandName> _name;
 
-        public virtual CommandName Name { get { return Attribute == null ? CommandName.Empty : Attribute.Name; } }
+        public virtual CommandName Name { get { return _name.Value; } }
         public virtual string Description { get { return Attribute == null ? null : Attribute.Description; } }
 
         public Logger Log { get; set; }
@@ -25,6 +26,17 @@ namespace Zeus
         protected Command()
         {
             _attribute = new Lazy<CommandAttribute>(() => GetType().GetCustomAttribute<CommandAttribute>());
+            _name = new Lazy<CommandName>(() =>
+            {
+                if (Attribute == null)
+                {
+                    return CommandName.Empty;
+                }
+                else
+                {
+                    return new CommandName(Attribute.Group, Attribute.Name);
+                }
+            });
         }
 
         public virtual void Invoke(CommandLineApplication app)

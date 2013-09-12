@@ -22,7 +22,8 @@ namespace Zeus
         private Logger Log { get; set; }
 
         [ImportingConstructor]
-        private CommandLineApplication([ImportMany] IEnumerable<Command> commands)
+        [Obsolete("You should construct a CommandLineApplication object using CommandLineApplication.Load")]
+        public CommandLineApplication([ImportMany] IEnumerable<Command> commands)
         {
             CommandGroups = commands
                 .GroupBy(c => c.Name.Group)
@@ -45,9 +46,6 @@ namespace Zeus
 
         public void Run(IEnumerable<string> args)
         {
-            // Check the first arg for the debug helper
-            TryLaunchDebugger(ref args);
-
             ConfigureLogging();
             try
             {
@@ -112,19 +110,6 @@ namespace Zeus
                 throw new Exception(String.Format(CultureInfo.InvariantCulture, "Unknown command: {0}", commandName));
             }
             return cmd;
-        }
-
-        [Conditional("DEBUG")]
-        private void TryLaunchDebugger(ref IEnumerable<string> args)
-        {
-            string arg = args.FirstOrDefault();
-            if(!String.IsNullOrEmpty(arg) && 
-               (String.Equals(arg, "dbg", StringComparison.OrdinalIgnoreCase) ||
-                String.Equals(arg, "debug", StringComparison.OrdinalIgnoreCase)))
-            {
-                args = args.Skip(1);
-                Debugger.Launch();
-            }
         }
     }
 }
