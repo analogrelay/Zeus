@@ -50,7 +50,6 @@ namespace Zeus
             
             try
             {
-                // Configure arguments
                 Command toExecute = null;
                 if (args.FirstOrDefault() == null)
                 {

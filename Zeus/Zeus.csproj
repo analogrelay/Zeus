@@ -48,7 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentModelInitializer.cs" />
+    <Compile Include="Arguments\ArgumentModel.cs" />
+    <Compile Include="Arguments\OptionAttribute.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="CommandLineApplication.cs" />

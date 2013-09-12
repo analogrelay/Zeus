@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using NLog;
+using clipr;
+using clipr.Usage;
+using Zeus.Arguments;
 
 namespace Zeus
 {
@@ -51,7 +54,22 @@ namespace Zeus
 
         private void BindArguments(IEnumerable<string> args)
         {
-            var config = new ArgumentModelInitializer(this);
+            ArgumentModel model = GetArgumentModel();
+        }
+
+        private IEnumerable<ArgumentModel> GetArgumentModels()
+        {
+            var argumentProperties = from p in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                     let attr = p.GetCustomAttribute<OptionAttribute>()
+                                     where attr != null
+                                     select Tuple.Create(p, attr);
+            foreach (var argumentProperty in argumentProperties)
+            {
+                var prop = argumentProperty.Item1;
+                var attr = argumentProperty.Item2;
+
+                yield return attr.CreateModel(prop);
+            }
         }
 
         protected abstract void Execute();
