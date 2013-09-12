@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.20827.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus", "Zeus\Zeus.csproj", "{C0B98E5B-51AA-4180-B338-2CCAC6B1DB7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus.Facts", "Zeus.Facts\Zeus.Facts.csproj", "{3A7A7FBA-20C1-4CDA-BC83-49E698D3383F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C0B98E5B-51AA-4180-B338-2CCAC6B1DB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0B98E5B-51AA-4180-B338-2CCAC6B1DB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0B98E5B-51AA-4180-B338-2CCAC6B1DB7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A7A7FBA-20C1-4CDA-BC83-49E698D3383F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7A7FBA-20C1-4CDA-BC83-49E698D3383F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7A7FBA-20C1-4CDA-BC83-49E698D3383F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7A7FBA-20C1-4CDA-BC83-49E698D3383F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
