@@ -1,3 +1,8 @@
 # ZEUS! God of the Clouds!
 
-Build Status: [![Build Status](https://travis-ci.org/anurse/Zeus.png?branch=master)](https://travis-ci.org/anurse/Zeus)
+## Building
+In VS: Just open the SLN and build
+Command Line:
+1. Make sure you have 'nuget.exe' in your PATH (get it from https://nuget.codeplex.com)
+2. Run 'nuget restore' in the root of the repository
+3. MSBuild the solution
