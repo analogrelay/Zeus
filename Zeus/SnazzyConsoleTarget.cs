@@ -29,14 +29,17 @@ namespace Zeus
         };
 
         private static readonly int LevelLength = LevelNames.Values.Max(s => s.Length);
+        public bool Color { get; set; }
 
         protected override void Write(LogEventInfo logEvent)
         {
+            bool useColor = Color && !Console.IsOutputRedirected;
+
             var oldForeground = Console.ForegroundColor;
             var oldBackground = Console.BackgroundColor;
 
             // Get us to the start of a line
-            if (Console.CursorLeft > 0)
+            if (!Console.IsOutputRedirected && Console.CursorLeft > 0)
             {
                 Console.WriteLine();
             }
@@ -95,10 +98,13 @@ namespace Zeus
                 }
 
                 // Write Level
-                Console.ForegroundColor = pair.Item1;
-                if (pair.Item2.HasValue)
+                if (useColor)
                 {
-                    Console.BackgroundColor = pair.Item2.Value;
+                    Console.ForegroundColor = pair.Item1;
+                    if (pair.Item2.HasValue)
+                    {
+                        Console.BackgroundColor = pair.Item2.Value;
+                    }
                 }
                 Console.Write(levelName);
 
@@ -107,13 +113,19 @@ namespace Zeus
                 var foreground = pair.Item2.HasValue
                                         ? pair.Item1
                                         : oldForeground;
-                Console.ForegroundColor = foreground;
+                if (useColor)
+                {
+                    Console.ForegroundColor = foreground;
+                }
                 Console.Write(": " + line);
             }
             Console.WriteLine();
-            
-            Console.ForegroundColor = oldForeground;
-            Console.BackgroundColor = oldBackground;
+
+            if (useColor)
+            {
+                Console.ForegroundColor = oldForeground;
+                Console.BackgroundColor = oldBackground;
+            }
         }
     }
 }

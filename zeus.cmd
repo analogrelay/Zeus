@@ -1,0 +1,1 @@
+@%~dp0zeus\bin\Debug\zeus.exe %*

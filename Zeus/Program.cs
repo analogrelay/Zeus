@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using clipr;
+using NLog;
+using NLog.Config;
+using Zeus.Infrastructure;
 
 namespace Zeus
 {
@@ -15,16 +18,50 @@ namespace Zeus
             // Check the first arg for the debug helper
             TryLaunchDebugger(ref args);
 
-            var opts = new Application();
-            var parser = new CliParser<Application>(opts);
-            if (parser.TryParse(args))
+            ConfigureLogging();
+
+            CompositionContainer container = new CompositionContainer(
+                new AssemblyCatalog(typeof(Program).Assembly));
+
+            var manager = container.GetExportedValue<CommandManager>();
+
+            // Invoke the root command
+            manager.Invoke(args);
+        }
+
+        private static void RenderCommandTree(IEnumerable<CommandBase> commands, int indent = 0)
+        {
+            foreach (var command in commands)
             {
-                opts.Invoke();
+                Console.Write(new String(' ', indent));
+                var group = command as CommandGroup;
+                if (group != null)
+                {
+                    Console.Write("+ ");
+                    Console.WriteLine(group.Name);
+                    RenderCommandTree(group.Commands, indent + 1);
+                }
+                else
+                {
+                    Console.Write("- ");
+                    Console.WriteLine(command.Name);
+                }
             }
-            else
+        }
+
+        private static void ConfigureLogging()
+        {
+            var config = new LoggingConfiguration();
+            
+            var consoleTarget = new SnazzyConsoleTarget()
             {
-                Console.WriteLine("HALP!");
-            }
+                Layout = "${message}"
+            };
+            config.AddTarget("console", consoleTarget);
+
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, consoleTarget));
+
+            LogManager.Configuration = config;
         }
 
         [Conditional("DEBUG")]
