@@ -34,9 +34,18 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Compile Include="Model\ZeusEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ConfigurationGroup.cs" />
+    <Compile Include="Model\ConfigurationNode.cs" />
+    <Compile Include="Model\Role.cs" />
+    <Compile Include="Model\Service.cs" />
+    <Compile Include="Model\ZeusApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Model\Model.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

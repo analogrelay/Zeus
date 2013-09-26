@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Zeus.Core.Model.ConfigurationGroup">
+    <Position X="6.25" Y="13.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ConfigurationGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Zeus.Core.Model.ConfigurationNode">
+    <Position X="6.25" Y="11.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\ConfigurationNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Zeus.Core.Model.Service">
+    <Position X="3.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAQAAAAAAAAAgQAAEAAAAAA=</HashCode>
+      <FileName>Model\Service.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Role" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Configuration" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Zeus.Core.Model.Role">
+    <Position X="9" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAgQAAAAAAAAA=</HashCode>
+      <FileName>Model\Role.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Configuration" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Zeus.Core.Model.ZeusApplication">
+    <Position X="9" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ZeusApplication.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Roles" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Zeus.Core.Model.ZeusEnvironment">
+    <Position X="3.5" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAABAEAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ZeusEnvironment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Application" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Services" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
