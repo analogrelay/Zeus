@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
@@ -18,7 +19,16 @@ namespace Zeus.PowerShell.Zeusfile.Commands
 
         protected override void ProcessRecord()
         {
-            WriteObject(new ServiceModel(Name));
+            var app = new ServiceModel(Name);
+            
+            // Run the script block to collect roles
+            var roles = Definition.Invoke();
+            foreach (var role in roles.Select(p => p.BaseObject as Role).Where(r => r != null)) {
+                WriteVerbose(String.Format(CultureInfo.CurrentCulture, Strings.FoundRole, role.GetType().Name, role.Name));
+                app.Roles.Add(role);
+            }
+
+            WriteObject(app);
         }
     }
 }

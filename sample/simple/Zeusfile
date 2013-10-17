@@ -1,2 +1,5 @@
+Plugin AspNet
+
 Application SimpleSample {
+	AspNetRole Website
 }

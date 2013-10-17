@@ -13,7 +13,11 @@ namespace Zeus
         public string Name { get; set; }
         public ICollection<Role> Roles { get; private set; }
 
-        public ServiceModel() { }
+        public ServiceModel()
+        {
+            Roles = new List<Role>();
+        }
+
         public ServiceModel(string name) : this()
         {
             Name = name;

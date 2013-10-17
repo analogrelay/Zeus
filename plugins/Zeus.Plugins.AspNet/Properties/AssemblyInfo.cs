@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Zeus.PowerShell.Facts")]
+[assembly: AssemblyTitle("Zeus.Plugins.AspNet")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Zeus.PowerShell.Facts")]
+[assembly: AssemblyProduct("Zeus.Plugins.AspNet")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7b9f5f54-c2e1-4e2a-b328-68411c4d6eee")]
+[assembly: Guid("cf1a3841-f52a-4640-8dcb-f10a5859064a")]
 
 // Version information for an assembly consists of the following four values:
 //

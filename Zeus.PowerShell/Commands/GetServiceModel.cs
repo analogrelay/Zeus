@@ -8,6 +8,7 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.PowerShell.Commands;
 
 namespace Zeus.PowerShell.Commands
 {
@@ -58,14 +59,7 @@ namespace Zeus.PowerShell.Commands
             // Ready! Build a service model by invoking the script and reading the return value
             var content = FileSystem.File.ReadAllText(zeusfile);
 
-            // Create a new runspace
-            IList<PSObject> results;
-            using (var runspace = RunspaceHelper.CreateZeusfileRunspace(MyInvocation.MyCommand))
-            {
-                var pipeline = runspace.CreatePipeline();
-                pipeline.Commands.AddScript(content);
-                results = pipeline.Invoke();
-            }
+            var results = InvokeCommand.InvokeScript("Invoke-Zeusfile -Script @\"\r\n" + content + "\r\n\"@");
             
             // Read the results
             if (results.Count == 0)
