@@ -1,0 +1,61 @@
+uses Azure
+
+service NuGetGallery
+	role Frontend is Windows::IIS::Website
+		appSetting Gallery.AzureConnectionString = $Storage.ConnectionString
+	
+	role Storage is StorageAccount
+		readonly container packages
+		readwrite container uploads
+
+	role PrimaryDatabase is SqlServer::Database
+		user SA
+			name 'nuget-sa'
+			role server-admin
+		user Monitoring
+			name 'nuget-monitor'
+			role server-readonly
+		user Backend
+			name 'nuget-backend'
+			role server-readonly, backup-admin
+		user Frontend
+			name 'nuget-frontend'
+			role db-admin
+
+	role WarehouseDatabase is SqlServer::Database
+		user SA
+			name 'nuget-sa'
+			role server-admin
+		user Monitoring
+			name 'nuget-monitor'
+			role server-readonly
+		user Backend
+			name 'nuget-backend'
+			role server-readonly, backup-admin
+
+---
+
+environment QA for NuGetGallery
+	role Frontend is Azure::CloudService
+	
+	role Storage is Azure::StorageAccount
+
+	role DbServer is Azure::SqlServer
+
+	role PrimaryDatabase is Azure::SqlDatabase
+		server DbServer
+	role WarehouseDatabase is Azure::SqlDatabase
+		server DbServer
+
+---
+
+environment Production for NuGetGallery
+	role Frontend is Azure::CloudService
+	
+	role Storage is Azure::StorageAccount
+
+	role PrimaryDatabase is Azure::SqlDatabase
+		server * # Runs on it's own server
+
+	role WarehouseDatabase is Azure::SqlDatabase
+		server * # Runs on it's own server
