@@ -6,7 +6,24 @@ lexer grammar ZeusLexer;
 	protected const int HIDDEN = Hidden;
 }
 
+tokens {
+	DEDENT
+}
+
 @namespace{Zeus.Parser}
+
+IDENTIFIER
+	:	LETTER (LETTER|IDENTIFIER_DIGIT)*
+	;
+
+EOL : '\r\n' | '\n' | '\r';
+
+INDENT
+	: {Column==0}? WS { HandleIndent(); }
+	;
+
+WS  :   [ \t\u000C]+ -> channel(HIDDEN)
+    ;
 
 // Unicode Letters and "_"
 fragment LETTER
@@ -42,10 +59,3 @@ fragment IDENTIFIER_DIGIT
 	|	'\u0ed0'..'\u0ed9' 
 	|	'\u1040'..'\u1049'
 	;
-
-IDENTIFIER
-	:	LETTER (LETTER|IDENTIFIER_DIGIT)*
-	;
-
-WS  :   [ \r\t\u000C\n]+ -> channel(HIDDEN)
-    ;

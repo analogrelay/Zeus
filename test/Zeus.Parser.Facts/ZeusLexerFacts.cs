@@ -13,6 +13,12 @@ namespace Zeus.Parser.Facts
         [Fact]
         public void Recognizes_Identifier()
         {
+            TestToken("foo", ZeusLexer.IDENTIFIER);
+            
+        }
+
+        private void TestToken(string text, int type)
+        {
             var rdr = new StringReader("foo");
             ZeusLexer l = new ZeusLexer(rdr);
             var tok = l.NextToken();
