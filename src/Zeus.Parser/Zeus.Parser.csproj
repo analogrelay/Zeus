@@ -52,11 +52,18 @@
     <Compile Include="ZeusLexer.g4.cs">
       <DependentUpon>ZeusLexer.g4</DependentUpon>
     </Compile>
+    <Compile Include="ZeusParserBase.g4.cs">
+      <DependentUpon>ZeusParserBase.g4</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LatestAntlrInputStream.cs" />
     <None Include="packages.config" />
     <Antlr4 Include="ZeusLexer.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>Zeus.Parser</CustomToolNamespace>
+    </Antlr4>
+    <Antlr4 Include="ZeusParserBase.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Zeus.Parser</CustomToolNamespace>
     </Antlr4>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Antlr4.Runtime;
@@ -27,22 +28,19 @@ namespace Zeus.Parser
         public override IToken NextToken()
         {
             IToken tok = base.NextToken();
-            if (_tokenQueue.Count == 0)
+            if (_tokenQueue.Count == 0 && _indents.Count > 0)
             {
-                if (_indents.Count > 0)
+                // End of file, but need to clear indents
+                while (_indents.Count > 1)
                 {
-                    // End of file, but need to clear indents
-                    while (_indents.Count > 0)
-                    {
-                        _indents.Pop();
-                        Emit(new CommonToken(DEDENT));
-                    }
+                    _indents.Pop();
+                    Emit(new CommonToken(DEDENT, ""));
                 }
-                else
-                {
-                    // EOF!
-                    return EmitEOF();
-                }
+            }
+            if(_tokenQueue.Count == 0)
+            {
+                // EOF!
+                return EmitEOF();
             }
             return _tokenQueue.Dequeue();
         }
@@ -52,33 +50,48 @@ namespace Zeus.Parser
             return pos - _linePos;
         }
 
+        private void HandleEol()
+        {
+            Emit(new CommonToken(EOL, Text));
+            int next = InputStream.La(1);
+            if (next > 0 && !Char.IsWhiteSpace((char)next))
+            {
+                // Process dedents
+                HandleIndent(0);
+            }
+        }
+
         private void HandleIndent()
         {
-            
             var text = Text.Replace("\t", "    ");
             int cur = Text == null ? 0 : Text.Length;
+            HandleIndent(cur);
+        }
+
+        private void HandleIndent(int currentLevel)
+        {
             IndentContext indent = _indents.Peek();
-            if (cur == indent.Level)
+            if (currentLevel == indent.Level)
             {
                 // Same indent level
                 Skip();
             }
-            else if (cur > indent.Level)
+            else if (currentLevel > indent.Level)
             {
                 // Higher indent level
-                _indents.Push(new IndentContext() { Line = Line, Column = Column, Index = CharIndex, Level = cur });
-                Emit(new CommonToken(INDENT));
+                _indents.Push(new IndentContext() { Line = Line, Column = Column, Index = CharIndex, Level = currentLevel });
+                Emit(new CommonToken(INDENT, ""));
             }
-            else if (cur < indent.Level)
+            else if (currentLevel < indent.Level)
             {
                 // Pop until we find the value or would pop 0
                 do
                 {
                     _indents.Pop();
-                    Emit(new CommonToken(DEDENT));
+                    Emit(new CommonToken(DEDENT, ""));
                     indent = _indents.Peek();
-                } while (indent.Level != 0 && indent.Level > cur);
-                if (indent.Level != cur && indent.Level != 0)
+                } while (indent.Level != 0 && indent.Level > currentLevel);
+                if (indent.Level != currentLevel && indent.Level != 0)
                 {
                     // No matching dedent!
                     GetErrorListenerDispatch().SyntaxError(
@@ -86,7 +99,7 @@ namespace Zeus.Parser
                         0, 
                         Line, 
                         Column,
-                        FormatDedentErrorMessage(indent.Line, indent.Column, indent.Level, cur, Line, Column),
+                        FormatDedentErrorMessage(indent.Line, indent.Column, indent.Level, currentLevel, Line, Column),
                         null);
                 }
             }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using Zeus.Parser;
 
 namespace QuickParse
@@ -34,11 +35,17 @@ namespace QuickParse
                 using (var rdr = new StreamReader(args[0]))
                 {
                     ZeusLexer lex = new ZeusLexer(rdr);
-                    IToken token;
-                    while((token = lex.NextToken()).Type != ZeusLexer.Eof)
-                    {
-                        WriteToken(token);
-                    }
+
+                    CommonTokenStream strm = new CommonTokenStream(lex);
+                    ZeusParserBase parser = new ZeusParserBase(strm);
+                    var result = parser.compilation_unit();
+                    Console.WriteLine(result.Accept(new IndentingTreeWriter()));
+
+                    //IToken tok;
+                    //while ((tok = lex.NextToken()).Type != ZeusLexer.Eof)
+                    //{
+                    //    WriteToken(tok);
+                    //}
                 }
             }
         }
