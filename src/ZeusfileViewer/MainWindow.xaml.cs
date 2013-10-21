@@ -15,7 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Antlr4.Runtime;
+using Zeus.Model;
 using Zeus.Parser;
+using Zeus.Parser.Internal;
 
 namespace ZeusfileViewer
 {
@@ -25,7 +27,7 @@ namespace ZeusfileViewer
     public partial class MainWindow : Window
     {
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable<Token>), typeof(MainWindow));
-        public static readonly DependencyProperty ParseTreeProperty = DependencyProperty.Register("ParseTree", typeof(IEnumerable<ParseTreeNode>), typeof(MainWindow));
+        public static readonly DependencyProperty ServiceModelsProperty = DependencyProperty.Register("ServiceModels", typeof(IEnumerable<ServiceModel>), typeof(MainWindow));
         public static readonly DependencyProperty ErrorsProperty = DependencyProperty.Register("Errors", typeof(IEnumerable<string>), typeof(MainWindow));
         
         public IEnumerable<Token> Tokens
@@ -34,10 +36,10 @@ namespace ZeusfileViewer
             set { SetValue(TokensProperty, value); }
         }
 
-        public IEnumerable<ParseTreeNode> ParseTree
+        public IEnumerable<ServiceModel> ServiceModels
         {
-            get { return (IEnumerable<ParseTreeNode>)GetValue(ParseTreeProperty); }
-            set { SetValue(ParseTreeProperty, value); }
+            get { return (IEnumerable<ServiceModel>)GetValue(ServiceModelsProperty); }
+            set { SetValue(ServiceModelsProperty, value); }
         }
 
         public IEnumerable<string> Errors
@@ -66,7 +68,7 @@ namespace ZeusfileViewer
             var errorCollector = new ErrorCollector();
             p.AddErrorListener(errorCollector);
             var zf = p.zeusfile();
-            ParseTree = new[] { zf.Accept(new TreeBuilderVisitor()) };
+            ServiceModels = zf.Services;
             Errors = errorCollector.Errors;
 
             // Grab tokens

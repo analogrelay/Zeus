@@ -5,33 +5,35 @@ options {
 	tokenVocab = ZeusLexer;
 }
 
-zeusfile
-	: (zeusfile_statement|EOL)* EOF
+zeusfile returns [IList<ServiceModel> Services = new List<ServiceModel>()]
+	: (zeusfile_statement[$Services]|EOL)* EOF
 	;
 
-zeusfile_statement
-	: uses_statement EOL?
-	| service_block
+zeusfile_statement[IList<ServiceModel> services]
+	: service { $services.Add($service.Service); }
 	;
 
-uses_statement
-	: USES name
+service returns [ServiceModel Service = new ServiceModel()]
+	: service_definition[$Service] EOL INDENT role_list[$Service.Roles] DEDENT
+	| service_definition[$Service] EOL
+	| service_definition[$Service]
 	;
 
-service_block
-	: service_definition EOL?
-	| service_definition EOL (INDENT role* DEDENT)?
+role_list[IList<ServiceRole> roles]
+	: role role_list[$roles] { $roles.Insert(0, $role.Role); }
+	| role { $roles.Insert(0, $role.Role); }
 	;
 
-service_definition
-	: SERVICE name
+service_definition[ServiceModel s]
+	: SERVICE name { $s.Name = $name.Name; }
 	;
 
-role
-	: role_definition EOL?
-	| role_definition EOL (INDENT resource* DEDENT)?
+role returns [ServiceRole Role = new ServiceRole()] 
+	: role_definition[$Role] EOL INDENT (resource[$Role.Resources])* DEDENT
+	| role_definition[$Role] EOL
+	| role_definition[$Role]
 	;
 
-role_definition
-	: ROLE name IS name
+role_definition[ServiceRole r]
+	: ROLE n=name IS t=name { $r.Name = $n.text; $r.Type = $t.text; }
 	;

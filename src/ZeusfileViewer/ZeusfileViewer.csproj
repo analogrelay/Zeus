@@ -58,9 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ErrorCollector.cs" />
-    <Compile Include="ParseTreeNode.cs" />
     <Compile Include="Token.cs" />
-    <Compile Include="TreeBuilderVisitor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +101,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zeus.Core\Zeus.Core.csproj">
+      <Project>{d3bc2ab1-0549-4fa5-80c0-3f7e9efff13b}</Project>
+      <Name>Zeus.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Zeus.Parser\Zeus.Parser.csproj">
       <Project>{67a07c49-96e1-4ffa-abfb-048883953ef6}</Project>
       <Name>Zeus.Parser</Name>

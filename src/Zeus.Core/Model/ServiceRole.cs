@@ -10,5 +10,10 @@ namespace Zeus.Model
         public string Name { get; set; }
         public string Type { get; set; }
         public IList<ServiceRoleResource> Resources { get; set; }
+
+        public ServiceRole()
+        {
+            Resources = new List<ServiceRoleResource>();
+        }
     }
 }

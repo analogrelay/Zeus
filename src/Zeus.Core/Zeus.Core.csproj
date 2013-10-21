@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ResourceConfigurationNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\ServiceModel.cs" />
     <Compile Include="Model\ServiceRole.cs" />
