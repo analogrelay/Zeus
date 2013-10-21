@@ -12,6 +12,7 @@
     <AssemblyName>Zeus.Parser</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,28 +45,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Internal\ServiceModelBuilder.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="ZeusLexer.g4.cs">
+    <Compile Include="Internal\ZeusfileParser.g4.cs">
+      <DependentUpon>ZeusfileParser.g4</DependentUpon>
+    </Compile>
+    <Compile Include="Internal\ZeusLexer.g4.cs">
       <DependentUpon>ZeusLexer.g4</DependentUpon>
     </Compile>
-    <Compile Include="ZeusParserBase.g4.cs">
+    <Compile Include="Internal\ZeusParserBase.g4.cs">
       <DependentUpon>ZeusParserBase.g4</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LatestAntlrInputStream.cs" />
+    <Compile Include="Internal\LatestAntlrInputStream.cs" />
     <None Include="packages.config" />
-    <Antlr4 Include="ZeusLexer.g4">
+    <Antlr4 Include="Internal\ZeusLexer.g4">
       <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>Zeus.Parser</CustomToolNamespace>
+      <CustomToolNamespace>Zeus.Parser.Internal</CustomToolNamespace>
     </Antlr4>
-    <Antlr4 Include="ZeusParserBase.g4">
+    <Antlr4 Include="Internal\ZeusParserBase.g4">
       <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>Zeus.Parser</CustomToolNamespace>
+      <CustomToolNamespace>Zeus.Parser.Internal</CustomToolNamespace>
+    </Antlr4>
+    <Antlr4 Include="Internal\ZeusfileParser.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>Zeus.Parser.Internal</CustomToolNamespace>
     </Antlr4>
   </ItemGroup>
   <ItemGroup>

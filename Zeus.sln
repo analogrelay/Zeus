@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus.Parser", "src\Zeus.Par
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeus.Parser.Facts", "test\Zeus.Parser.Facts\Zeus.Parser.Facts.csproj", "{116B10A1-AE7F-4489-85E5-56ADF933B2D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickParse", "QuickParse\QuickParse.csproj", "{AD2B40B3-9F97-42BB-BFA4-83956B90E009}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusfileViewer", "src\ZeusfileViewer\ZeusfileViewer.csproj", "{5ABEC4AF-7978-4961-AE06-DCBC7FCAE26F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{116B10A1-AE7F-4489-85E5-56ADF933B2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{116B10A1-AE7F-4489-85E5-56ADF933B2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{116B10A1-AE7F-4489-85E5-56ADF933B2D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD2B40B3-9F97-42BB-BFA4-83956B90E009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD2B40B3-9F97-42BB-BFA4-83956B90E009}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD2B40B3-9F97-42BB-BFA4-83956B90E009}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD2B40B3-9F97-42BB-BFA4-83956B90E009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ABEC4AF-7978-4961-AE06-DCBC7FCAE26F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ABEC4AF-7978-4961-AE06-DCBC7FCAE26F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ABEC4AF-7978-4961-AE06-DCBC7FCAE26F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ABEC4AF-7978-4961-AE06-DCBC7FCAE26F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

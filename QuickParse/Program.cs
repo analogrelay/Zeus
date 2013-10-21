@@ -36,9 +36,9 @@ namespace QuickParse
                 {
                     ZeusLexer lex = new ZeusLexer(rdr);
 
-                    CommonTokenStream strm = new CommonTokenStream(lex);
-                    ZeusParserBase parser = new ZeusParserBase(strm);
-                    var result = parser.compilation_unit();
+                    var strm = new CommonTokenStream(lex);
+                    var parser = new ZeusfileParser(strm);
+                    var result = parser.zeusfile();
                     Console.WriteLine(result.Accept(new IndentingTreeWriter()));
 
                     //IToken tok;

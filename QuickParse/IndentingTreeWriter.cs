@@ -7,53 +7,83 @@ using Zeus.Parser;
 
 namespace QuickParse
 {
-    public class IndentingTreeWriter : ZeusParserBaseBaseVisitor<string>
+    public class IndentingTreeWriter : ZeusfileParserBaseVisitor<string>
     {
         private int _indent = 0;
 
-        public override string VisitCompilation_unit(ZeusParserBase.Compilation_unitContext context)
+        public override string VisitRole(ZeusfileParser.RoleContext context)
         {
-            return HandleNode(context, "compilation_unit");
+            return HandleNode(context, "role");
         }
 
-        public override string VisitSingle_value(ZeusParserBase.Single_valueContext context)
+        public override string VisitService_block(ZeusfileParser.Service_blockContext context)
+        {
+            return HandleNode(context, "service_block");
+        }
+
+        public override string VisitStatement(ZeusfileParser.StatementContext context)
+        {
+            return HandleNode(context, "statement");
+        }
+
+        public override string VisitBlock(ZeusfileParser.BlockContext context)
+        {
+            return HandleNode(context, "block");
+        }
+
+        public override string VisitUses_statement(ZeusfileParser.Uses_statementContext context)
+        {
+            return HandleNode(context, "uses_statement");
+        }
+
+        public override string VisitZeusfile_statement(ZeusfileParser.Zeusfile_statementContext context)
+        {
+            return HandleNode(context, "zeusfile_statement");
+        }
+
+        public override string VisitZeusfile(ZeusfileParser.ZeusfileContext context)
+        {
+            return HandleNode(context, "zeusfile");
+        }
+
+        public override string VisitSingle_value(ZeusfileParser.Single_valueContext context)
         {
             return HandleNode(context, "single_value");
         }
 
-        public override string VisitValue(ZeusParserBase.ValueContext context)
+        public override string VisitValue(ZeusfileParser.ValueContext context)
         {
             return HandleNode(context, "value");
         }
 
-        public override string VisitResource(ZeusParserBase.ResourceContext context)
+        public override string VisitResource(ZeusfileParser.ResourceContext context)
         {
             return HandleNode(context, "resource");
         }
 
-        public override string VisitName(ZeusParserBase.NameContext context)
+        public override string VisitName(ZeusfileParser.NameContext context)
         {
             return HandleNode(context, "name");
         }
 
-        public override string VisitName_part(ZeusParserBase.Name_partContext context)
+        public override string VisitName_part(ZeusfileParser.Name_partContext context)
         {
             return HandleNode(context, "name_part");
         }
 
-        public override string VisitResource_list(ZeusParserBase.Resource_listContext context)
-        {
-            return HandleNode(context, "resource_list");
-        }
-
-        public override string VisitResource_definition(ZeusParserBase.Resource_definitionContext context)
+        public override string VisitResource_definition(ZeusfileParser.Resource_definitionContext context)
         {
             return HandleNode(context, "resource_definition");
         }
 
-        public override string VisitSubresource_block(ZeusParserBase.Subresource_blockContext context)
+        public override string VisitSubresource_block(ZeusfileParser.Subresource_blockContext context)
         {
             return HandleNode(context, "subresource_block");
+        }
+
+        public override string VisitId_or_keyword(ZeusfileParser.Id_or_keywordContext context)
+        {
+            return HandleNode(context, "id_or_keyword");
         }
 
         public override string VisitTerminal(ITerminalNode node)
