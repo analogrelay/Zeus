@@ -1,0 +1,14 @@
+{
+  "name": "zeus_cli",
+  "version": "0.0.0",
+  "description": "zeus-cli",
+  "main": "app.js",
+  "author": {
+    "name": "anurse",
+    "email": ""
+  },
+  "dependencies": {
+    "winston": "^0.7.3",
+    "commander": "^2.3.0"
+  }
+}

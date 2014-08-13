@@ -1,0 +1,8 @@
+{
+  "version": "v4",
+  "repo": "anurse/DefinitelyTyped",
+  "ref": "master",
+  "path": "Scripts/typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {}
+}

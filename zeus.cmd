@@ -1,0 +1,1 @@
+@node %~dp0src\zeus-cli\zeus.js %*
